@@ -1,3 +1,3 @@
-# Leechanx Load Balancer
+#Easy Load Balancer
 
 developing...
