@@ -1,0 +1,3 @@
+[submodule "common/Easy-Reactor"]
+	path = common/Easy-Reactor
+	url = https://github.com/LeechanX/Easy-Reactor.git
