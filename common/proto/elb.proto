@@ -1,0 +1,35 @@
+package elb;
+
+enum MsgTypeId {
+    GetHostReqId         = 1; //api get a host from agent
+    GetHostRspId         = 2; //agent give a host to api
+    ReportReqId          = 3; //api report call result to agent
+    GetRouteByToolReqId  = 4; //tool get route from agent
+    GetRouteByToolRspId  = 5; //agent give route to tool
+    RecordLbReqId        = 6; //tool let agent record lb information
+    GetRouteByAgentReqId = 7; //agent get route from dnsserver
+    GetRouteByAgentRspId = 8; //dnsserver give route to agent
+    ReportStatusReqId    = 9; //agent report lb status to reporter
+}
+
+/*
+ 
+*/
+message HostAddr {
+    required int32 ip  = 1;
+    required int32 port = 2;
+}
+
+//agent get route from dnsserver (TCP)
+message GetRouteByAgentReq {
+    required int32 modid = 1;
+    required int32 cmdid = 2;
+}
+
+//dnsserver give route to agent
+message GetRouteByAgentRsp {
+    required int32 modid    = 1;
+    required int32 cmdid    = 2;
+    repeated HostAddr hosts = 3;
+}
+
