@@ -23,5 +23,5 @@ DnsServer使用两个map存储路由数据（key = `modid<<32 + cmdid` ， value
 服务启动后，agent发来Query for 某modid/cmdid，其所在Thread Loop上，上读锁查询`data_ptr`指向的map，返回查询结果；
 顺便如果此moid,cmdid不存在，则把agent ip+agent port+此moid+cmdid发送到Backend thread loop1的队列，让其记录到ClientMap
 
-后台线程Backend thread 2每隔10s清空`tmp_ptr`指向的map，再加载DnsServerRoute表内容到`tmp_ptr`指向的map，加载成功后交换指针`data_ptr`与`tmp_ptr`指针内容，于是完成了路由数据的更新
+后台线程Backend thread每隔10s清空`tmp_ptr`指向的map，再加载DnsServerRoute表内容到`tmp_ptr`指向的map，加载成功后交换指针`data_ptr`与`tmp_ptr`指针内容，于是完成了路由数据的更新
 
