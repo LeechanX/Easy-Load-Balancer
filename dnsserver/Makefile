@@ -21,7 +21,7 @@ INC = -Iinclude -I$(MYSQL_H) -I$(BASE_H) -I$(EASYREACTOR_H) -I$(PROTO_H)
 LIB = $(MYSQL_LIB) -L$(PROTOBUF_LIB) -L$(EASYREACTOR_LIB) $(OTHER_LIB)
 
 OBJS = $(addsuffix .o, $(basename $(wildcard src/*.cc)))
-OBJS += $(PROTO_H)/elb.pb.o
+OBJS += $(PROTO_H)/elb.pb.o $(BASE)/src/log.o
 
 $(TARGET): $(OBJS)
 	-mkdir -p bin
@@ -41,4 +41,4 @@ $(TARGET): $(OBJS)
 .PHONY: clean
 
 clean:
-	-rm -f src/*.o src/*.d $(TARGET)
+	-rm -f $(OBJS) src/*.d $(PROTO_H)/elb.pb.d $(BASE)/src/log.d $(TARGET)
