@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include "log.h"
+#include "logo.h"
 #include "Route.h"
 #include "elb.pb.h"
 #include "easy_reactor.h"
@@ -63,6 +64,8 @@ int main()
         ::exit(1);
     }
     ::pthread_detach(tid);
+
+    dispLogo();
 
     loop.process_evs();
     return 0;
