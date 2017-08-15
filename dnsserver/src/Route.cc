@@ -1,3 +1,4 @@
+#include "log.h"
 #include "Route.h"
 #include "config_reader.h"
 #include <stdio.h>
@@ -29,18 +30,18 @@ int Route::reload()
     int ret = mysql_real_query(&_dbConn, _sql, strlen(_sql));
     if (ret)
     {
-        printf("Failed to find any records and caused an error: %s\n", mysql_error(&_dbConn));
+        log_error("Failed to find any records and caused an error: %s\n", mysql_error(&_dbConn));
         return -1;
     }
 
     MYSQL_RES *result = mysql_store_result(&_dbConn);
     if (!result)
     {
-        printf( "Error getting records: %s\n", mysql_error(&_dbConn));
+        log_error("Error getting records: %s\n", mysql_error(&_dbConn));
         return -1;
     }
 
-    long lineNum = mysql_num_fields(result);
+    long lineNum = mysql_num_rows(result);
     MYSQL_ROW row;
     for (long i = 0;i < lineNum; ++i)
     {
@@ -56,6 +57,7 @@ int Route::reload()
 
         (*_tmpData)[key].insert(value);
     }
+    log_debug("load data size is %lu", _tmpData->size());
     mysql_free_result(result);
     return 0;
 }
@@ -84,10 +86,11 @@ Route::Route()
     const char* dbPasswd = config_reader::ins()->GetString("mysql", "db_passwd", "").c_str();
     const char* dbName   = config_reader::ins()->GetString("mysql", "db_name", "dnsserver").c_str();
 
+    mysql_init(&_dbConn);
     mysql_options(&_dbConn, MYSQL_OPT_CONNECT_TIMEOUT, "30");
     if (!mysql_real_connect(&_dbConn, dbHost, dbUser, dbPasswd, dbName, dbPort, NULL, 0))
     {
-        printf("Failed to connect to MySQL: Error: %s\n", mysql_error(&_dbConn));
+        log_error("Failed to connect to MySQL[%s:%u %s %s]: %s\n", dbHost, dbPort, dbUser, dbName, mysql_error(&_dbConn));
         ::exit(1);
     }
 
@@ -96,18 +99,18 @@ Route::Route()
     int ret = mysql_real_query(&_dbConn, _sql, strlen(_sql));
     if (ret)
     {
-        printf("Failed to find any records and caused an error: %s\n", mysql_error(&_dbConn));
+        log_error("Failed to find any records and caused an error: %s\n", mysql_error(&_dbConn));
         ::exit(1);
     }
 
     MYSQL_RES *result = mysql_store_result(&_dbConn);
     if (!result)
     {
-        printf( "Error getting records: %s\n", mysql_error(&_dbConn));
+        log_error( "Error getting records: %s\n", mysql_error(&_dbConn));
         ::exit(1);
     }
 
-    long lineNum = mysql_num_fields(result);
+    long lineNum = mysql_num_rows(result);
     MYSQL_ROW row;
     for (long i = 0;i < lineNum; ++i)
     {
@@ -123,6 +126,7 @@ Route::Route()
 
         (*_data)[key].insert(value);
     }
+    log_info("init load data size is %lu", _tmpData->size());
     mysql_free_result(result);
 }
 
