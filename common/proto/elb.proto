@@ -20,6 +20,30 @@ message HostAddr {
     required int32 port = 2;
 }
 
+//api get a host from agent (UDP)
+message GetHostReq {
+    required uint32 seq   = 1;
+    required int32 modid  = 2;
+    required int32 cmdid  = 3;
+}
+
+//agent give a host to api (UDP)
+message GetHostRsp {
+    required uint32 seq    = 1;
+    required int32 modid   = 2;
+    required int32 cmdid   = 3;
+    required int32 retcode = 4;
+    optional HostAddr host = 5;
+}
+
+//api report call result to agent
+message ReportReq {
+    required int32 modid   = 1;
+    required int32 cmdid   = 2;
+    required HostAddr host = 3;
+    required int32 retcode = 4;
+}
+
 //agent get route from dnsserver (TCP)
 message GetRouteByAgentReq {
     required int32 modid = 1;
