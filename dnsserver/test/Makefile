@@ -19,7 +19,6 @@ OBJS = benchmark.o
 OBJS += $(PROTO_H)/elb.pb.o
 
 $(TARGET): $(OBJS)
-	-mkdir -p bin
 	$(CXX) $(CFLAGS) -o $(TARGET) $(OBJS) $(INC) $(LIB)
 
 -include $(OBJS:.o=.d) 

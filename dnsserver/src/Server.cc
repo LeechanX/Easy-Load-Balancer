@@ -48,6 +48,8 @@ int main()
     std::string ip = config_reader::ins()->GetString("reactor", "ip", "0.0.0.0");
     short port = config_reader::ins()->GetNumber("reactor", "port", 12315);
 
+    dispLogo();
+
     tcp_server server(&loop, ip.c_str(), port);//创建TCP服务器
     server.add_msg_cb(elb::GetRouteByAgentReqId, getRoute);//设置：当收到消息id = 1的消息调用的回调函数  我们约定EchoString消息的ID是1
 
@@ -64,8 +66,6 @@ int main()
         ::exit(1);
     }
     ::pthread_detach(tid);
-
-    dispLogo();
 
     loop.process_evs();
     return 0;

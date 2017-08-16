@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <string>
+#include <vector>
 #include <string.h>
 #include <stdlib.h>
 #include <pthread.h>
@@ -55,7 +56,7 @@ void parseOption(int argc, char** argv)
     }
 }
 
-void buz(const char* data, uint32_t len, int msgId, net_commu* commu, void* usr_data)
+void ActionGetRoute(const char* data, uint32_t len, int msgId, net_commu* commu, void* usr_data)
 {
     long* count = (long*)usr_data;
     elb::GetRouteByAgentRsp rsp;
@@ -82,25 +83,41 @@ void buz(const char* data, uint32_t len, int msgId, net_commu* commu, void* usr_
     commu->send_data(reqStr.c_str(), reqStr.size(), elb::GetRouteByAgentReqId);//回复消息
 }
 
-int main(int argc, char** argv)
+void onConnection(tcp_client* client, void *args)
 {
-    parseOption(argc, argv);
-
+    unsigned long* startTsPtr = (unsigned long*)args;
+    if (!*startTsPtr)
+        *startTsPtr = getCurrentMills();
+    //连接建立后，主动发送消息
     elb::GetRouteByAgentReq req;
     req.set_modid(10001);
     req.set_cmdid(1001);
-
     std::string reqStr;
     req.SerializeToString(&reqStr);
+    client->send_data(reqStr.c_str(), reqStr.size(), elb::GetRouteByAgentReqId);
+}
 
+int main(int argc, char** argv)
+{
+    parseOption(argc, argv);
     long done = 0;
     event_loop loop;
+    std::vector<tcp_client*> clients;
     for (int i = 0;i < config.concurrency; ++i)
     {
-        tcp_client client(&loop, config.hostip, config.hostPort);//创建TCP客户端
-        client.add_msg_cb(elb::GetRouteByAgentRspId, buz, &done);//设置：当收到消息id=GetRouteByAgentRspId的消息时的回调函数
-        client.send_data(reqStr.c_str(), reqStr.size(), elb::GetRouteByAgentReqId);//主动发送消息
+        tcp_client* cli = new tcp_client(&loop, config.hostip, config.hostPort);//创建TCP客户端
+        if (!cli) exit(1);
+        cli->add_msg_cb(elb::GetRouteByAgentRspId, ActionGetRoute, &done);//设置：当收到消息id=GetRouteByAgentRspId的消息时的回调函数
+        cli->setup_connectcb(onConnection, &startTs);//当连接建立后，执行函数onConnection
+        clients.push_back(cli);
     }
-    startTs = getCurrentMills();
+
     loop.process_evs();
+
+    for (int i = 0;i < config.concurrency; ++i)
+    {
+        tcp_client* cli = clients[i];
+        delete cli;
+    }
+    return 0;
 }
