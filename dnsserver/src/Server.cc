@@ -51,7 +51,7 @@ int main()
     dispLogo();
 
     tcp_server server(&loop, ip.c_str(), port);//创建TCP服务器
-    server.add_msg_cb(elb::GetRouteByAgentReqId, getRoute);//设置：当收到消息id = 1的消息调用的回调函数  我们约定EchoString消息的ID是1
+    server.add_msg_cb(elb::GetRouteByAgentReqId, getRoute);//设置：当收到消息id = GetRouteByAgentReqId （即获取路由）的消息调用的回调函数
 
     _init_log_("dnsserver", ".");
     int log_level = config_reader::ins()->GetNumber("log", "level", 3);
