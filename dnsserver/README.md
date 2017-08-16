@@ -1,4 +1,4 @@
-## Arch
+## DNS Server Arch
 
 ![Alt text](pictures/DnsServer-Arch.png)
 ### **server model**
