@@ -5,4 +5,6 @@
 
 [1]: https://github.com/LeechanX/Easy-Load-Balancer/blob/master/dnsserver/README.md
 
-developing...
+**LB Agent: [lb agent readme][2]**
+
+[2]: https://github.com/LeechanX/Easy-Load-Balancer/blob/master/lbagent/README.md
