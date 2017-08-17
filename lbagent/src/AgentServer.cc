@@ -42,7 +42,7 @@ static void* initUDPServerIns(void* portPtr)
 
 void initUDPServers()
 {
-    short ports[3] = {8888, 8889, 8890};
+    static short ports[3] = {8888, 8889, 8890};
     for (int i = 0;i < 3; ++i)
     {
         pthread_t tid;
@@ -52,6 +52,6 @@ void initUDPServers()
             perror("pthread_create");
             ::exit(1);
         }
-        ::pthread_detach(tid);        
+        ::pthread_detach(tid);
     }
 }

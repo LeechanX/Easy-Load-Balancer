@@ -15,5 +15,9 @@ int main()
 
     //init three UDP servers and three thread for localhost[8888~8890]
     initUDPServers();
+    while (1)
+    {
+        sleep(3);
+    }
     return 0;
 }
