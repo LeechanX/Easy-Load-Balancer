@@ -12,9 +12,7 @@ enum MsgTypeId {
     ReportStatusReqId    = 9; //agent report lb status to reporter
 }
 
-/*
- 
-*/
+//represent a remote node
 message HostAddr {
     required int32 ip  = 1;
     required int32 port = 2;
