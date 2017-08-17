@@ -35,6 +35,9 @@ void protobuf_AssignDesc_elb_2eproto();
 void protobuf_ShutdownFile_elb_2eproto();
 
 class HostAddr;
+class GetHostReq;
+class GetHostRsp;
+class ReportReq;
 class GetRouteByAgentReq;
 class GetRouteByAgentRsp;
 
@@ -152,6 +155,337 @@ class HostAddr : public ::google::protobuf::Message {
 
   void InitAsDefaultInstance();
   static HostAddr* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class GetHostReq : public ::google::protobuf::Message {
+ public:
+  GetHostReq();
+  virtual ~GetHostReq();
+
+  GetHostReq(const GetHostReq& from);
+
+  inline GetHostReq& operator=(const GetHostReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GetHostReq& default_instance();
+
+  void Swap(GetHostReq* other);
+
+  // implements Message ----------------------------------------------
+
+  GetHostReq* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GetHostReq& from);
+  void MergeFrom(const GetHostReq& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 seq = 1;
+  inline bool has_seq() const;
+  inline void clear_seq();
+  static const int kSeqFieldNumber = 1;
+  inline ::google::protobuf::uint32 seq() const;
+  inline void set_seq(::google::protobuf::uint32 value);
+
+  // required int32 modid = 2;
+  inline bool has_modid() const;
+  inline void clear_modid();
+  static const int kModidFieldNumber = 2;
+  inline ::google::protobuf::int32 modid() const;
+  inline void set_modid(::google::protobuf::int32 value);
+
+  // required int32 cmdid = 3;
+  inline bool has_cmdid() const;
+  inline void clear_cmdid();
+  static const int kCmdidFieldNumber = 3;
+  inline ::google::protobuf::int32 cmdid() const;
+  inline void set_cmdid(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:elb.GetHostReq)
+ private:
+  inline void set_has_seq();
+  inline void clear_has_seq();
+  inline void set_has_modid();
+  inline void clear_has_modid();
+  inline void set_has_cmdid();
+  inline void clear_has_cmdid();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 seq_;
+  ::google::protobuf::int32 modid_;
+  ::google::protobuf::int32 cmdid_;
+  friend void  protobuf_AddDesc_elb_2eproto();
+  friend void protobuf_AssignDesc_elb_2eproto();
+  friend void protobuf_ShutdownFile_elb_2eproto();
+
+  void InitAsDefaultInstance();
+  static GetHostReq* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class GetHostRsp : public ::google::protobuf::Message {
+ public:
+  GetHostRsp();
+  virtual ~GetHostRsp();
+
+  GetHostRsp(const GetHostRsp& from);
+
+  inline GetHostRsp& operator=(const GetHostRsp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GetHostRsp& default_instance();
+
+  void Swap(GetHostRsp* other);
+
+  // implements Message ----------------------------------------------
+
+  GetHostRsp* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GetHostRsp& from);
+  void MergeFrom(const GetHostRsp& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 seq = 1;
+  inline bool has_seq() const;
+  inline void clear_seq();
+  static const int kSeqFieldNumber = 1;
+  inline ::google::protobuf::uint32 seq() const;
+  inline void set_seq(::google::protobuf::uint32 value);
+
+  // required int32 modid = 2;
+  inline bool has_modid() const;
+  inline void clear_modid();
+  static const int kModidFieldNumber = 2;
+  inline ::google::protobuf::int32 modid() const;
+  inline void set_modid(::google::protobuf::int32 value);
+
+  // required int32 cmdid = 3;
+  inline bool has_cmdid() const;
+  inline void clear_cmdid();
+  static const int kCmdidFieldNumber = 3;
+  inline ::google::protobuf::int32 cmdid() const;
+  inline void set_cmdid(::google::protobuf::int32 value);
+
+  // required int32 retcode = 4;
+  inline bool has_retcode() const;
+  inline void clear_retcode();
+  static const int kRetcodeFieldNumber = 4;
+  inline ::google::protobuf::int32 retcode() const;
+  inline void set_retcode(::google::protobuf::int32 value);
+
+  // optional .elb.HostAddr host = 5;
+  inline bool has_host() const;
+  inline void clear_host();
+  static const int kHostFieldNumber = 5;
+  inline const ::elb::HostAddr& host() const;
+  inline ::elb::HostAddr* mutable_host();
+  inline ::elb::HostAddr* release_host();
+  inline void set_allocated_host(::elb::HostAddr* host);
+
+  // @@protoc_insertion_point(class_scope:elb.GetHostRsp)
+ private:
+  inline void set_has_seq();
+  inline void clear_has_seq();
+  inline void set_has_modid();
+  inline void clear_has_modid();
+  inline void set_has_cmdid();
+  inline void clear_has_cmdid();
+  inline void set_has_retcode();
+  inline void clear_has_retcode();
+  inline void set_has_host();
+  inline void clear_has_host();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 seq_;
+  ::google::protobuf::int32 modid_;
+  ::google::protobuf::int32 cmdid_;
+  ::google::protobuf::int32 retcode_;
+  ::elb::HostAddr* host_;
+  friend void  protobuf_AddDesc_elb_2eproto();
+  friend void protobuf_AssignDesc_elb_2eproto();
+  friend void protobuf_ShutdownFile_elb_2eproto();
+
+  void InitAsDefaultInstance();
+  static GetHostRsp* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class ReportReq : public ::google::protobuf::Message {
+ public:
+  ReportReq();
+  virtual ~ReportReq();
+
+  ReportReq(const ReportReq& from);
+
+  inline ReportReq& operator=(const ReportReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const ReportReq& default_instance();
+
+  void Swap(ReportReq* other);
+
+  // implements Message ----------------------------------------------
+
+  ReportReq* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const ReportReq& from);
+  void MergeFrom(const ReportReq& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required int32 modid = 1;
+  inline bool has_modid() const;
+  inline void clear_modid();
+  static const int kModidFieldNumber = 1;
+  inline ::google::protobuf::int32 modid() const;
+  inline void set_modid(::google::protobuf::int32 value);
+
+  // required int32 cmdid = 2;
+  inline bool has_cmdid() const;
+  inline void clear_cmdid();
+  static const int kCmdidFieldNumber = 2;
+  inline ::google::protobuf::int32 cmdid() const;
+  inline void set_cmdid(::google::protobuf::int32 value);
+
+  // required .elb.HostAddr host = 3;
+  inline bool has_host() const;
+  inline void clear_host();
+  static const int kHostFieldNumber = 3;
+  inline const ::elb::HostAddr& host() const;
+  inline ::elb::HostAddr* mutable_host();
+  inline ::elb::HostAddr* release_host();
+  inline void set_allocated_host(::elb::HostAddr* host);
+
+  // required int32 retcode = 4;
+  inline bool has_retcode() const;
+  inline void clear_retcode();
+  static const int kRetcodeFieldNumber = 4;
+  inline ::google::protobuf::int32 retcode() const;
+  inline void set_retcode(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:elb.ReportReq)
+ private:
+  inline void set_has_modid();
+  inline void clear_has_modid();
+  inline void set_has_cmdid();
+  inline void clear_has_cmdid();
+  inline void set_has_host();
+  inline void clear_has_host();
+  inline void set_has_retcode();
+  inline void clear_has_retcode();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::int32 modid_;
+  ::google::protobuf::int32 cmdid_;
+  ::elb::HostAddr* host_;
+  ::google::protobuf::int32 retcode_;
+  friend void  protobuf_AddDesc_elb_2eproto();
+  friend void protobuf_AssignDesc_elb_2eproto();
+  friend void protobuf_ShutdownFile_elb_2eproto();
+
+  void InitAsDefaultInstance();
+  static ReportReq* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -397,6 +731,340 @@ inline void HostAddr::set_port(::google::protobuf::int32 value) {
   set_has_port();
   port_ = value;
   // @@protoc_insertion_point(field_set:elb.HostAddr.port)
+}
+
+// -------------------------------------------------------------------
+
+// GetHostReq
+
+// required uint32 seq = 1;
+inline bool GetHostReq::has_seq() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GetHostReq::set_has_seq() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GetHostReq::clear_has_seq() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GetHostReq::clear_seq() {
+  seq_ = 0u;
+  clear_has_seq();
+}
+inline ::google::protobuf::uint32 GetHostReq::seq() const {
+  // @@protoc_insertion_point(field_get:elb.GetHostReq.seq)
+  return seq_;
+}
+inline void GetHostReq::set_seq(::google::protobuf::uint32 value) {
+  set_has_seq();
+  seq_ = value;
+  // @@protoc_insertion_point(field_set:elb.GetHostReq.seq)
+}
+
+// required int32 modid = 2;
+inline bool GetHostReq::has_modid() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void GetHostReq::set_has_modid() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void GetHostReq::clear_has_modid() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void GetHostReq::clear_modid() {
+  modid_ = 0;
+  clear_has_modid();
+}
+inline ::google::protobuf::int32 GetHostReq::modid() const {
+  // @@protoc_insertion_point(field_get:elb.GetHostReq.modid)
+  return modid_;
+}
+inline void GetHostReq::set_modid(::google::protobuf::int32 value) {
+  set_has_modid();
+  modid_ = value;
+  // @@protoc_insertion_point(field_set:elb.GetHostReq.modid)
+}
+
+// required int32 cmdid = 3;
+inline bool GetHostReq::has_cmdid() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void GetHostReq::set_has_cmdid() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void GetHostReq::clear_has_cmdid() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void GetHostReq::clear_cmdid() {
+  cmdid_ = 0;
+  clear_has_cmdid();
+}
+inline ::google::protobuf::int32 GetHostReq::cmdid() const {
+  // @@protoc_insertion_point(field_get:elb.GetHostReq.cmdid)
+  return cmdid_;
+}
+inline void GetHostReq::set_cmdid(::google::protobuf::int32 value) {
+  set_has_cmdid();
+  cmdid_ = value;
+  // @@protoc_insertion_point(field_set:elb.GetHostReq.cmdid)
+}
+
+// -------------------------------------------------------------------
+
+// GetHostRsp
+
+// required uint32 seq = 1;
+inline bool GetHostRsp::has_seq() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GetHostRsp::set_has_seq() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GetHostRsp::clear_has_seq() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GetHostRsp::clear_seq() {
+  seq_ = 0u;
+  clear_has_seq();
+}
+inline ::google::protobuf::uint32 GetHostRsp::seq() const {
+  // @@protoc_insertion_point(field_get:elb.GetHostRsp.seq)
+  return seq_;
+}
+inline void GetHostRsp::set_seq(::google::protobuf::uint32 value) {
+  set_has_seq();
+  seq_ = value;
+  // @@protoc_insertion_point(field_set:elb.GetHostRsp.seq)
+}
+
+// required int32 modid = 2;
+inline bool GetHostRsp::has_modid() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void GetHostRsp::set_has_modid() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void GetHostRsp::clear_has_modid() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void GetHostRsp::clear_modid() {
+  modid_ = 0;
+  clear_has_modid();
+}
+inline ::google::protobuf::int32 GetHostRsp::modid() const {
+  // @@protoc_insertion_point(field_get:elb.GetHostRsp.modid)
+  return modid_;
+}
+inline void GetHostRsp::set_modid(::google::protobuf::int32 value) {
+  set_has_modid();
+  modid_ = value;
+  // @@protoc_insertion_point(field_set:elb.GetHostRsp.modid)
+}
+
+// required int32 cmdid = 3;
+inline bool GetHostRsp::has_cmdid() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void GetHostRsp::set_has_cmdid() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void GetHostRsp::clear_has_cmdid() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void GetHostRsp::clear_cmdid() {
+  cmdid_ = 0;
+  clear_has_cmdid();
+}
+inline ::google::protobuf::int32 GetHostRsp::cmdid() const {
+  // @@protoc_insertion_point(field_get:elb.GetHostRsp.cmdid)
+  return cmdid_;
+}
+inline void GetHostRsp::set_cmdid(::google::protobuf::int32 value) {
+  set_has_cmdid();
+  cmdid_ = value;
+  // @@protoc_insertion_point(field_set:elb.GetHostRsp.cmdid)
+}
+
+// required int32 retcode = 4;
+inline bool GetHostRsp::has_retcode() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void GetHostRsp::set_has_retcode() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void GetHostRsp::clear_has_retcode() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void GetHostRsp::clear_retcode() {
+  retcode_ = 0;
+  clear_has_retcode();
+}
+inline ::google::protobuf::int32 GetHostRsp::retcode() const {
+  // @@protoc_insertion_point(field_get:elb.GetHostRsp.retcode)
+  return retcode_;
+}
+inline void GetHostRsp::set_retcode(::google::protobuf::int32 value) {
+  set_has_retcode();
+  retcode_ = value;
+  // @@protoc_insertion_point(field_set:elb.GetHostRsp.retcode)
+}
+
+// optional .elb.HostAddr host = 5;
+inline bool GetHostRsp::has_host() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void GetHostRsp::set_has_host() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void GetHostRsp::clear_has_host() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void GetHostRsp::clear_host() {
+  if (host_ != NULL) host_->::elb::HostAddr::Clear();
+  clear_has_host();
+}
+inline const ::elb::HostAddr& GetHostRsp::host() const {
+  // @@protoc_insertion_point(field_get:elb.GetHostRsp.host)
+  return host_ != NULL ? *host_ : *default_instance_->host_;
+}
+inline ::elb::HostAddr* GetHostRsp::mutable_host() {
+  set_has_host();
+  if (host_ == NULL) host_ = new ::elb::HostAddr;
+  // @@protoc_insertion_point(field_mutable:elb.GetHostRsp.host)
+  return host_;
+}
+inline ::elb::HostAddr* GetHostRsp::release_host() {
+  clear_has_host();
+  ::elb::HostAddr* temp = host_;
+  host_ = NULL;
+  return temp;
+}
+inline void GetHostRsp::set_allocated_host(::elb::HostAddr* host) {
+  delete host_;
+  host_ = host;
+  if (host) {
+    set_has_host();
+  } else {
+    clear_has_host();
+  }
+  // @@protoc_insertion_point(field_set_allocated:elb.GetHostRsp.host)
+}
+
+// -------------------------------------------------------------------
+
+// ReportReq
+
+// required int32 modid = 1;
+inline bool ReportReq::has_modid() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void ReportReq::set_has_modid() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void ReportReq::clear_has_modid() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void ReportReq::clear_modid() {
+  modid_ = 0;
+  clear_has_modid();
+}
+inline ::google::protobuf::int32 ReportReq::modid() const {
+  // @@protoc_insertion_point(field_get:elb.ReportReq.modid)
+  return modid_;
+}
+inline void ReportReq::set_modid(::google::protobuf::int32 value) {
+  set_has_modid();
+  modid_ = value;
+  // @@protoc_insertion_point(field_set:elb.ReportReq.modid)
+}
+
+// required int32 cmdid = 2;
+inline bool ReportReq::has_cmdid() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void ReportReq::set_has_cmdid() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void ReportReq::clear_has_cmdid() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void ReportReq::clear_cmdid() {
+  cmdid_ = 0;
+  clear_has_cmdid();
+}
+inline ::google::protobuf::int32 ReportReq::cmdid() const {
+  // @@protoc_insertion_point(field_get:elb.ReportReq.cmdid)
+  return cmdid_;
+}
+inline void ReportReq::set_cmdid(::google::protobuf::int32 value) {
+  set_has_cmdid();
+  cmdid_ = value;
+  // @@protoc_insertion_point(field_set:elb.ReportReq.cmdid)
+}
+
+// required .elb.HostAddr host = 3;
+inline bool ReportReq::has_host() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void ReportReq::set_has_host() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void ReportReq::clear_has_host() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void ReportReq::clear_host() {
+  if (host_ != NULL) host_->::elb::HostAddr::Clear();
+  clear_has_host();
+}
+inline const ::elb::HostAddr& ReportReq::host() const {
+  // @@protoc_insertion_point(field_get:elb.ReportReq.host)
+  return host_ != NULL ? *host_ : *default_instance_->host_;
+}
+inline ::elb::HostAddr* ReportReq::mutable_host() {
+  set_has_host();
+  if (host_ == NULL) host_ = new ::elb::HostAddr;
+  // @@protoc_insertion_point(field_mutable:elb.ReportReq.host)
+  return host_;
+}
+inline ::elb::HostAddr* ReportReq::release_host() {
+  clear_has_host();
+  ::elb::HostAddr* temp = host_;
+  host_ = NULL;
+  return temp;
+}
+inline void ReportReq::set_allocated_host(::elb::HostAddr* host) {
+  delete host_;
+  host_ = host;
+  if (host) {
+    set_has_host();
+  } else {
+    clear_has_host();
+  }
+  // @@protoc_insertion_point(field_set_allocated:elb.ReportReq.host)
+}
+
+// required int32 retcode = 4;
+inline bool ReportReq::has_retcode() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void ReportReq::set_has_retcode() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void ReportReq::clear_has_retcode() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void ReportReq::clear_retcode() {
+  retcode_ = 0;
+  clear_has_retcode();
+}
+inline ::google::protobuf::int32 ReportReq::retcode() const {
+  // @@protoc_insertion_point(field_get:elb.ReportReq.retcode)
+  return retcode_;
+}
+inline void ReportReq::set_retcode(::google::protobuf::int32 value) {
+  set_has_retcode();
+  retcode_ = value;
+  // @@protoc_insertion_point(field_set:elb.ReportReq.retcode)
 }
 
 // -------------------------------------------------------------------

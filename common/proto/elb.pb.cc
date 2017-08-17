@@ -23,6 +23,15 @@ namespace {
 const ::google::protobuf::Descriptor* HostAddr_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   HostAddr_reflection_ = NULL;
+const ::google::protobuf::Descriptor* GetHostReq_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  GetHostReq_reflection_ = NULL;
+const ::google::protobuf::Descriptor* GetHostRsp_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  GetHostRsp_reflection_ = NULL;
+const ::google::protobuf::Descriptor* ReportReq_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  ReportReq_reflection_ = NULL;
 const ::google::protobuf::Descriptor* GetRouteByAgentReq_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   GetRouteByAgentReq_reflection_ = NULL;
@@ -56,7 +65,61 @@ void protobuf_AssignDesc_elb_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(HostAddr));
-  GetRouteByAgentReq_descriptor_ = file->message_type(1);
+  GetHostReq_descriptor_ = file->message_type(1);
+  static const int GetHostReq_offsets_[3] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GetHostReq, seq_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GetHostReq, modid_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GetHostReq, cmdid_),
+  };
+  GetHostReq_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      GetHostReq_descriptor_,
+      GetHostReq::default_instance_,
+      GetHostReq_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GetHostReq, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GetHostReq, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(GetHostReq));
+  GetHostRsp_descriptor_ = file->message_type(2);
+  static const int GetHostRsp_offsets_[5] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GetHostRsp, seq_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GetHostRsp, modid_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GetHostRsp, cmdid_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GetHostRsp, retcode_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GetHostRsp, host_),
+  };
+  GetHostRsp_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      GetHostRsp_descriptor_,
+      GetHostRsp::default_instance_,
+      GetHostRsp_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GetHostRsp, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GetHostRsp, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(GetHostRsp));
+  ReportReq_descriptor_ = file->message_type(3);
+  static const int ReportReq_offsets_[4] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ReportReq, modid_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ReportReq, cmdid_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ReportReq, host_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ReportReq, retcode_),
+  };
+  ReportReq_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      ReportReq_descriptor_,
+      ReportReq::default_instance_,
+      ReportReq_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ReportReq, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ReportReq, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(ReportReq));
+  GetRouteByAgentReq_descriptor_ = file->message_type(4);
   static const int GetRouteByAgentReq_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GetRouteByAgentReq, modid_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GetRouteByAgentReq, cmdid_),
@@ -72,7 +135,7 @@ void protobuf_AssignDesc_elb_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(GetRouteByAgentReq));
-  GetRouteByAgentRsp_descriptor_ = file->message_type(2);
+  GetRouteByAgentRsp_descriptor_ = file->message_type(5);
   static const int GetRouteByAgentRsp_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GetRouteByAgentRsp, modid_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GetRouteByAgentRsp, cmdid_),
@@ -105,6 +168,12 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     HostAddr_descriptor_, &HostAddr::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    GetHostReq_descriptor_, &GetHostReq::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    GetHostRsp_descriptor_, &GetHostRsp::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    ReportReq_descriptor_, &ReportReq::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     GetRouteByAgentReq_descriptor_, &GetRouteByAgentReq::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     GetRouteByAgentRsp_descriptor_, &GetRouteByAgentRsp::default_instance());
@@ -115,6 +184,12 @@ void protobuf_RegisterTypes(const ::std::string&) {
 void protobuf_ShutdownFile_elb_2eproto() {
   delete HostAddr::default_instance_;
   delete HostAddr_reflection_;
+  delete GetHostReq::default_instance_;
+  delete GetHostReq_reflection_;
+  delete GetHostRsp::default_instance_;
+  delete GetHostRsp_reflection_;
+  delete ReportReq::default_instance_;
+  delete ReportReq_reflection_;
   delete GetRouteByAgentReq::default_instance_;
   delete GetRouteByAgentReq_reflection_;
   delete GetRouteByAgentRsp::default_instance_;
@@ -129,21 +204,34 @@ void protobuf_AddDesc_elb_2eproto() {
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\telb.proto\022\003elb\"$\n\010HostAddr\022\n\n\002ip\030\001 \002(\005"
-    "\022\014\n\004port\030\002 \002(\005\"2\n\022GetRouteByAgentReq\022\r\n\005"
-    "modid\030\001 \002(\005\022\r\n\005cmdid\030\002 \002(\005\"P\n\022GetRouteBy"
-    "AgentRsp\022\r\n\005modid\030\001 \002(\005\022\r\n\005cmdid\030\002 \002(\005\022\034"
-    "\n\005hosts\030\003 \003(\0132\r.elb.HostAddr*\320\001\n\tMsgType"
-    "Id\022\020\n\014GetHostReqId\020\001\022\020\n\014GetHostRspId\020\002\022\017"
-    "\n\013ReportReqId\020\003\022\027\n\023GetRouteByToolReqId\020\004"
-    "\022\027\n\023GetRouteByToolRspId\020\005\022\021\n\rRecordLbReq"
-    "Id\020\006\022\030\n\024GetRouteByAgentReqId\020\007\022\030\n\024GetRou"
-    "teByAgentRspId\020\010\022\025\n\021ReportStatusReqId\020\t", 399);
+    "\022\014\n\004port\030\002 \002(\005\"7\n\nGetHostReq\022\013\n\003seq\030\001 \002("
+    "\r\022\r\n\005modid\030\002 \002(\005\022\r\n\005cmdid\030\003 \002(\005\"e\n\nGetHo"
+    "stRsp\022\013\n\003seq\030\001 \002(\r\022\r\n\005modid\030\002 \002(\005\022\r\n\005cmd"
+    "id\030\003 \002(\005\022\017\n\007retcode\030\004 \002(\005\022\033\n\004host\030\005 \001(\0132"
+    "\r.elb.HostAddr\"W\n\tReportReq\022\r\n\005modid\030\001 \002"
+    "(\005\022\r\n\005cmdid\030\002 \002(\005\022\033\n\004host\030\003 \002(\0132\r.elb.Ho"
+    "stAddr\022\017\n\007retcode\030\004 \002(\005\"2\n\022GetRouteByAge"
+    "ntReq\022\r\n\005modid\030\001 \002(\005\022\r\n\005cmdid\030\002 \002(\005\"P\n\022G"
+    "etRouteByAgentRsp\022\r\n\005modid\030\001 \002(\005\022\r\n\005cmdi"
+    "d\030\002 \002(\005\022\034\n\005hosts\030\003 \003(\0132\r.elb.HostAddr*\320\001"
+    "\n\tMsgTypeId\022\020\n\014GetHostReqId\020\001\022\020\n\014GetHost"
+    "RspId\020\002\022\017\n\013ReportReqId\020\003\022\027\n\023GetRouteByTo"
+    "olReqId\020\004\022\027\n\023GetRouteByToolRspId\020\005\022\021\n\rRe"
+    "cordLbReqId\020\006\022\030\n\024GetRouteByAgentReqId\020\007\022"
+    "\030\n\024GetRouteByAgentRspId\020\010\022\025\n\021ReportStatu"
+    "sReqId\020\t", 648);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "elb.proto", &protobuf_RegisterTypes);
   HostAddr::default_instance_ = new HostAddr();
+  GetHostReq::default_instance_ = new GetHostReq();
+  GetHostRsp::default_instance_ = new GetHostRsp();
+  ReportReq::default_instance_ = new ReportReq();
   GetRouteByAgentReq::default_instance_ = new GetRouteByAgentReq();
   GetRouteByAgentRsp::default_instance_ = new GetRouteByAgentRsp();
   HostAddr::default_instance_->InitAsDefaultInstance();
+  GetHostReq::default_instance_->InitAsDefaultInstance();
+  GetHostRsp::default_instance_->InitAsDefaultInstance();
+  ReportReq::default_instance_->InitAsDefaultInstance();
   GetRouteByAgentReq::default_instance_->InitAsDefaultInstance();
   GetRouteByAgentRsp::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_elb_2eproto);
@@ -448,6 +536,1082 @@ void HostAddr::Swap(HostAddr* other) {
   ::google::protobuf::Metadata metadata;
   metadata.descriptor = HostAddr_descriptor_;
   metadata.reflection = HostAddr_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int GetHostReq::kSeqFieldNumber;
+const int GetHostReq::kModidFieldNumber;
+const int GetHostReq::kCmdidFieldNumber;
+#endif  // !_MSC_VER
+
+GetHostReq::GetHostReq()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:elb.GetHostReq)
+}
+
+void GetHostReq::InitAsDefaultInstance() {
+}
+
+GetHostReq::GetHostReq(const GetHostReq& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:elb.GetHostReq)
+}
+
+void GetHostReq::SharedCtor() {
+  _cached_size_ = 0;
+  seq_ = 0u;
+  modid_ = 0;
+  cmdid_ = 0;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+GetHostReq::~GetHostReq() {
+  // @@protoc_insertion_point(destructor:elb.GetHostReq)
+  SharedDtor();
+}
+
+void GetHostReq::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void GetHostReq::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* GetHostReq::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return GetHostReq_descriptor_;
+}
+
+const GetHostReq& GetHostReq::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_elb_2eproto();
+  return *default_instance_;
+}
+
+GetHostReq* GetHostReq::default_instance_ = NULL;
+
+GetHostReq* GetHostReq::New() const {
+  return new GetHostReq;
+}
+
+void GetHostReq::Clear() {
+#define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
+  &reinterpret_cast<GetHostReq*>(16)->f) - \
+   reinterpret_cast<char*>(16))
+
+#define ZR_(first, last) do {                              \
+    size_t f = OFFSET_OF_FIELD_(first);                    \
+    size_t n = OFFSET_OF_FIELD_(last) - f + sizeof(last);  \
+    ::memset(&first, 0, n);                                \
+  } while (0)
+
+  ZR_(seq_, cmdid_);
+
+#undef OFFSET_OF_FIELD_
+#undef ZR_
+
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool GetHostReq::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:elb.GetHostReq)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required uint32 seq = 1;
+      case 1: {
+        if (tag == 8) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &seq_)));
+          set_has_seq();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_modid;
+        break;
+      }
+
+      // required int32 modid = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_modid:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &modid_)));
+          set_has_modid();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(24)) goto parse_cmdid;
+        break;
+      }
+
+      // required int32 cmdid = 3;
+      case 3: {
+        if (tag == 24) {
+         parse_cmdid:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &cmdid_)));
+          set_has_cmdid();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:elb.GetHostReq)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:elb.GetHostReq)
+  return false;
+#undef DO_
+}
+
+void GetHostReq::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:elb.GetHostReq)
+  // required uint32 seq = 1;
+  if (has_seq()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->seq(), output);
+  }
+
+  // required int32 modid = 2;
+  if (has_modid()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->modid(), output);
+  }
+
+  // required int32 cmdid = 3;
+  if (has_cmdid()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->cmdid(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:elb.GetHostReq)
+}
+
+::google::protobuf::uint8* GetHostReq::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:elb.GetHostReq)
+  // required uint32 seq = 1;
+  if (has_seq()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->seq(), target);
+  }
+
+  // required int32 modid = 2;
+  if (has_modid()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(2, this->modid(), target);
+  }
+
+  // required int32 cmdid = 3;
+  if (has_cmdid()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(3, this->cmdid(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:elb.GetHostReq)
+  return target;
+}
+
+int GetHostReq::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required uint32 seq = 1;
+    if (has_seq()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->seq());
+    }
+
+    // required int32 modid = 2;
+    if (has_modid()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->modid());
+    }
+
+    // required int32 cmdid = 3;
+    if (has_cmdid()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->cmdid());
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void GetHostReq::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const GetHostReq* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const GetHostReq*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void GetHostReq::MergeFrom(const GetHostReq& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_seq()) {
+      set_seq(from.seq());
+    }
+    if (from.has_modid()) {
+      set_modid(from.modid());
+    }
+    if (from.has_cmdid()) {
+      set_cmdid(from.cmdid());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void GetHostReq::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void GetHostReq::CopyFrom(const GetHostReq& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool GetHostReq::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
+
+  return true;
+}
+
+void GetHostReq::Swap(GetHostReq* other) {
+  if (other != this) {
+    std::swap(seq_, other->seq_);
+    std::swap(modid_, other->modid_);
+    std::swap(cmdid_, other->cmdid_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata GetHostReq::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = GetHostReq_descriptor_;
+  metadata.reflection = GetHostReq_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int GetHostRsp::kSeqFieldNumber;
+const int GetHostRsp::kModidFieldNumber;
+const int GetHostRsp::kCmdidFieldNumber;
+const int GetHostRsp::kRetcodeFieldNumber;
+const int GetHostRsp::kHostFieldNumber;
+#endif  // !_MSC_VER
+
+GetHostRsp::GetHostRsp()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:elb.GetHostRsp)
+}
+
+void GetHostRsp::InitAsDefaultInstance() {
+  host_ = const_cast< ::elb::HostAddr*>(&::elb::HostAddr::default_instance());
+}
+
+GetHostRsp::GetHostRsp(const GetHostRsp& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:elb.GetHostRsp)
+}
+
+void GetHostRsp::SharedCtor() {
+  _cached_size_ = 0;
+  seq_ = 0u;
+  modid_ = 0;
+  cmdid_ = 0;
+  retcode_ = 0;
+  host_ = NULL;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+GetHostRsp::~GetHostRsp() {
+  // @@protoc_insertion_point(destructor:elb.GetHostRsp)
+  SharedDtor();
+}
+
+void GetHostRsp::SharedDtor() {
+  if (this != default_instance_) {
+    delete host_;
+  }
+}
+
+void GetHostRsp::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* GetHostRsp::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return GetHostRsp_descriptor_;
+}
+
+const GetHostRsp& GetHostRsp::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_elb_2eproto();
+  return *default_instance_;
+}
+
+GetHostRsp* GetHostRsp::default_instance_ = NULL;
+
+GetHostRsp* GetHostRsp::New() const {
+  return new GetHostRsp;
+}
+
+void GetHostRsp::Clear() {
+#define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
+  &reinterpret_cast<GetHostRsp*>(16)->f) - \
+   reinterpret_cast<char*>(16))
+
+#define ZR_(first, last) do {                              \
+    size_t f = OFFSET_OF_FIELD_(first);                    \
+    size_t n = OFFSET_OF_FIELD_(last) - f + sizeof(last);  \
+    ::memset(&first, 0, n);                                \
+  } while (0)
+
+  if (_has_bits_[0 / 32] & 31) {
+    ZR_(seq_, retcode_);
+    if (has_host()) {
+      if (host_ != NULL) host_->::elb::HostAddr::Clear();
+    }
+  }
+
+#undef OFFSET_OF_FIELD_
+#undef ZR_
+
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool GetHostRsp::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:elb.GetHostRsp)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required uint32 seq = 1;
+      case 1: {
+        if (tag == 8) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &seq_)));
+          set_has_seq();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_modid;
+        break;
+      }
+
+      // required int32 modid = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_modid:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &modid_)));
+          set_has_modid();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(24)) goto parse_cmdid;
+        break;
+      }
+
+      // required int32 cmdid = 3;
+      case 3: {
+        if (tag == 24) {
+         parse_cmdid:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &cmdid_)));
+          set_has_cmdid();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(32)) goto parse_retcode;
+        break;
+      }
+
+      // required int32 retcode = 4;
+      case 4: {
+        if (tag == 32) {
+         parse_retcode:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &retcode_)));
+          set_has_retcode();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(42)) goto parse_host;
+        break;
+      }
+
+      // optional .elb.HostAddr host = 5;
+      case 5: {
+        if (tag == 42) {
+         parse_host:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_host()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:elb.GetHostRsp)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:elb.GetHostRsp)
+  return false;
+#undef DO_
+}
+
+void GetHostRsp::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:elb.GetHostRsp)
+  // required uint32 seq = 1;
+  if (has_seq()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->seq(), output);
+  }
+
+  // required int32 modid = 2;
+  if (has_modid()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->modid(), output);
+  }
+
+  // required int32 cmdid = 3;
+  if (has_cmdid()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->cmdid(), output);
+  }
+
+  // required int32 retcode = 4;
+  if (has_retcode()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->retcode(), output);
+  }
+
+  // optional .elb.HostAddr host = 5;
+  if (has_host()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      5, this->host(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:elb.GetHostRsp)
+}
+
+::google::protobuf::uint8* GetHostRsp::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:elb.GetHostRsp)
+  // required uint32 seq = 1;
+  if (has_seq()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->seq(), target);
+  }
+
+  // required int32 modid = 2;
+  if (has_modid()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(2, this->modid(), target);
+  }
+
+  // required int32 cmdid = 3;
+  if (has_cmdid()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(3, this->cmdid(), target);
+  }
+
+  // required int32 retcode = 4;
+  if (has_retcode()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(4, this->retcode(), target);
+  }
+
+  // optional .elb.HostAddr host = 5;
+  if (has_host()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        5, this->host(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:elb.GetHostRsp)
+  return target;
+}
+
+int GetHostRsp::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required uint32 seq = 1;
+    if (has_seq()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->seq());
+    }
+
+    // required int32 modid = 2;
+    if (has_modid()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->modid());
+    }
+
+    // required int32 cmdid = 3;
+    if (has_cmdid()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->cmdid());
+    }
+
+    // required int32 retcode = 4;
+    if (has_retcode()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->retcode());
+    }
+
+    // optional .elb.HostAddr host = 5;
+    if (has_host()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->host());
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void GetHostRsp::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const GetHostRsp* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const GetHostRsp*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void GetHostRsp::MergeFrom(const GetHostRsp& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_seq()) {
+      set_seq(from.seq());
+    }
+    if (from.has_modid()) {
+      set_modid(from.modid());
+    }
+    if (from.has_cmdid()) {
+      set_cmdid(from.cmdid());
+    }
+    if (from.has_retcode()) {
+      set_retcode(from.retcode());
+    }
+    if (from.has_host()) {
+      mutable_host()->::elb::HostAddr::MergeFrom(from.host());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void GetHostRsp::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void GetHostRsp::CopyFrom(const GetHostRsp& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool GetHostRsp::IsInitialized() const {
+  if ((_has_bits_[0] & 0x0000000f) != 0x0000000f) return false;
+
+  if (has_host()) {
+    if (!this->host().IsInitialized()) return false;
+  }
+  return true;
+}
+
+void GetHostRsp::Swap(GetHostRsp* other) {
+  if (other != this) {
+    std::swap(seq_, other->seq_);
+    std::swap(modid_, other->modid_);
+    std::swap(cmdid_, other->cmdid_);
+    std::swap(retcode_, other->retcode_);
+    std::swap(host_, other->host_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata GetHostRsp::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = GetHostRsp_descriptor_;
+  metadata.reflection = GetHostRsp_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int ReportReq::kModidFieldNumber;
+const int ReportReq::kCmdidFieldNumber;
+const int ReportReq::kHostFieldNumber;
+const int ReportReq::kRetcodeFieldNumber;
+#endif  // !_MSC_VER
+
+ReportReq::ReportReq()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:elb.ReportReq)
+}
+
+void ReportReq::InitAsDefaultInstance() {
+  host_ = const_cast< ::elb::HostAddr*>(&::elb::HostAddr::default_instance());
+}
+
+ReportReq::ReportReq(const ReportReq& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:elb.ReportReq)
+}
+
+void ReportReq::SharedCtor() {
+  _cached_size_ = 0;
+  modid_ = 0;
+  cmdid_ = 0;
+  host_ = NULL;
+  retcode_ = 0;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+ReportReq::~ReportReq() {
+  // @@protoc_insertion_point(destructor:elb.ReportReq)
+  SharedDtor();
+}
+
+void ReportReq::SharedDtor() {
+  if (this != default_instance_) {
+    delete host_;
+  }
+}
+
+void ReportReq::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* ReportReq::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return ReportReq_descriptor_;
+}
+
+const ReportReq& ReportReq::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_elb_2eproto();
+  return *default_instance_;
+}
+
+ReportReq* ReportReq::default_instance_ = NULL;
+
+ReportReq* ReportReq::New() const {
+  return new ReportReq;
+}
+
+void ReportReq::Clear() {
+#define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
+  &reinterpret_cast<ReportReq*>(16)->f) - \
+   reinterpret_cast<char*>(16))
+
+#define ZR_(first, last) do {                              \
+    size_t f = OFFSET_OF_FIELD_(first);                    \
+    size_t n = OFFSET_OF_FIELD_(last) - f + sizeof(last);  \
+    ::memset(&first, 0, n);                                \
+  } while (0)
+
+  if (_has_bits_[0 / 32] & 15) {
+    ZR_(modid_, cmdid_);
+    if (has_host()) {
+      if (host_ != NULL) host_->::elb::HostAddr::Clear();
+    }
+    retcode_ = 0;
+  }
+
+#undef OFFSET_OF_FIELD_
+#undef ZR_
+
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool ReportReq::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:elb.ReportReq)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required int32 modid = 1;
+      case 1: {
+        if (tag == 8) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &modid_)));
+          set_has_modid();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_cmdid;
+        break;
+      }
+
+      // required int32 cmdid = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_cmdid:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &cmdid_)));
+          set_has_cmdid();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(26)) goto parse_host;
+        break;
+      }
+
+      // required .elb.HostAddr host = 3;
+      case 3: {
+        if (tag == 26) {
+         parse_host:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_host()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(32)) goto parse_retcode;
+        break;
+      }
+
+      // required int32 retcode = 4;
+      case 4: {
+        if (tag == 32) {
+         parse_retcode:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &retcode_)));
+          set_has_retcode();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:elb.ReportReq)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:elb.ReportReq)
+  return false;
+#undef DO_
+}
+
+void ReportReq::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:elb.ReportReq)
+  // required int32 modid = 1;
+  if (has_modid()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->modid(), output);
+  }
+
+  // required int32 cmdid = 2;
+  if (has_cmdid()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->cmdid(), output);
+  }
+
+  // required .elb.HostAddr host = 3;
+  if (has_host()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      3, this->host(), output);
+  }
+
+  // required int32 retcode = 4;
+  if (has_retcode()) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->retcode(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:elb.ReportReq)
+}
+
+::google::protobuf::uint8* ReportReq::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:elb.ReportReq)
+  // required int32 modid = 1;
+  if (has_modid()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->modid(), target);
+  }
+
+  // required int32 cmdid = 2;
+  if (has_cmdid()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(2, this->cmdid(), target);
+  }
+
+  // required .elb.HostAddr host = 3;
+  if (has_host()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        3, this->host(), target);
+  }
+
+  // required int32 retcode = 4;
+  if (has_retcode()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(4, this->retcode(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:elb.ReportReq)
+  return target;
+}
+
+int ReportReq::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required int32 modid = 1;
+    if (has_modid()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->modid());
+    }
+
+    // required int32 cmdid = 2;
+    if (has_cmdid()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->cmdid());
+    }
+
+    // required .elb.HostAddr host = 3;
+    if (has_host()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->host());
+    }
+
+    // required int32 retcode = 4;
+    if (has_retcode()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->retcode());
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void ReportReq::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const ReportReq* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const ReportReq*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void ReportReq::MergeFrom(const ReportReq& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_modid()) {
+      set_modid(from.modid());
+    }
+    if (from.has_cmdid()) {
+      set_cmdid(from.cmdid());
+    }
+    if (from.has_host()) {
+      mutable_host()->::elb::HostAddr::MergeFrom(from.host());
+    }
+    if (from.has_retcode()) {
+      set_retcode(from.retcode());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void ReportReq::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void ReportReq::CopyFrom(const ReportReq& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ReportReq::IsInitialized() const {
+  if ((_has_bits_[0] & 0x0000000f) != 0x0000000f) return false;
+
+  if (has_host()) {
+    if (!this->host().IsInitialized()) return false;
+  }
+  return true;
+}
+
+void ReportReq::Swap(ReportReq* other) {
+  if (other != this) {
+    std::swap(modid_, other->modid_);
+    std::swap(cmdid_, other->cmdid_);
+    std::swap(host_, other->host_);
+    std::swap(retcode_, other->retcode_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata ReportReq::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = ReportReq_descriptor_;
+  metadata.reflection = ReportReq_reflection_;
   return metadata;
 }
 
