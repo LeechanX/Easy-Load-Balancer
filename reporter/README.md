@@ -7,7 +7,7 @@
 
 ### **principle arch**
 
-![Alt text](pictures/Reporter-Arch.png)
+![Reporter-Arch](pictures/Reporter-Arch.png)
 
 ### **server model**
 
