@@ -1,5 +1,9 @@
 # Easy Load Balancer
 
+### 总体架构
+
+![arch](pictures/arch.png)
+
 ### 各模块架构原理介绍
 **DNS Server: [dnsserver readme][1]**
 
