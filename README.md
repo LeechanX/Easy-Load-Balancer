@@ -9,6 +9,6 @@
 
 [2]: https://github.com/LeechanX/Easy-Load-Balancer/blob/master/lbagent/README.md
 
-**Reporter: [reporter readme][2]**
+**Reporter: [reporter readme][3]**
 
-[2]: https://github.com/LeechanX/Easy-Load-Balancer/blob/master/reporter/README.md
+[3]: https://github.com/LeechanX/Easy-Load-Balancer/blob/master/reporter/README.md
