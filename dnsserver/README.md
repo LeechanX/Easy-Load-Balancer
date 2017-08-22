@@ -1,7 +1,7 @@
-## DNS Server Arch
+## DNS Server Presentation
 ### **feature**
 负责接收各agent对某modid、cmdid的请求并返回该modid、cmdid下的所有节点，即为agent提供获取路由服务
-
+### **principle arch**
 ![Alt text](pictures/DnsServer-Arch.png)
 ### **server model**
 DnsServer服务模型采用了one loop per thread TCP服务器：
