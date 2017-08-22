@@ -40,6 +40,8 @@ class GetHostRsp;
 class ReportReq;
 class GetRouteByAgentReq;
 class GetRouteByAgentRsp;
+class HostCallResult;
+class ReportStatusReq;
 
 enum MsgTypeId {
   GetHostReqId = 1,
@@ -678,6 +680,247 @@ class GetRouteByAgentRsp : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static GetRouteByAgentRsp* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class HostCallResult : public ::google::protobuf::Message {
+ public:
+  HostCallResult();
+  virtual ~HostCallResult();
+
+  HostCallResult(const HostCallResult& from);
+
+  inline HostCallResult& operator=(const HostCallResult& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const HostCallResult& default_instance();
+
+  void Swap(HostCallResult* other);
+
+  // implements Message ----------------------------------------------
+
+  HostCallResult* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const HostCallResult& from);
+  void MergeFrom(const HostCallResult& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required int32 ip = 1;
+  inline bool has_ip() const;
+  inline void clear_ip();
+  static const int kIpFieldNumber = 1;
+  inline ::google::protobuf::int32 ip() const;
+  inline void set_ip(::google::protobuf::int32 value);
+
+  // required int32 port = 2;
+  inline bool has_port() const;
+  inline void clear_port();
+  static const int kPortFieldNumber = 2;
+  inline ::google::protobuf::int32 port() const;
+  inline void set_port(::google::protobuf::int32 value);
+
+  // required uint32 succ = 3;
+  inline bool has_succ() const;
+  inline void clear_succ();
+  static const int kSuccFieldNumber = 3;
+  inline ::google::protobuf::uint32 succ() const;
+  inline void set_succ(::google::protobuf::uint32 value);
+
+  // required uint32 err = 4;
+  inline bool has_err() const;
+  inline void clear_err();
+  static const int kErrFieldNumber = 4;
+  inline ::google::protobuf::uint32 err() const;
+  inline void set_err(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:elb.HostCallResult)
+ private:
+  inline void set_has_ip();
+  inline void clear_has_ip();
+  inline void set_has_port();
+  inline void clear_has_port();
+  inline void set_has_succ();
+  inline void clear_has_succ();
+  inline void set_has_err();
+  inline void clear_has_err();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::int32 ip_;
+  ::google::protobuf::int32 port_;
+  ::google::protobuf::uint32 succ_;
+  ::google::protobuf::uint32 err_;
+  friend void  protobuf_AddDesc_elb_2eproto();
+  friend void protobuf_AssignDesc_elb_2eproto();
+  friend void protobuf_ShutdownFile_elb_2eproto();
+
+  void InitAsDefaultInstance();
+  static HostCallResult* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class ReportStatusReq : public ::google::protobuf::Message {
+ public:
+  ReportStatusReq();
+  virtual ~ReportStatusReq();
+
+  ReportStatusReq(const ReportStatusReq& from);
+
+  inline ReportStatusReq& operator=(const ReportStatusReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const ReportStatusReq& default_instance();
+
+  void Swap(ReportStatusReq* other);
+
+  // implements Message ----------------------------------------------
+
+  ReportStatusReq* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const ReportStatusReq& from);
+  void MergeFrom(const ReportStatusReq& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required int32 modid = 1;
+  inline bool has_modid() const;
+  inline void clear_modid();
+  static const int kModidFieldNumber = 1;
+  inline ::google::protobuf::int32 modid() const;
+  inline void set_modid(::google::protobuf::int32 value);
+
+  // required int32 cmdid = 2;
+  inline bool has_cmdid() const;
+  inline void clear_cmdid();
+  static const int kCmdidFieldNumber = 2;
+  inline ::google::protobuf::int32 cmdid() const;
+  inline void set_cmdid(::google::protobuf::int32 value);
+
+  // required int32 caller = 3;
+  inline bool has_caller() const;
+  inline void clear_caller();
+  static const int kCallerFieldNumber = 3;
+  inline ::google::protobuf::int32 caller() const;
+  inline void set_caller(::google::protobuf::int32 value);
+
+  // repeated .elb.HostCallResult results = 4;
+  inline int results_size() const;
+  inline void clear_results();
+  static const int kResultsFieldNumber = 4;
+  inline const ::elb::HostCallResult& results(int index) const;
+  inline ::elb::HostCallResult* mutable_results(int index);
+  inline ::elb::HostCallResult* add_results();
+  inline const ::google::protobuf::RepeatedPtrField< ::elb::HostCallResult >&
+      results() const;
+  inline ::google::protobuf::RepeatedPtrField< ::elb::HostCallResult >*
+      mutable_results();
+
+  // required uint32 ts = 5;
+  inline bool has_ts() const;
+  inline void clear_ts();
+  static const int kTsFieldNumber = 5;
+  inline ::google::protobuf::uint32 ts() const;
+  inline void set_ts(::google::protobuf::uint32 value);
+
+  // required bool overload = 6;
+  inline bool has_overload() const;
+  inline void clear_overload();
+  static const int kOverloadFieldNumber = 6;
+  inline bool overload() const;
+  inline void set_overload(bool value);
+
+  // @@protoc_insertion_point(class_scope:elb.ReportStatusReq)
+ private:
+  inline void set_has_modid();
+  inline void clear_has_modid();
+  inline void set_has_cmdid();
+  inline void clear_has_cmdid();
+  inline void set_has_caller();
+  inline void clear_has_caller();
+  inline void set_has_ts();
+  inline void clear_has_ts();
+  inline void set_has_overload();
+  inline void clear_has_overload();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::int32 modid_;
+  ::google::protobuf::int32 cmdid_;
+  ::google::protobuf::RepeatedPtrField< ::elb::HostCallResult > results_;
+  ::google::protobuf::int32 caller_;
+  ::google::protobuf::uint32 ts_;
+  bool overload_;
+  friend void  protobuf_AddDesc_elb_2eproto();
+  friend void protobuf_AssignDesc_elb_2eproto();
+  friend void protobuf_ShutdownFile_elb_2eproto();
+
+  void InitAsDefaultInstance();
+  static ReportStatusReq* default_instance_;
+};
 // ===================================================================
 
 
@@ -1199,6 +1442,260 @@ inline ::google::protobuf::RepeatedPtrField< ::elb::HostAddr >*
 GetRouteByAgentRsp::mutable_hosts() {
   // @@protoc_insertion_point(field_mutable_list:elb.GetRouteByAgentRsp.hosts)
   return &hosts_;
+}
+
+// -------------------------------------------------------------------
+
+// HostCallResult
+
+// required int32 ip = 1;
+inline bool HostCallResult::has_ip() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void HostCallResult::set_has_ip() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void HostCallResult::clear_has_ip() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void HostCallResult::clear_ip() {
+  ip_ = 0;
+  clear_has_ip();
+}
+inline ::google::protobuf::int32 HostCallResult::ip() const {
+  // @@protoc_insertion_point(field_get:elb.HostCallResult.ip)
+  return ip_;
+}
+inline void HostCallResult::set_ip(::google::protobuf::int32 value) {
+  set_has_ip();
+  ip_ = value;
+  // @@protoc_insertion_point(field_set:elb.HostCallResult.ip)
+}
+
+// required int32 port = 2;
+inline bool HostCallResult::has_port() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void HostCallResult::set_has_port() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void HostCallResult::clear_has_port() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void HostCallResult::clear_port() {
+  port_ = 0;
+  clear_has_port();
+}
+inline ::google::protobuf::int32 HostCallResult::port() const {
+  // @@protoc_insertion_point(field_get:elb.HostCallResult.port)
+  return port_;
+}
+inline void HostCallResult::set_port(::google::protobuf::int32 value) {
+  set_has_port();
+  port_ = value;
+  // @@protoc_insertion_point(field_set:elb.HostCallResult.port)
+}
+
+// required uint32 succ = 3;
+inline bool HostCallResult::has_succ() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void HostCallResult::set_has_succ() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void HostCallResult::clear_has_succ() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void HostCallResult::clear_succ() {
+  succ_ = 0u;
+  clear_has_succ();
+}
+inline ::google::protobuf::uint32 HostCallResult::succ() const {
+  // @@protoc_insertion_point(field_get:elb.HostCallResult.succ)
+  return succ_;
+}
+inline void HostCallResult::set_succ(::google::protobuf::uint32 value) {
+  set_has_succ();
+  succ_ = value;
+  // @@protoc_insertion_point(field_set:elb.HostCallResult.succ)
+}
+
+// required uint32 err = 4;
+inline bool HostCallResult::has_err() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void HostCallResult::set_has_err() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void HostCallResult::clear_has_err() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void HostCallResult::clear_err() {
+  err_ = 0u;
+  clear_has_err();
+}
+inline ::google::protobuf::uint32 HostCallResult::err() const {
+  // @@protoc_insertion_point(field_get:elb.HostCallResult.err)
+  return err_;
+}
+inline void HostCallResult::set_err(::google::protobuf::uint32 value) {
+  set_has_err();
+  err_ = value;
+  // @@protoc_insertion_point(field_set:elb.HostCallResult.err)
+}
+
+// -------------------------------------------------------------------
+
+// ReportStatusReq
+
+// required int32 modid = 1;
+inline bool ReportStatusReq::has_modid() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void ReportStatusReq::set_has_modid() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void ReportStatusReq::clear_has_modid() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void ReportStatusReq::clear_modid() {
+  modid_ = 0;
+  clear_has_modid();
+}
+inline ::google::protobuf::int32 ReportStatusReq::modid() const {
+  // @@protoc_insertion_point(field_get:elb.ReportStatusReq.modid)
+  return modid_;
+}
+inline void ReportStatusReq::set_modid(::google::protobuf::int32 value) {
+  set_has_modid();
+  modid_ = value;
+  // @@protoc_insertion_point(field_set:elb.ReportStatusReq.modid)
+}
+
+// required int32 cmdid = 2;
+inline bool ReportStatusReq::has_cmdid() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void ReportStatusReq::set_has_cmdid() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void ReportStatusReq::clear_has_cmdid() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void ReportStatusReq::clear_cmdid() {
+  cmdid_ = 0;
+  clear_has_cmdid();
+}
+inline ::google::protobuf::int32 ReportStatusReq::cmdid() const {
+  // @@protoc_insertion_point(field_get:elb.ReportStatusReq.cmdid)
+  return cmdid_;
+}
+inline void ReportStatusReq::set_cmdid(::google::protobuf::int32 value) {
+  set_has_cmdid();
+  cmdid_ = value;
+  // @@protoc_insertion_point(field_set:elb.ReportStatusReq.cmdid)
+}
+
+// required int32 caller = 3;
+inline bool ReportStatusReq::has_caller() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void ReportStatusReq::set_has_caller() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void ReportStatusReq::clear_has_caller() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void ReportStatusReq::clear_caller() {
+  caller_ = 0;
+  clear_has_caller();
+}
+inline ::google::protobuf::int32 ReportStatusReq::caller() const {
+  // @@protoc_insertion_point(field_get:elb.ReportStatusReq.caller)
+  return caller_;
+}
+inline void ReportStatusReq::set_caller(::google::protobuf::int32 value) {
+  set_has_caller();
+  caller_ = value;
+  // @@protoc_insertion_point(field_set:elb.ReportStatusReq.caller)
+}
+
+// repeated .elb.HostCallResult results = 4;
+inline int ReportStatusReq::results_size() const {
+  return results_.size();
+}
+inline void ReportStatusReq::clear_results() {
+  results_.Clear();
+}
+inline const ::elb::HostCallResult& ReportStatusReq::results(int index) const {
+  // @@protoc_insertion_point(field_get:elb.ReportStatusReq.results)
+  return results_.Get(index);
+}
+inline ::elb::HostCallResult* ReportStatusReq::mutable_results(int index) {
+  // @@protoc_insertion_point(field_mutable:elb.ReportStatusReq.results)
+  return results_.Mutable(index);
+}
+inline ::elb::HostCallResult* ReportStatusReq::add_results() {
+  // @@protoc_insertion_point(field_add:elb.ReportStatusReq.results)
+  return results_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::elb::HostCallResult >&
+ReportStatusReq::results() const {
+  // @@protoc_insertion_point(field_list:elb.ReportStatusReq.results)
+  return results_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::elb::HostCallResult >*
+ReportStatusReq::mutable_results() {
+  // @@protoc_insertion_point(field_mutable_list:elb.ReportStatusReq.results)
+  return &results_;
+}
+
+// required uint32 ts = 5;
+inline bool ReportStatusReq::has_ts() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void ReportStatusReq::set_has_ts() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void ReportStatusReq::clear_has_ts() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void ReportStatusReq::clear_ts() {
+  ts_ = 0u;
+  clear_has_ts();
+}
+inline ::google::protobuf::uint32 ReportStatusReq::ts() const {
+  // @@protoc_insertion_point(field_get:elb.ReportStatusReq.ts)
+  return ts_;
+}
+inline void ReportStatusReq::set_ts(::google::protobuf::uint32 value) {
+  set_has_ts();
+  ts_ = value;
+  // @@protoc_insertion_point(field_set:elb.ReportStatusReq.ts)
+}
+
+// required bool overload = 6;
+inline bool ReportStatusReq::has_overload() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void ReportStatusReq::set_has_overload() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void ReportStatusReq::clear_has_overload() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void ReportStatusReq::clear_overload() {
+  overload_ = false;
+  clear_has_overload();
+}
+inline bool ReportStatusReq::overload() const {
+  // @@protoc_insertion_point(field_get:elb.ReportStatusReq.overload)
+  return overload_;
+}
+inline void ReportStatusReq::set_overload(bool value) {
+  set_has_overload();
+  overload_ = value;
+  // @@protoc_insertion_point(field_set:elb.ReportStatusReq.overload)
 }
 
 
