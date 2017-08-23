@@ -19,7 +19,6 @@ CREATE TABLE `ServerCallStatus` (
   `ip` int(11) NOT NULL,
   `port` int(11) NOT NULL,
   `caller` int(11) NOT NULL,
-  `capacity` int(11) NOT NULL,
   `succ_cnt` int(11) NOT NULL,
   `err_cnt` int(11) NOT NULL,
   `ts` bigint(20) NOT NULL,
