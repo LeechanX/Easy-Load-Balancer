@@ -1,3 +1,6 @@
+import os
+import mmap
+import time
 import socket
 import struct
 import elb_pb2
@@ -19,12 +22,24 @@ class elbClient:
             print errMsg
             exit(1)
         self.seq = 0
+        self.f = os.open('/tmp/hb_map.bin', os.O_RDONLY)
+        self.m = mmap.mmap(self.f, 8, flags = mmap.MAP_SHARED, prot = mmap.PROT_READ, offset = 0)
 
     def __del__(self):
         for sock in self.socks:
             sock.close()
+        os.close(self.f)
+
+    def agentDie(self):
+        currTs = int(time.time())
+        s = self.m.read(8)
+        ts = struct.unpack('q', s)[0]
+        self.m.seek(0)
+        return currTs - ts > 2
 
     def apiGetHost(self, modid, cmdid, timo):
+        if self.agentDie():
+            return (-11111, 'agent GG')
         if timo < 10: timo = 10
         if timo > 1000: timo = 1000
         i = (modid + cmdid) % 3
