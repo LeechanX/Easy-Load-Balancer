@@ -2,6 +2,12 @@ import socket
 import struct
 import elb_pb2
 
+class FormatError(Exception):
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
+
 class elbClient:
     def __init__(self):
         self.socks = [None for i in range(3)]
@@ -9,9 +15,6 @@ class elbClient:
             self.socks[0] = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             self.socks[1] = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             self.socks[2] = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            self.socks[0].bind(('127.0.0.1', 8888))
-            self.socks[1].bind(('127.0.0.1', 8889))
-            self.socks[2].bind(('127.0.0.1', 8890))
         except socket.error, errMsg:
             print errMsg
             exit(1)
@@ -35,31 +38,41 @@ class elbClient:
         req.cmdid = cmdid
         rsp = elb_pb2.GetHostRsp()
         #send request
+        bodyStr = req.SerializeToString()
+        reqStr = struct.pack('i', elb_pb2.GetHostReqId) + struct.pack('i', len(bodyStr)) + bodyStr
         try:
-            sock.sendto(req.SerializeToString(), ('127.0.0.1', 8888 + i))
+            sock.sendto(reqStr, ('127.0.0.1', 8888 + i))
         except socket.error, errMsg:
             print errMsg
-            return -10003
+            return (-10003, errMsg)
         try:
             #recv response
-            sock.settimeout(timo)
+            sock.settimeout(timo * 0.001)
             rspStr, addr = sock.recvfrom(65536)
-            rsp.ParseFromString(rspStr)
+            rspId = struct.unpack('i', rspStr[:4])[0]
+            bodyLen = struct.unpack('i', rspStr[4:8])[0]
+            if rspId != elb_pb2.GetHostRspId or bodyLen != len(rspStr[8:]):
+                raise FormatError('message head format error')
+            rsp.ParseFromString(rspStr[8:])
             while rsp.seq < req.seq:
                 rspStr, addr = sock.recvfrom(65536)
-                rsp.ParseFromString(rspStr)
+                rspId = struct.unpack('i', rspStr[:4])
+                bodyLen = struct.unpack('i', rspStr[4:8])
+                if rspId != elb_pb2.GetHostReqId or bodyLen != len(rspStr[8:]):
+                    raise FormatError('message head format error')
+                rsp.ParseFromString(rspStr[8:])
             if rsp.seq != req.seq:
-                print 'request seq id is %d, response seq id is %d' % (req.seq, rsp.seq)
-                return (-10001, None)
+                return (-10001, 'request seq id is %d, response seq id is %d' % (req.seq, rsp.seq))
             elif rsp.retcode != 0:
-                return (rsp.retcode, None)
+                return (rsp.retcode, 'agent error')
             else:
                 ipn = rsp.host.ip
                 ips = socket.inet_ntoa(struct.pack('I', socket.htonl(ipn)))
                 return (0, (ips, rsp.host.port))
         except socket.timeout:
-            print 'time out when recvfrom socket'
-            return (-10002, None)
+            return (-10002, 'time out when recvfrom socket')
+        except FormatError as e:
+            return (-10001, e.value)
 
     def apiReportRes(self, modid, cmdid, ip, port, res):
         i = (modid + cmdid) % 3
@@ -69,10 +82,17 @@ class elbClient:
         req.modid = modid
         req.cmdid = cmdid
         req.retcode = res
-        #req.host.ip = ip
+        req.host.ip = ip
         req.host.port = port
-        sock.send(req.SerializeToString())
+        bodyStr = req.SerializeToString()
+        reqStr = struct.pack('i', elb_pb2.ReportReqId) + struct.pack('i', len(bodyStr)) + bodyStr
+        sock.sendto(reqStr, ('127.0.0.1', 8888 + i))
 
 if __name__ == '__main__':
     client = elbClient()
-    print client.apiGetHost(10001, 1001, 10)
+    ret, hostOrEmsg = client.apiGetHost(10001, 1001, 10)
+    if ret == 0:
+        print hostOrEmsg
+    else:
+        print hostOrEmsg
+    client.apiReportRes(10001, 1001, 1, 2, 3)
