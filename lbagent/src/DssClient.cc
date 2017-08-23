@@ -27,15 +27,13 @@ static void newPullReq(event_loop* loop, int fd, void *args)
     }
 }
 
-void dssConnectorDomain()
+void dssConnectorDomain(event_loop& loop)
 {
     const char* dssIp = config_reader::ins()->GetString("dnsserver", "ip", "").c_str();
     short dssPort = config_reader::ins()->GetNumber("dnsserver", "port", 0);
-    event_loop loop;
     tcp_client client(&loop, dssIp, dssPort);//创建TCP客户端
     client.add_msg_cb(elb::GetRouteByAgentRspId, recvRoute/*, ???*/);//设置：当收到消息id=1的消息时的回调函数
     //loop install message queue's messge coming event
     pullQueue->set_loop(&loop, newPullReq, &client);
-    //run loop
-    loop.process_evs();
+
 }

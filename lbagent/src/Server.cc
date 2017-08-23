@@ -2,11 +2,19 @@
 #include "logo.h"
 #include "elb.pb.h"
 #include "Server.h"
+#include "HeartBeat.h"
 #include <pthread.h>
 #include "easy_reactor.h"
 
 thread_queue<elb::GetRouteByAgentReq>* pullQueue = NULL;
 thread_queue<elb::ReportReq>* reptQueue = NULL;
+
+//timeout event 1: record current time in shared memory
+static void recordTs(event_loop* loop, void* usrData)
+{
+    HeartBeat* hb = (HeartBeat*)usrData;
+    hb->recordTs();
+}
 
 int main()
 {
@@ -34,7 +42,14 @@ int main()
     initUDPServers();
     //init connector who connects to reporter, create a thread and run in loop
     rptConnectorDomain();
-    //init connector who connects to dns server, and run in loop
-    dssConnectorDomain();
+
+    event_loop mainLoop;
+    //init connector who connects to dns server, and run in loop [main thread]
+    dssConnectorDomain(mainLoop);
+    //install timeout event 1: record current time in shared memory, 1 second 1 do
+    HeartBeat hb;
+    mainLoop.run_every(recordTs, &hb, 1);
+    //run loop
+    mainLoop.process_evs();
     return 0;
 }
