@@ -6,27 +6,45 @@
 
 static void getHost(const char* data, uint32_t len, int msgid, net_commu* commu, void* usr_data)
 {
-    int rspMsgId = elb::GetHostRspId;
     elb::GetHostReq req;
     req.ParseFromArray(data, len);//解包，data[0:len)保证是一个完整包
     int modid = req.modid();
     int cmdid = req.cmdid();
-    //.................................
+    //response
     elb::GetHostRsp rsp;
     rsp.set_seq(req.seq());
-    //.................................
+    rsp.set_modid(modid);
+    rsp.set_cmdid(cmdid);
+    //get host from route lb metadata
+    RouteLB* ptrRouteLB = (RouteLB*)usr_data;
+    ptrRouteLB->getHost(modid, cmdid, rsp);
+    std::string rspStr;
+    rsp.SerializeToString(&rspStr);
+    commu->send_data(rspStr.c_str(), rspStr.size(), elb::GetHostRspId);//回复消息
 }
 
 static void reportStatus(const char* data, uint32_t len, int msgid, net_commu* commu, void* usr_data)
 {
     elb::ReportReq req;
     req.ParseFromArray(data, len);//解包，data[0:len)保证是一个完整包
-    int modid = req.modid();
-    int cmdid = req.cmdid();
-    int recode = req.retcode();
-    int ip = req.host().ip();
-    int port = req.host().port();
-    //.................................
+    //report to route lb metadata
+    RouteLB* ptrRouteLB = (RouteLB*)usr_data;
+    ptrRouteLB->report(req);
+}
+
+static void getRoute(const char* data, uint32_t len, int msgid, net_commu* commu, void* usr_data)
+{
+    elb::GetRouteByAgentReq req;
+    req.ParseFromArray(data, len);//解包，data[0:len)保证是一个完整包
+    //report to route lb metadata
+    RouteLB* ptrRouteLB = (RouteLB*)usr_data;
+    elb::GetRouteByAgentRsp rsp;
+    rsp.set_modid(req.modid());
+    rsp.set_cmdid(req.cmdid());
+    ptrRouteLB->getRoute(req.modid(), req.cmdid(), rsp);
+    std::string rspStr;
+    rsp.SerializeToString(&rspStr);
+    commu->send_data(rspStr.c_str(), rspStr.size(), elb::GetHostRspId);//回复消息
 }
 
 static void* initUDPServerIns(void* portPtr)
@@ -34,8 +52,11 @@ static void* initUDPServerIns(void* portPtr)
     short port = *((short*)portPtr);
     event_loop loop;
     udp_server server(&loop, "127.0.0.1", port);//创建UDP服务器
-    server.add_msg_cb(elb::GetHostReqId, getHost);//设置：当收到消息id = GetHostReqId的消息调用的回调函数getHost
-    server.add_msg_cb(elb::ReportReqId, reportStatus);//设置：当收到消息id = ReportReqId的消息调用的回调函数reportStatus
+
+    server.add_msg_cb(elb::GetHostReqId, getHost, &routeLB[port - 8888]);//设置：当收到消息id = GetHostReqId的消息调用的回调函数getHost
+    server.add_msg_cb(elb::ReportReqId, reportStatus, &routeLB[port - 8888]);//设置：当收到消息id = ReportReqId的消息调用的回调函数reportStatus
+    server.add_msg_cb(elb::GetRouteByToolReqId, getRoute, &routeLB[port - 8888]);//设置：当收到消息id = GetRouteByToolReqId的消息调用的回调函数getRoute
+
     loop.process_evs();
     return NULL;
 }

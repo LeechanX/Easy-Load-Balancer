@@ -9,6 +9,8 @@
 thread_queue<elb::GetRouteByAgentReq>* pullQueue = NULL;
 thread_queue<elb::ReportReq>* reptQueue = NULL;
 
+RouteLB routeLB[3];
+
 //timeout event 1: record current time in shared memory
 static void recordTs(event_loop* loop, void* usrData)
 {
