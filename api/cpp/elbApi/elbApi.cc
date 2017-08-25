@@ -47,6 +47,7 @@ int elbClient::apiGetHost(int modid, int cmdid, int timo, std::string& ip, int& 
 {
     if (((HeartBeat*)_hb)->die())
     {
+        _agentOff = true;
         int ret = _staticRoute.getHost(modid, cmdid, ip, port);
         if (ret == -1)
         {
@@ -54,6 +55,7 @@ int elbClient::apiGetHost(int modid, int cmdid, int timo, std::string& ip, int& 
         }
         return 0;
     }
+    _agentOff = false;
     _staticRoute.freeData();
 
     uint32_t seq = _seqid++;
@@ -129,6 +131,7 @@ int elbClient::apiGetHost(int modid, int cmdid, int timo, std::string& ip, int& 
 
 void elbClient::apiReportRes(int modid, int cmdid, const std::string& ip, int port, int retcode)
 {
+    if (_agentOff) return ;
     struct in_addr inaddr;
     ::inet_aton(ip.c_str(), &inaddr);
 

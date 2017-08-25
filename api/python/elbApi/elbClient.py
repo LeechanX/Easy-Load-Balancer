@@ -26,6 +26,7 @@ class elbClient:
         self.__f = os.open('/tmp/hb_map.bin', os.O_RDONLY)
         self.__m = mmap.mmap(self.__f, 8, flags = mmap.MAP_SHARED, prot = mmap.PROT_READ, offset = 0)
         self.__staticRoute = StaticRoute()
+        self.__agentOff = True
 
     def __del__(self):
         for sock in self._socks:
@@ -41,12 +42,14 @@ class elbClient:
 
     def apiGetHost(self, modid, cmdid, timo):
         if self.agentDie():
+            self.__agentOff = True
             staticData = self.__staticRoute.getHost(modid, cmdid)
             if staticData == -1:
                 return (-10001, 'no data')
             return (0, staticData)
 
         self.__staticRoute.freeData()
+        self.__agentOff = False
 
         if timo < 10: timo = 10
         if timo > 1000: timo = 1000
@@ -98,6 +101,8 @@ class elbClient:
             return (-10001, e.value)
 
     def apiReportRes(self, modid, cmdid, ip, port, res):
+        if self.__agentOff:
+            return
         i = (modid + cmdid) % 3
         sock = self._socks[i]
         #create request

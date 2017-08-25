@@ -19,6 +19,7 @@ private:
     uint32_t _seqid;
     void* _hb;
     StaticRoute _staticRoute;
+    bool _agentOff;
 };
 
 #endif
