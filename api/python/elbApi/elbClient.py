@@ -4,6 +4,7 @@ import time
 import socket
 import struct
 import elb_pb2
+from StaticRoute import StaticRoute
 
 class FormatError(Exception):
     def __init__(self, value):
@@ -13,42 +14,49 @@ class FormatError(Exception):
 
 class elbClient:
     def __init__(self):
-        self.socks = [None for i in range(3)]
+        self._socks = [None for i in range(3)]
         try:
-            self.socks[0] = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            self.socks[1] = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            self.socks[2] = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            self._socks[0] = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            self._socks[1] = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            self._socks[2] = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         except socket.error, errMsg:
             print errMsg
             exit(1)
-        self.seq = 0
-        self.f = os.open('/tmp/hb_map.bin', os.O_RDONLY)
-        self.m = mmap.mmap(self.f, 8, flags = mmap.MAP_SHARED, prot = mmap.PROT_READ, offset = 0)
+        self.__seq = 0
+        self.__f = os.open('/tmp/hb_map.bin', os.O_RDONLY)
+        self.__m = mmap.mmap(self.__f, 8, flags = mmap.MAP_SHARED, prot = mmap.PROT_READ, offset = 0)
+        self.__staticRoute = StaticRoute()
 
     def __del__(self):
-        for sock in self.socks:
+        for sock in self._socks:
             sock.close()
-        os.close(self.f)
+        os.close(self.__f)
 
     def agentDie(self):
         currTs = int(time.time())
-        s = self.m.read(8)
+        s = self.__m.read(8)
         ts = struct.unpack('q', s)[0]
-        self.m.seek(0)
+        self.__m.seek(0)
         return currTs - ts > 2
 
     def apiGetHost(self, modid, cmdid, timo):
         if self.agentDie():
-            return (-11111, 'agent GG')
+            staticData = self.__staticRoute.getHost(modid, cmdid)
+            if staticData == -1:
+                return (-10001, 'no data')
+            return (0, staticData)
+
+        self.__staticRoute.freeData()
+
         if timo < 10: timo = 10
         if timo > 1000: timo = 1000
         i = (modid + cmdid) % 3
-        sock = self.socks[i]
-        if self.seq == 2 ** 31: self.seq = 0
+        sock = self._socks[i]
+        if self.__seq == 2 ** 31: self.__seq = 0
         #create request
         req = elb_pb2.GetHostReq()
-        req.seq = self.seq
-        self.seq += 1
+        req.seq = self.__seq
+        self.__seq += 1
         req.modid = modid
         req.cmdid = cmdid
         rsp = elb_pb2.GetHostRsp()
@@ -91,7 +99,7 @@ class elbClient:
 
     def apiReportRes(self, modid, cmdid, ip, port, res):
         i = (modid + cmdid) % 3
-        sock = self.socks[i]
+        sock = self._socks[i]
         #create request
         req = elb_pb2.ReportReq()
         req.modid = modid
