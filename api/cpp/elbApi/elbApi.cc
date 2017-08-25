@@ -47,9 +47,15 @@ int elbClient::apiGetHost(int modid, int cmdid, int timo, std::string& ip, int& 
 {
     if (((HeartBeat*)_hb)->die())
     {
-        printf("agent fucked up\n");
-        //TODO: read local
+        int ret = _staticRoute.getHost(modid, cmdid, ip, port);
+        if (ret == -1)
+        {
+            return -100011;
+        }
+        return 0;
     }
+    _staticRoute.freeData();
+
     uint32_t seq = _seqid++;
     elb::GetHostReq req;
     req.set_seq(seq);

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <stdint.h>
+#include "StaticRoute.h"
 
 class elbClient
 {
@@ -17,6 +18,7 @@ private:
     int _sockfd[3];
     uint32_t _seqid;
     void* _hb;
+    StaticRoute _staticRoute;
 };
 
 #endif
