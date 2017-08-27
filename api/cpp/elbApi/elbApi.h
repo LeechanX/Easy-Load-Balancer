@@ -2,6 +2,7 @@
 #define __ELBAPI_H__
 
 #include <string>
+#include <vector>
 #include <stdint.h>
 #include "StaticRoute.h"
 
@@ -13,6 +14,8 @@ public:
     int apiGetHost(int modid, int cmdid, int timo, std::string& ip, int& port);
 
     void apiReportRes(int modid, int cmdid, const std::string& ip, int port, int retcode);
+
+    int apiGetRoute(int modid, int cmdid, std::vector<std::pair<std::string, int> >& route);
 
 private:
     int _sockfd[3];

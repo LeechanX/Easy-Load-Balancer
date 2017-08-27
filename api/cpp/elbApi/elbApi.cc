@@ -157,3 +157,62 @@ void elbClient::apiReportRes(int modid, int cmdid, const std::string& ip, int po
     if (ret == -1)
         perror("sendto()");
 }
+
+int elbClient::apiGetRoute(int modid, int cmdid, std::vector<std::pair<std::string, int> >& route)
+{
+    if (((HeartBeat*)_hb)->die())
+    {
+        fprintf(stderr, "agent offline\n");
+        return -1;
+    }
+
+    elb::GetRouteReq req;
+    req.set_modid(modid);
+    req.set_cmdid(cmdid);
+    //send
+    char wbuf[4096], rbuf[4096];
+    commu_head head;
+    head.length = req.ByteSize();
+    head.cmdid = elb::GetRouteByToolReqId;
+    ::memcpy(wbuf, &head, COMMU_HEAD_LENGTH);
+    req.SerializeToArray(wbuf + COMMU_HEAD_LENGTH, head.length);
+    int index = (modid + cmdid) % 3;
+    int ret = ::sendto(_sockfd[index], wbuf, head.length + COMMU_HEAD_LENGTH , 0, NULL, 0);
+    if (ret == -1)
+    {
+        perror("sendto");
+        return -1;
+    }
+
+    struct timeval tv;
+    tv.tv_sec = 1;
+    tv.tv_usec = 0;
+    ::setsockopt(_sockfd[index], SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv));
+
+    int pkgLen = ::recvfrom(_sockfd[index], rbuf, sizeof rbuf, 0, NULL, NULL);
+    if (pkgLen == -1)
+    {
+        perror("recvfrom");
+        return -1;
+    }
+
+    ::memcpy(&head, rbuf, COMMU_HEAD_LENGTH);
+    elb::GetRouteRsp rsp;
+    if (head.cmdid != elb::GetRouteByToolRspId || 
+        !rsp.ParseFromArray(rbuf + COMMU_HEAD_LENGTH, pkgLen - COMMU_HEAD_LENGTH))
+    {
+        fprintf(stderr, "receive data format error\n");
+        return -1;
+    }
+
+    for (int i = 0;i < rsp.hosts_size(); ++i)
+    {
+        const elb::HostAddr& host = rsp.hosts(i);
+        struct in_addr inaddr;
+        inaddr.s_addr = host.ip();
+        std::string ip = ::inet_ntoa(inaddr);
+        int port = host.port();
+        route.push_back(std::pair<std::string, int>(ip, port));
+    }
+    return 0;
+}
