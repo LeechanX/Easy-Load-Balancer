@@ -6,10 +6,9 @@ enum MsgTypeId {
     ReportReqId          = 3; //api report call result to agent
     GetRouteByToolReqId  = 4; //tool get route from agent
     GetRouteByToolRspId  = 5; //agent give route to tool
-    RecordLbReqId        = 6; //tool let agent record lb information
-    GetRouteByAgentReqId = 7; //agent get route from dnsserver
-    GetRouteByAgentRspId = 8; //dnsserver give route to agent
-    ReportStatusReqId    = 9; //agent report lb status to reporter
+    GetRouteByAgentReqId = 6; //agent get route from dnsserver
+    GetRouteByAgentRspId = 7; //dnsserver give route to agent
+    ReportStatusReqId    = 8; //agent report lb status to reporter
 }
 
 //represent a remote node
@@ -42,14 +41,14 @@ message ReportReq {
     required int32 retcode = 4;
 }
 
-//agent get route from dnsserver (TCP)
-message GetRouteByAgentReq {
+//agent get route from dnsserver (TCP), or tool get route from agent (UDP)
+message GetRouteReq {
     required int32 modid = 1;
     required int32 cmdid = 2;
 }
 
-//dnsserver give route to agent
-message GetRouteByAgentRsp {
+//dnsserver give route to agent (TCP), or agent give route to tool (UDP)
+message GetRouteRsp {
     required int32 modid    = 1;
     required int32 cmdid    = 2;
     repeated HostAddr hosts = 3;

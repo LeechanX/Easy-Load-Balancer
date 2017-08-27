@@ -10,8 +10,8 @@
 void getRoute(const char* data, uint32_t len, int msgid, net_commu* commu, void* usr_data)
 {
     int rspMsgId = elb::GetRouteByAgentRspId;
-    elb::GetRouteByAgentReq req;
-    elb::GetRouteByAgentRsp rsp;
+    elb::GetRouteReq req;
+    elb::GetRouteRsp rsp;
     req.ParseFromArray(data, len);//解包，data[0:len)保证是一个完整包
 
     if (!req.ParseFromArray(data, len))

@@ -38,8 +38,8 @@ class HostAddr;
 class GetHostReq;
 class GetHostRsp;
 class ReportReq;
-class GetRouteByAgentReq;
-class GetRouteByAgentRsp;
+class GetRouteReq;
+class GetRouteRsp;
 class HostCallResult;
 class ReportStatusReq;
 
@@ -49,10 +49,9 @@ enum MsgTypeId {
   ReportReqId = 3,
   GetRouteByToolReqId = 4,
   GetRouteByToolRspId = 5,
-  RecordLbReqId = 6,
-  GetRouteByAgentReqId = 7,
-  GetRouteByAgentRspId = 8,
-  ReportStatusReqId = 9
+  GetRouteByAgentReqId = 6,
+  GetRouteByAgentRspId = 7,
+  ReportStatusReqId = 8
 };
 bool MsgTypeId_IsValid(int value);
 const MsgTypeId MsgTypeId_MIN = GetHostReqId;
@@ -491,14 +490,14 @@ class ReportReq : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
-class GetRouteByAgentReq : public ::google::protobuf::Message {
+class GetRouteReq : public ::google::protobuf::Message {
  public:
-  GetRouteByAgentReq();
-  virtual ~GetRouteByAgentReq();
+  GetRouteReq();
+  virtual ~GetRouteReq();
 
-  GetRouteByAgentReq(const GetRouteByAgentReq& from);
+  GetRouteReq(const GetRouteReq& from);
 
-  inline GetRouteByAgentReq& operator=(const GetRouteByAgentReq& from) {
+  inline GetRouteReq& operator=(const GetRouteReq& from) {
     CopyFrom(from);
     return *this;
   }
@@ -512,17 +511,17 @@ class GetRouteByAgentReq : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const GetRouteByAgentReq& default_instance();
+  static const GetRouteReq& default_instance();
 
-  void Swap(GetRouteByAgentReq* other);
+  void Swap(GetRouteReq* other);
 
   // implements Message ----------------------------------------------
 
-  GetRouteByAgentReq* New() const;
+  GetRouteReq* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const GetRouteByAgentReq& from);
-  void MergeFrom(const GetRouteByAgentReq& from);
+  void CopyFrom(const GetRouteReq& from);
+  void MergeFrom(const GetRouteReq& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -558,7 +557,7 @@ class GetRouteByAgentReq : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 cmdid() const;
   inline void set_cmdid(::google::protobuf::int32 value);
 
-  // @@protoc_insertion_point(class_scope:elb.GetRouteByAgentReq)
+  // @@protoc_insertion_point(class_scope:elb.GetRouteReq)
  private:
   inline void set_has_modid();
   inline void clear_has_modid();
@@ -576,18 +575,18 @@ class GetRouteByAgentReq : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_elb_2eproto();
 
   void InitAsDefaultInstance();
-  static GetRouteByAgentReq* default_instance_;
+  static GetRouteReq* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class GetRouteByAgentRsp : public ::google::protobuf::Message {
+class GetRouteRsp : public ::google::protobuf::Message {
  public:
-  GetRouteByAgentRsp();
-  virtual ~GetRouteByAgentRsp();
+  GetRouteRsp();
+  virtual ~GetRouteRsp();
 
-  GetRouteByAgentRsp(const GetRouteByAgentRsp& from);
+  GetRouteRsp(const GetRouteRsp& from);
 
-  inline GetRouteByAgentRsp& operator=(const GetRouteByAgentRsp& from) {
+  inline GetRouteRsp& operator=(const GetRouteRsp& from) {
     CopyFrom(from);
     return *this;
   }
@@ -601,17 +600,17 @@ class GetRouteByAgentRsp : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const GetRouteByAgentRsp& default_instance();
+  static const GetRouteRsp& default_instance();
 
-  void Swap(GetRouteByAgentRsp* other);
+  void Swap(GetRouteRsp* other);
 
   // implements Message ----------------------------------------------
 
-  GetRouteByAgentRsp* New() const;
+  GetRouteRsp* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const GetRouteByAgentRsp& from);
-  void MergeFrom(const GetRouteByAgentRsp& from);
+  void CopyFrom(const GetRouteRsp& from);
+  void MergeFrom(const GetRouteRsp& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -659,7 +658,7 @@ class GetRouteByAgentRsp : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::elb::HostAddr >*
       mutable_hosts();
 
-  // @@protoc_insertion_point(class_scope:elb.GetRouteByAgentRsp)
+  // @@protoc_insertion_point(class_scope:elb.GetRouteRsp)
  private:
   inline void set_has_modid();
   inline void clear_has_modid();
@@ -678,7 +677,7 @@ class GetRouteByAgentRsp : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_elb_2eproto();
 
   void InitAsDefaultInstance();
-  static GetRouteByAgentRsp* default_instance_;
+  static GetRouteRsp* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -1312,135 +1311,135 @@ inline void ReportReq::set_retcode(::google::protobuf::int32 value) {
 
 // -------------------------------------------------------------------
 
-// GetRouteByAgentReq
+// GetRouteReq
 
 // required int32 modid = 1;
-inline bool GetRouteByAgentReq::has_modid() const {
+inline bool GetRouteReq::has_modid() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void GetRouteByAgentReq::set_has_modid() {
+inline void GetRouteReq::set_has_modid() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void GetRouteByAgentReq::clear_has_modid() {
+inline void GetRouteReq::clear_has_modid() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void GetRouteByAgentReq::clear_modid() {
+inline void GetRouteReq::clear_modid() {
   modid_ = 0;
   clear_has_modid();
 }
-inline ::google::protobuf::int32 GetRouteByAgentReq::modid() const {
-  // @@protoc_insertion_point(field_get:elb.GetRouteByAgentReq.modid)
+inline ::google::protobuf::int32 GetRouteReq::modid() const {
+  // @@protoc_insertion_point(field_get:elb.GetRouteReq.modid)
   return modid_;
 }
-inline void GetRouteByAgentReq::set_modid(::google::protobuf::int32 value) {
+inline void GetRouteReq::set_modid(::google::protobuf::int32 value) {
   set_has_modid();
   modid_ = value;
-  // @@protoc_insertion_point(field_set:elb.GetRouteByAgentReq.modid)
+  // @@protoc_insertion_point(field_set:elb.GetRouteReq.modid)
 }
 
 // required int32 cmdid = 2;
-inline bool GetRouteByAgentReq::has_cmdid() const {
+inline bool GetRouteReq::has_cmdid() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void GetRouteByAgentReq::set_has_cmdid() {
+inline void GetRouteReq::set_has_cmdid() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void GetRouteByAgentReq::clear_has_cmdid() {
+inline void GetRouteReq::clear_has_cmdid() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void GetRouteByAgentReq::clear_cmdid() {
+inline void GetRouteReq::clear_cmdid() {
   cmdid_ = 0;
   clear_has_cmdid();
 }
-inline ::google::protobuf::int32 GetRouteByAgentReq::cmdid() const {
-  // @@protoc_insertion_point(field_get:elb.GetRouteByAgentReq.cmdid)
+inline ::google::protobuf::int32 GetRouteReq::cmdid() const {
+  // @@protoc_insertion_point(field_get:elb.GetRouteReq.cmdid)
   return cmdid_;
 }
-inline void GetRouteByAgentReq::set_cmdid(::google::protobuf::int32 value) {
+inline void GetRouteReq::set_cmdid(::google::protobuf::int32 value) {
   set_has_cmdid();
   cmdid_ = value;
-  // @@protoc_insertion_point(field_set:elb.GetRouteByAgentReq.cmdid)
+  // @@protoc_insertion_point(field_set:elb.GetRouteReq.cmdid)
 }
 
 // -------------------------------------------------------------------
 
-// GetRouteByAgentRsp
+// GetRouteRsp
 
 // required int32 modid = 1;
-inline bool GetRouteByAgentRsp::has_modid() const {
+inline bool GetRouteRsp::has_modid() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void GetRouteByAgentRsp::set_has_modid() {
+inline void GetRouteRsp::set_has_modid() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void GetRouteByAgentRsp::clear_has_modid() {
+inline void GetRouteRsp::clear_has_modid() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void GetRouteByAgentRsp::clear_modid() {
+inline void GetRouteRsp::clear_modid() {
   modid_ = 0;
   clear_has_modid();
 }
-inline ::google::protobuf::int32 GetRouteByAgentRsp::modid() const {
-  // @@protoc_insertion_point(field_get:elb.GetRouteByAgentRsp.modid)
+inline ::google::protobuf::int32 GetRouteRsp::modid() const {
+  // @@protoc_insertion_point(field_get:elb.GetRouteRsp.modid)
   return modid_;
 }
-inline void GetRouteByAgentRsp::set_modid(::google::protobuf::int32 value) {
+inline void GetRouteRsp::set_modid(::google::protobuf::int32 value) {
   set_has_modid();
   modid_ = value;
-  // @@protoc_insertion_point(field_set:elb.GetRouteByAgentRsp.modid)
+  // @@protoc_insertion_point(field_set:elb.GetRouteRsp.modid)
 }
 
 // required int32 cmdid = 2;
-inline bool GetRouteByAgentRsp::has_cmdid() const {
+inline bool GetRouteRsp::has_cmdid() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void GetRouteByAgentRsp::set_has_cmdid() {
+inline void GetRouteRsp::set_has_cmdid() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void GetRouteByAgentRsp::clear_has_cmdid() {
+inline void GetRouteRsp::clear_has_cmdid() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void GetRouteByAgentRsp::clear_cmdid() {
+inline void GetRouteRsp::clear_cmdid() {
   cmdid_ = 0;
   clear_has_cmdid();
 }
-inline ::google::protobuf::int32 GetRouteByAgentRsp::cmdid() const {
-  // @@protoc_insertion_point(field_get:elb.GetRouteByAgentRsp.cmdid)
+inline ::google::protobuf::int32 GetRouteRsp::cmdid() const {
+  // @@protoc_insertion_point(field_get:elb.GetRouteRsp.cmdid)
   return cmdid_;
 }
-inline void GetRouteByAgentRsp::set_cmdid(::google::protobuf::int32 value) {
+inline void GetRouteRsp::set_cmdid(::google::protobuf::int32 value) {
   set_has_cmdid();
   cmdid_ = value;
-  // @@protoc_insertion_point(field_set:elb.GetRouteByAgentRsp.cmdid)
+  // @@protoc_insertion_point(field_set:elb.GetRouteRsp.cmdid)
 }
 
 // repeated .elb.HostAddr hosts = 3;
-inline int GetRouteByAgentRsp::hosts_size() const {
+inline int GetRouteRsp::hosts_size() const {
   return hosts_.size();
 }
-inline void GetRouteByAgentRsp::clear_hosts() {
+inline void GetRouteRsp::clear_hosts() {
   hosts_.Clear();
 }
-inline const ::elb::HostAddr& GetRouteByAgentRsp::hosts(int index) const {
-  // @@protoc_insertion_point(field_get:elb.GetRouteByAgentRsp.hosts)
+inline const ::elb::HostAddr& GetRouteRsp::hosts(int index) const {
+  // @@protoc_insertion_point(field_get:elb.GetRouteRsp.hosts)
   return hosts_.Get(index);
 }
-inline ::elb::HostAddr* GetRouteByAgentRsp::mutable_hosts(int index) {
-  // @@protoc_insertion_point(field_mutable:elb.GetRouteByAgentRsp.hosts)
+inline ::elb::HostAddr* GetRouteRsp::mutable_hosts(int index) {
+  // @@protoc_insertion_point(field_mutable:elb.GetRouteRsp.hosts)
   return hosts_.Mutable(index);
 }
-inline ::elb::HostAddr* GetRouteByAgentRsp::add_hosts() {
-  // @@protoc_insertion_point(field_add:elb.GetRouteByAgentRsp.hosts)
+inline ::elb::HostAddr* GetRouteRsp::add_hosts() {
+  // @@protoc_insertion_point(field_add:elb.GetRouteRsp.hosts)
   return hosts_.Add();
 }
 inline const ::google::protobuf::RepeatedPtrField< ::elb::HostAddr >&
-GetRouteByAgentRsp::hosts() const {
-  // @@protoc_insertion_point(field_list:elb.GetRouteByAgentRsp.hosts)
+GetRouteRsp::hosts() const {
+  // @@protoc_insertion_point(field_list:elb.GetRouteRsp.hosts)
   return hosts_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::elb::HostAddr >*
-GetRouteByAgentRsp::mutable_hosts() {
-  // @@protoc_insertion_point(field_mutable_list:elb.GetRouteByAgentRsp.hosts)
+GetRouteRsp::mutable_hosts() {
+  // @@protoc_insertion_point(field_mutable_list:elb.GetRouteRsp.hosts)
   return &hosts_;
 }
 
