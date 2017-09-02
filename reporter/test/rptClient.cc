@@ -40,7 +40,7 @@ int main(int argc, char const *argv[])
     srand(time(NULL));
     event_loop loop;
     tcp_client client(&loop, "127.0.0.1", 12316);//创建TCP客户端
-    client.setup_connectcb(whenConnectDone);
+    client.onConnection(whenConnectDone);//install:当连接建立，调用whenConnectionDone函数
     loop.process_evs();
     return 0;
 }

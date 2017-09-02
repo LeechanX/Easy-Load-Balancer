@@ -59,7 +59,7 @@ void parseOption(int argc, char** argv)
 void ActionGetRoute(const char* data, uint32_t len, int msgId, net_commu* commu, void* usr_data)
 {
     long* count = (long*)usr_data;
-    elb::GetRouteByAgentRsp rsp;
+    elb::GetRouteRsp rsp;
     //解包，data[0:len)保证是一个完整包
     rsp.ParseFromArray(data, len);
 
@@ -75,7 +75,7 @@ void ActionGetRoute(const char* data, uint32_t len, int msgId, net_commu* commu,
 
     int modid = rsp.modid();
     int cmdid = rsp.cmdid();
-    elb::GetRouteByAgentReq req;
+    elb::GetRouteReq req;
     req.set_modid(modid);
     req.set_cmdid(cmdid);
     std::string reqStr;
@@ -83,13 +83,13 @@ void ActionGetRoute(const char* data, uint32_t len, int msgId, net_commu* commu,
     commu->send_data(reqStr.c_str(), reqStr.size(), elb::GetRouteByAgentReqId);//回复消息
 }
 
-void onConnection(tcp_client* client, void *args)
+void onConnectionCb(tcp_client* client, void *args)
 {
     unsigned long* startTsPtr = (unsigned long*)args;
     if (!*startTsPtr)
         *startTsPtr = getCurrentMills();
     //连接建立后，主动发送消息
-    elb::GetRouteByAgentReq req;
+    elb::GetRouteReq req;
     req.set_modid(10001);
     req.set_cmdid(1001);
     std::string reqStr;
@@ -108,7 +108,7 @@ int main(int argc, char** argv)
         tcp_client* cli = new tcp_client(&loop, config.hostip, config.hostPort);//创建TCP客户端
         if (!cli) exit(1);
         cli->add_msg_cb(elb::GetRouteByAgentRspId, ActionGetRoute, &done);//设置：当收到消息id=GetRouteByAgentRspId的消息时的回调函数
-        cli->setup_connectcb(onConnection, &startTs);//当连接建立后，执行函数onConnection
+        cli->onConnection(onConnectionCb, &startTs);//当连接建立后，执行函数onConnectionCb
         clients.push_back(cli);
     }
 
