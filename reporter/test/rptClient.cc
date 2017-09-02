@@ -32,7 +32,7 @@ void reportStatus(event_loop* loop, void* usr_data)
 void whenConnectDone(tcp_client* client, void* args)
 {
     event_loop* loop = client->loop();
-    loop->run_every(reportStatus, client, 1);    
+    loop->run_every(reportStatus, client, 1);
 }
 
 int main(int argc, char const *argv[])
