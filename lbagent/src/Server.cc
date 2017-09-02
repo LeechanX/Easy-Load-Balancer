@@ -6,8 +6,8 @@
 #include <pthread.h>
 #include "easy_reactor.h"
 
-thread_queue<elb::GetRouteByAgentReq>* pullQueue = NULL;
-thread_queue<elb::ReportReq>* reptQueue = NULL;
+thread_queue<elb::GetRouteReq>* pullQueue = NULL;
+thread_queue<elb::ReportStatusReq>* reptQueue = NULL;
 
 RouteLB routeLB[3];
 
@@ -26,17 +26,17 @@ int main()
     int log_level = config_reader::ins()->GetNumber("log", "level", 3);
     _set_log_level_(log_level);
 
-    pullQueue = new thread_queue<elb::GetRouteByAgentReq>();
+    pullQueue = new thread_queue<elb::GetRouteReq>();
     if (!pullQueue)
     {
-        log_error("no space to create thread_queue<elb::GetRouteByAgentReq>");
+        log_error("no space to create thread_queue<elb::GetRouteReq>");
         return 1;
     }
 
-    reptQueue = new thread_queue<elb::ReportReq>();
+    reptQueue = new thread_queue<elb::ReportStatusReq>();
     if (!reptQueue)
     {
-        log_error("no space to create thread_queue<elb::ReportReq>");
+        log_error("no space to create thread_queue<elb::ReportStatusReq>");
         return 1;
     }
 

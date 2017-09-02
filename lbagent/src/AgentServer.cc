@@ -4,7 +4,7 @@
 #include "Server.h"
 #include "easy_reactor.h"
 
-static void getHost(const char* data, uint32_t len, int msgid, net_commu* commu, void* usr_data)
+static void getHost(const char* data, uint32_t len, int msgid, net_commu* commu, void* usrData)
 {
     elb::GetHostReq req;
     req.ParseFromArray(data, len);//解包，data[0:len)保证是一个完整包
@@ -16,35 +16,35 @@ static void getHost(const char* data, uint32_t len, int msgid, net_commu* commu,
     rsp.set_modid(modid);
     rsp.set_cmdid(cmdid);
     //get host from route lb metadata
-    RouteLB* ptrRouteLB = (RouteLB*)usr_data;
+    RouteLB* ptrRouteLB = (RouteLB*)usrData;
     ptrRouteLB->getHost(modid, cmdid, rsp);
     std::string rspStr;
     rsp.SerializeToString(&rspStr);
     commu->send_data(rspStr.c_str(), rspStr.size(), elb::GetHostRspId);//回复消息
 }
 
-static void reportStatus(const char* data, uint32_t len, int msgid, net_commu* commu, void* usr_data)
+static void reportStatus(const char* data, uint32_t len, int msgid, net_commu* commu, void* usrData)
 {
     elb::ReportReq req;
     req.ParseFromArray(data, len);//解包，data[0:len)保证是一个完整包
     //report to route lb metadata
-    RouteLB* ptrRouteLB = (RouteLB*)usr_data;
+    RouteLB* ptrRouteLB = (RouteLB*)usrData;
     ptrRouteLB->report(req);
 }
 
-static void getRoute(const char* data, uint32_t len, int msgid, net_commu* commu, void* usr_data)
+static void getRoute(const char* data, uint32_t len, int msgid, net_commu* commu, void* usrData)
 {
-    elb::GetRouteByAgentReq req;
+    elb::GetRouteReq req;
     req.ParseFromArray(data, len);//解包，data[0:len)保证是一个完整包
     //report to route lb metadata
-    RouteLB* ptrRouteLB = (RouteLB*)usr_data;
-    elb::GetRouteByAgentRsp rsp;
+    RouteLB* ptrRouteLB = (RouteLB*)usrData;
+    elb::GetRouteRsp rsp;
     rsp.set_modid(req.modid());
     rsp.set_cmdid(req.cmdid());
     ptrRouteLB->getRoute(req.modid(), req.cmdid(), rsp);
     std::string rspStr;
     rsp.SerializeToString(&rspStr);
-    commu->send_data(rspStr.c_str(), rspStr.size(), elb::GetHostRspId);//回复消息
+    commu->send_data(rspStr.c_str(), rspStr.size(), elb::GetRouteByToolRspId);//回复消息
 }
 
 static void* initUDPServerIns(void* portPtr)

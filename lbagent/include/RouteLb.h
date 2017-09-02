@@ -3,9 +3,7 @@
 
 #include <list>
 #include <vector>
-#include <stdio.h>
 #include <stdint.h>
-#include <stdlib.h>
 #include <ext/hash_map>
 #include "elb.pb.h"
 
@@ -24,56 +22,23 @@ struct HI
 class LB
 {
 public:
-    LB(): effectData(0), _status(ISPULLING)
+    LB(): effectData(0), status(ISPULLING), _accessCnt(0)
     {
     }
 
-    ~LB()
-    {
-        for (HostMapIt it = _hostMap.begin();it != _hostMap.end(); ++it)
-        {
-            HI* hi = it->second;
-            delete hi;
-        }
-    }
+    ~LB();
 
-    bool overload() const { return !empty() && _runningList.empty(); }
+    //bool overload() const { return !empty() && _runningList.empty(); }
 
     bool empty() const { return _hostMap.empty(); }
 
-    int getHost(elb::HostAddr* hp)
-    {
-        //TODO
-        //hp->set_ip(inaddr.s_addr);
-        //hp->set_port(port);
-        return 0;
-    }
+    int getHost(elb::HostAddr* hp);
 
-    void getRoute(std::vector<HI*>& vec)
-    {
-        for (HostMapIt it = _hostMap.begin();it != _hostMap.end(); ++it)
-        {
-            HI* hi = it->second;
-            vec.push_back(hi);
-        }
-    }
+    void getRoute(std::vector<HI*>& vec);
 
-    void report(int ip, int port, int retcode)
-    {
-        uint64_t key = ((uint64_t)ip << 32) + port;
-        if (_hostMap.find(key) == _hostMap.end())
-            return ;
-        HI* hp = _hostMap[key];
-        //TODO
-        if (retcode == 0)
-        {
-            hp->succ += 1;
-        }
-        else
-        {
-            hp->err += 1;
-        }
-    }
+    void report(int ip, int port, int retcode);
+
+    void update(elb::GetRouteRsp& rsp);
 
     enum STATUS
     {
@@ -81,110 +46,36 @@ public:
         ISNEW
     };
 
-    long effectData;//used to repull
+    long effectData;//used to repull, last pull timestamp
+    long lstRptTime;//last report timestamp
+    STATUS status;
 
 private:
-    void addHost(uint32_t ip, int port)
-    {
-        uint64_t key = ((uint64_t)ip << 32) + port;
-        if (_hostMap.find(key) != _hostMap.end())
-            return ;
-        HI* hi = new HI(ip, port, 10000/*TODO*/);
-        if (!hi)
-        {
-            fprintf(stderr, "no more space to new HI\n");
-            ::exit(1);
-        }
-        _hostMap[key] = hi;
-        _runningList.push_back(hi);
-    }
-
-    void delHost(uint32_t ip, int port)
-    {
-        uint64_t key = ((uint64_t)ip << 32) + port;
-        if (_hostMap.find(key) != _hostMap.end())
-            return ;
-        HI* hi = _hostMap[key];
-        _hostMap.erase(key);
-        if (hi->overload)
-            _downList.remove(hi);
-        else
-            _runningList.remove(hi);
-        delete hi;
-    }
-
     typedef __gnu_cxx::hash_map<uint64_t, HI*> HostMap;
     typedef __gnu_cxx::hash_map<uint64_t, HI*>::iterator HostMapIt;
 
+    int _accessCnt;
     HostMap _hostMap;
     std::list<HI*> _runningList, _downList;
-    STATUS _status;
 };
 
 class RouteLB
 {
 public:
-    int getHost(int modid, int cmdid, elb::GetHostRsp& rsp)
-    {
-        //TODO: repull
-        uint64_t key = ((uint64_t)modid << 32) + cmdid;
-        if (_routeMap.find(key) != _routeMap.end())
-        {
-            LB* lb = _routeMap[key];
-            elb::HostAddr* hp = rsp.mutable_host();
-            int ret = lb->getHost(hp);
-            rsp.set_retcode(ret);
-        }
-        else
-        {
-            _routeMap[key] = new LB();
-            rsp.set_retcode(-111111/*TODO*/);
-            return -10000;//TODO
-        }
-        return 0;
-    }
+    int getHost(int modid, int cmdid, elb::GetHostRsp& rsp);
 
-    void report(elb::ReportReq& req)
-    {
-        int modid = req.modid();
-        int cmdid = req.cmdid();
-        int retcode = req.retcode();
-        int ip = req.host().ip();
-        int port = req.host().port();
-        uint64_t key = ((uint64_t)modid << 32) + cmdid;
-        if (_routeMap.find(key) != _routeMap.end())
-        {
-            LB* lb = _routeMap[key];
-            lb->report(ip, port, retcode);
-        }
-    }
+    void report(elb::ReportReq& req);
 
-    void getRoute(int modid, int cmdid, elb::GetRouteByAgentRsp& rsp)
-    {
-        //TODO: repull
-        uint64_t key = ((uint64_t)modid << 32) + cmdid;
-        if (_routeMap.find(key) != _routeMap.end())
-        {
-            LB* lb = _routeMap[key];
-            std::vector<HI*> vec;
-            lb->getRoute(vec);
-            for (std::vector<HI*>::iterator it = vec.begin();it != vec.end(); ++it)
-            {
-                elb::HostAddr host;
-                host.set_ip((*it)->ip);
-                host.set_port((*it)->port);
-                rsp.add_hosts()->CopyFrom(host);
-            }
-        }
-    }
+    void getRoute(int modid, int cmdid, elb::GetRouteRsp& rsp);
 
-    void update(int modid, int cmdid, elb::GetRouteByAgentRsp& rsp)
-    {
-        
-    }
+    void update(int modid, int cmdid, elb::GetRouteRsp& rsp);
+
+    //清除任何标记为：正在拉取 的[modid,cmdid]状态，当dss client网络断开后需要调用之
+    void clearPulling();
 
 private:
     typedef __gnu_cxx::hash_map<uint64_t, LB*> RouteMap;
+    typedef __gnu_cxx::hash_map<uint64_t, LB*>::iterator RouteMapIt;
 
     RouteMap _routeMap;
 };

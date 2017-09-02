@@ -8,11 +8,11 @@
 static void newReportReq(event_loop* loop, int fd, void *args)
 {
     tcp_client* cli = (tcp_client*)args;
-    std::queue<elb::ReportReq> msgs;
+    std::queue<elb::ReportStatusReq> msgs;
     reptQueue->recv_msg(msgs);
     while (!msgs.empty())
     {
-        elb::ReportReq req = msgs.front();
+        elb::ReportStatusReq req = msgs.front();
         msgs.pop();
         std::string reqStr;
         req.SerializeToString(&reqStr);

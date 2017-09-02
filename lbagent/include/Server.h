@@ -5,8 +5,16 @@
 #include "RouteLb.h"
 #include "easy_reactor.h"
 
-extern thread_queue<elb::GetRouteByAgentReq>* pullQueue;
-extern thread_queue<elb::ReportReq>* reptQueue;
+enum RETCODE
+{
+    OVERLOAD = -10000,
+    SYSERR,//-9999
+    NOEXIST,//-9998
+    SUCCESS = 0,
+};
+
+extern thread_queue<elb::GetRouteReq>* pullQueue;
+extern thread_queue<elb::ReportStatusReq>* reptQueue;
 
 extern RouteLB routeLB[3];
 
