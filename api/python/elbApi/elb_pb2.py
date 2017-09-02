@@ -19,7 +19,7 @@ _sym_db = _symbol_database.Default()
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='elb.proto',
   package='elb',
-  serialized_pb=_b('\n\telb.proto\x12\x03\x65lb\"$\n\x08HostAddr\x12\n\n\x02ip\x18\x01 \x02(\x05\x12\x0c\n\x04port\x18\x02 \x02(\x05\"7\n\nGetHostReq\x12\x0b\n\x03seq\x18\x01 \x02(\r\x12\r\n\x05modid\x18\x02 \x02(\x05\x12\r\n\x05\x63mdid\x18\x03 \x02(\x05\"e\n\nGetHostRsp\x12\x0b\n\x03seq\x18\x01 \x02(\r\x12\r\n\x05modid\x18\x02 \x02(\x05\x12\r\n\x05\x63mdid\x18\x03 \x02(\x05\x12\x0f\n\x07retcode\x18\x04 \x02(\x05\x12\x1b\n\x04host\x18\x05 \x01(\x0b\x32\r.elb.HostAddr\"W\n\tReportReq\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\x12\x1b\n\x04host\x18\x03 \x02(\x0b\x32\r.elb.HostAddr\x12\x0f\n\x07retcode\x18\x04 \x02(\x05\"2\n\x12GetRouteByAgentReq\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\"P\n\x12GetRouteByAgentRsp\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\x12\x1c\n\x05hosts\x18\x03 \x03(\x0b\x32\r.elb.HostAddr\"E\n\x0eHostCallResult\x12\n\n\x02ip\x18\x01 \x02(\x05\x12\x0c\n\x04port\x18\x02 \x02(\x05\x12\x0c\n\x04succ\x18\x03 \x02(\r\x12\x0b\n\x03\x65rr\x18\x04 \x02(\r\"\x83\x01\n\x0fReportStatusReq\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\x12\x0e\n\x06\x63\x61ller\x18\x03 \x02(\x05\x12$\n\x07results\x18\x04 \x03(\x0b\x32\x13.elb.HostCallResult\x12\n\n\x02ts\x18\x05 \x02(\r\x12\x10\n\x08overload\x18\x06 \x02(\x08*\xd0\x01\n\tMsgTypeId\x12\x10\n\x0cGetHostReqId\x10\x01\x12\x10\n\x0cGetHostRspId\x10\x02\x12\x0f\n\x0bReportReqId\x10\x03\x12\x17\n\x13GetRouteByToolReqId\x10\x04\x12\x17\n\x13GetRouteByToolRspId\x10\x05\x12\x11\n\rRecordLbReqId\x10\x06\x12\x18\n\x14GetRouteByAgentReqId\x10\x07\x12\x18\n\x14GetRouteByAgentRspId\x10\x08\x12\x15\n\x11ReportStatusReqId\x10\t')
+  serialized_pb=_b('\n\telb.proto\x12\x03\x65lb\"$\n\x08HostAddr\x12\n\n\x02ip\x18\x01 \x02(\x05\x12\x0c\n\x04port\x18\x02 \x02(\x05\"7\n\nGetHostReq\x12\x0b\n\x03seq\x18\x01 \x02(\r\x12\r\n\x05modid\x18\x02 \x02(\x05\x12\r\n\x05\x63mdid\x18\x03 \x02(\x05\"e\n\nGetHostRsp\x12\x0b\n\x03seq\x18\x01 \x02(\r\x12\r\n\x05modid\x18\x02 \x02(\x05\x12\r\n\x05\x63mdid\x18\x03 \x02(\x05\x12\x0f\n\x07retcode\x18\x04 \x02(\x05\x12\x1b\n\x04host\x18\x05 \x01(\x0b\x32\r.elb.HostAddr\"W\n\tReportReq\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\x12\x1b\n\x04host\x18\x03 \x02(\x0b\x32\r.elb.HostAddr\x12\x0f\n\x07retcode\x18\x04 \x02(\x05\"+\n\x0bGetRouteReq\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\"I\n\x0bGetRouteRsp\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\x12\x1c\n\x05hosts\x18\x03 \x03(\x0b\x32\r.elb.HostAddr\"E\n\x0eHostCallResult\x12\n\n\x02ip\x18\x01 \x02(\x05\x12\x0c\n\x04port\x18\x02 \x02(\x05\x12\x0c\n\x04succ\x18\x03 \x02(\r\x12\x0b\n\x03\x65rr\x18\x04 \x02(\r\"\x83\x01\n\x0fReportStatusReq\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\x12\x0e\n\x06\x63\x61ller\x18\x03 \x02(\x05\x12$\n\x07results\x18\x04 \x03(\x0b\x32\x13.elb.HostCallResult\x12\n\n\x02ts\x18\x05 \x02(\r\x12\x10\n\x08overload\x18\x06 \x02(\x08*\xbd\x01\n\tMsgTypeId\x12\x10\n\x0cGetHostReqId\x10\x01\x12\x10\n\x0cGetHostRspId\x10\x02\x12\x0f\n\x0bReportReqId\x10\x03\x12\x17\n\x13GetRouteByToolReqId\x10\x04\x12\x17\n\x13GetRouteByToolRspId\x10\x05\x12\x18\n\x14GetRouteByAgentReqId\x10\x06\x12\x18\n\x14GetRouteByAgentRspId\x10\x07\x12\x15\n\x11ReportStatusReqId\x10\x08')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -50,26 +50,22 @@ _MSGTYPEID = _descriptor.EnumDescriptor(
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='RecordLbReqId', index=5, number=6,
+      name='GetRouteByAgentReqId', index=5, number=6,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='GetRouteByAgentReqId', index=6, number=7,
+      name='GetRouteByAgentRspId', index=6, number=7,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='GetRouteByAgentRspId', index=7, number=8,
-      options=None,
-      type=None),
-    _descriptor.EnumValueDescriptor(
-      name='ReportStatusReqId', index=8, number=9,
+      name='ReportStatusReqId', index=7, number=8,
       options=None,
       type=None),
   ],
   containing_type=None,
   options=None,
-  serialized_start=645,
-  serialized_end=853,
+  serialized_start=631,
+  serialized_end=820,
 )
 _sym_db.RegisterEnumDescriptor(_MSGTYPEID)
 
@@ -79,10 +75,9 @@ GetHostRspId = 2
 ReportReqId = 3
 GetRouteByToolReqId = 4
 GetRouteByToolRspId = 5
-RecordLbReqId = 6
-GetRouteByAgentReqId = 7
-GetRouteByAgentRspId = 8
-ReportStatusReqId = 9
+GetRouteByAgentReqId = 6
+GetRouteByAgentRspId = 7
+ReportStatusReqId = 8
 
 
 
@@ -276,22 +271,22 @@ _REPORTREQ = _descriptor.Descriptor(
 )
 
 
-_GETROUTEBYAGENTREQ = _descriptor.Descriptor(
-  name='GetRouteByAgentReq',
-  full_name='elb.GetRouteByAgentReq',
+_GETROUTEREQ = _descriptor.Descriptor(
+  name='GetRouteReq',
+  full_name='elb.GetRouteReq',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='modid', full_name='elb.GetRouteByAgentReq.modid', index=0,
+      name='modid', full_name='elb.GetRouteReq.modid', index=0,
       number=1, type=5, cpp_type=1, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='cmdid', full_name='elb.GetRouteByAgentReq.cmdid', index=1,
+      name='cmdid', full_name='elb.GetRouteReq.cmdid', index=1,
       number=2, type=5, cpp_type=1, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -309,33 +304,33 @@ _GETROUTEBYAGENTREQ = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=305,
-  serialized_end=355,
+  serialized_end=348,
 )
 
 
-_GETROUTEBYAGENTRSP = _descriptor.Descriptor(
-  name='GetRouteByAgentRsp',
-  full_name='elb.GetRouteByAgentRsp',
+_GETROUTERSP = _descriptor.Descriptor(
+  name='GetRouteRsp',
+  full_name='elb.GetRouteRsp',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='modid', full_name='elb.GetRouteByAgentRsp.modid', index=0,
+      name='modid', full_name='elb.GetRouteRsp.modid', index=0,
       number=1, type=5, cpp_type=1, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='cmdid', full_name='elb.GetRouteByAgentRsp.cmdid', index=1,
+      name='cmdid', full_name='elb.GetRouteRsp.cmdid', index=1,
       number=2, type=5, cpp_type=1, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='hosts', full_name='elb.GetRouteByAgentRsp.hosts', index=2,
+      name='hosts', full_name='elb.GetRouteRsp.hosts', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -352,8 +347,8 @@ _GETROUTEBYAGENTRSP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=357,
-  serialized_end=437,
+  serialized_start=350,
+  serialized_end=423,
 )
 
 
@@ -403,8 +398,8 @@ _HOSTCALLRESULT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=439,
-  serialized_end=508,
+  serialized_start=425,
+  serialized_end=494,
 )
 
 
@@ -468,20 +463,20 @@ _REPORTSTATUSREQ = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=511,
-  serialized_end=642,
+  serialized_start=497,
+  serialized_end=628,
 )
 
 _GETHOSTRSP.fields_by_name['host'].message_type = _HOSTADDR
 _REPORTREQ.fields_by_name['host'].message_type = _HOSTADDR
-_GETROUTEBYAGENTRSP.fields_by_name['hosts'].message_type = _HOSTADDR
+_GETROUTERSP.fields_by_name['hosts'].message_type = _HOSTADDR
 _REPORTSTATUSREQ.fields_by_name['results'].message_type = _HOSTCALLRESULT
 DESCRIPTOR.message_types_by_name['HostAddr'] = _HOSTADDR
 DESCRIPTOR.message_types_by_name['GetHostReq'] = _GETHOSTREQ
 DESCRIPTOR.message_types_by_name['GetHostRsp'] = _GETHOSTRSP
 DESCRIPTOR.message_types_by_name['ReportReq'] = _REPORTREQ
-DESCRIPTOR.message_types_by_name['GetRouteByAgentReq'] = _GETROUTEBYAGENTREQ
-DESCRIPTOR.message_types_by_name['GetRouteByAgentRsp'] = _GETROUTEBYAGENTRSP
+DESCRIPTOR.message_types_by_name['GetRouteReq'] = _GETROUTEREQ
+DESCRIPTOR.message_types_by_name['GetRouteRsp'] = _GETROUTERSP
 DESCRIPTOR.message_types_by_name['HostCallResult'] = _HOSTCALLRESULT
 DESCRIPTOR.message_types_by_name['ReportStatusReq'] = _REPORTSTATUSREQ
 DESCRIPTOR.enum_types_by_name['MsgTypeId'] = _MSGTYPEID
@@ -514,19 +509,19 @@ ReportReq = _reflection.GeneratedProtocolMessageType('ReportReq', (_message.Mess
   ))
 _sym_db.RegisterMessage(ReportReq)
 
-GetRouteByAgentReq = _reflection.GeneratedProtocolMessageType('GetRouteByAgentReq', (_message.Message,), dict(
-  DESCRIPTOR = _GETROUTEBYAGENTREQ,
+GetRouteReq = _reflection.GeneratedProtocolMessageType('GetRouteReq', (_message.Message,), dict(
+  DESCRIPTOR = _GETROUTEREQ,
   __module__ = 'elb_pb2'
-  # @@protoc_insertion_point(class_scope:elb.GetRouteByAgentReq)
+  # @@protoc_insertion_point(class_scope:elb.GetRouteReq)
   ))
-_sym_db.RegisterMessage(GetRouteByAgentReq)
+_sym_db.RegisterMessage(GetRouteReq)
 
-GetRouteByAgentRsp = _reflection.GeneratedProtocolMessageType('GetRouteByAgentRsp', (_message.Message,), dict(
-  DESCRIPTOR = _GETROUTEBYAGENTRSP,
+GetRouteRsp = _reflection.GeneratedProtocolMessageType('GetRouteRsp', (_message.Message,), dict(
+  DESCRIPTOR = _GETROUTERSP,
   __module__ = 'elb_pb2'
-  # @@protoc_insertion_point(class_scope:elb.GetRouteByAgentRsp)
+  # @@protoc_insertion_point(class_scope:elb.GetRouteRsp)
   ))
-_sym_db.RegisterMessage(GetRouteByAgentRsp)
+_sym_db.RegisterMessage(GetRouteRsp)
 
 HostCallResult = _reflection.GeneratedProtocolMessageType('HostCallResult', (_message.Message,), dict(
   DESCRIPTOR = _HOSTCALLRESULT,
