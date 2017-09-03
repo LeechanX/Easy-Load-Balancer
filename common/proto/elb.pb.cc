@@ -159,11 +159,12 @@ void protobuf_AssignDesc_elb_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(GetRouteRsp));
   HostCallResult_descriptor_ = file->message_type(6);
-  static const int HostCallResult_offsets_[4] = {
+  static const int HostCallResult_offsets_[5] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(HostCallResult, ip_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(HostCallResult, port_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(HostCallResult, succ_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(HostCallResult, err_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(HostCallResult, overload_),
   };
   HostCallResult_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -177,13 +178,12 @@ void protobuf_AssignDesc_elb_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(HostCallResult));
   ReportStatusReq_descriptor_ = file->message_type(7);
-  static const int ReportStatusReq_offsets_[6] = {
+  static const int ReportStatusReq_offsets_[5] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ReportStatusReq, modid_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ReportStatusReq, cmdid_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ReportStatusReq, caller_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ReportStatusReq, results_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ReportStatusReq, ts_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ReportStatusReq, overload_),
   };
   ReportStatusReq_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -265,17 +265,17 @@ void protobuf_AddDesc_elb_2eproto() {
     "stAddr\022\017\n\007retcode\030\004 \002(\005\"+\n\013GetRouteReq\022\r"
     "\n\005modid\030\001 \002(\005\022\r\n\005cmdid\030\002 \002(\005\"I\n\013GetRoute"
     "Rsp\022\r\n\005modid\030\001 \002(\005\022\r\n\005cmdid\030\002 \002(\005\022\034\n\005hos"
-    "ts\030\003 \003(\0132\r.elb.HostAddr\"E\n\016HostCallResul"
+    "ts\030\003 \003(\0132\r.elb.HostAddr\"W\n\016HostCallResul"
     "t\022\n\n\002ip\030\001 \002(\005\022\014\n\004port\030\002 \002(\005\022\014\n\004succ\030\003 \002("
-    "\r\022\013\n\003err\030\004 \002(\r\"\203\001\n\017ReportStatusReq\022\r\n\005mo"
-    "did\030\001 \002(\005\022\r\n\005cmdid\030\002 \002(\005\022\016\n\006caller\030\003 \002(\005"
-    "\022$\n\007results\030\004 \003(\0132\023.elb.HostCallResult\022\n"
-    "\n\002ts\030\005 \002(\r\022\020\n\010overload\030\006 \002(\010*\275\001\n\tMsgType"
-    "Id\022\020\n\014GetHostReqId\020\001\022\020\n\014GetHostRspId\020\002\022\017"
-    "\n\013ReportReqId\020\003\022\027\n\023GetRouteByToolReqId\020\004"
-    "\022\027\n\023GetRouteByToolRspId\020\005\022\030\n\024GetRouteByA"
-    "gentReqId\020\006\022\030\n\024GetRouteByAgentRspId\020\007\022\025\n"
-    "\021ReportStatusReqId\020\010", 820);
+    "\r\022\013\n\003err\030\004 \002(\r\022\020\n\010overload\030\005 \002(\010\"q\n\017Repo"
+    "rtStatusReq\022\r\n\005modid\030\001 \002(\005\022\r\n\005cmdid\030\002 \002("
+    "\005\022\016\n\006caller\030\003 \002(\005\022$\n\007results\030\004 \003(\0132\023.elb"
+    ".HostCallResult\022\n\n\002ts\030\005 \002(\r*\275\001\n\tMsgTypeI"
+    "d\022\020\n\014GetHostReqId\020\001\022\020\n\014GetHostRspId\020\002\022\017\n"
+    "\013ReportReqId\020\003\022\027\n\023GetRouteByToolReqId\020\004\022"
+    "\027\n\023GetRouteByToolRspId\020\005\022\030\n\024GetRouteByAg"
+    "entReqId\020\006\022\030\n\024GetRouteByAgentRspId\020\007\022\025\n\021"
+    "ReportStatusReqId\020\010", 819);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "elb.proto", &protobuf_RegisterTypes);
   HostAddr::default_instance_ = new HostAddr();
@@ -2272,6 +2272,7 @@ const int HostCallResult::kIpFieldNumber;
 const int HostCallResult::kPortFieldNumber;
 const int HostCallResult::kSuccFieldNumber;
 const int HostCallResult::kErrFieldNumber;
+const int HostCallResult::kOverloadFieldNumber;
 #endif  // !_MSC_VER
 
 HostCallResult::HostCallResult()
@@ -2296,6 +2297,7 @@ void HostCallResult::SharedCtor() {
   port_ = 0;
   succ_ = 0u;
   err_ = 0u;
+  overload_ = false;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -2341,7 +2343,9 @@ void HostCallResult::Clear() {
     ::memset(&first, 0, n);                                \
   } while (0)
 
-  ZR_(ip_, err_);
+  if (_has_bits_[0 / 32] & 31) {
+    ZR_(ip_, overload_);
+  }
 
 #undef OFFSET_OF_FIELD_
 #undef ZR_
@@ -2415,6 +2419,21 @@ bool HostCallResult::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
+        if (input->ExpectTag(40)) goto parse_overload;
+        break;
+      }
+
+      // required bool overload = 5;
+      case 5: {
+        if (tag == 40) {
+         parse_overload:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &overload_)));
+          set_has_overload();
+        } else {
+          goto handle_unusual;
+        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -2464,6 +2483,11 @@ void HostCallResult::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->err(), output);
   }
 
+  // required bool overload = 5;
+  if (has_overload()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(5, this->overload(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -2492,6 +2516,11 @@ void HostCallResult::SerializeWithCachedSizes(
   // required uint32 err = 4;
   if (has_err()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->err(), target);
+  }
+
+  // required bool overload = 5;
+  if (has_overload()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(5, this->overload(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -2534,6 +2563,11 @@ int HostCallResult::ByteSize() const {
           this->err());
     }
 
+    // required bool overload = 5;
+    if (has_overload()) {
+      total_size += 1 + 1;
+    }
+
   }
   if (!unknown_fields().empty()) {
     total_size +=
@@ -2573,6 +2607,9 @@ void HostCallResult::MergeFrom(const HostCallResult& from) {
     if (from.has_err()) {
       set_err(from.err());
     }
+    if (from.has_overload()) {
+      set_overload(from.overload());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -2590,7 +2627,7 @@ void HostCallResult::CopyFrom(const HostCallResult& from) {
 }
 
 bool HostCallResult::IsInitialized() const {
-  if ((_has_bits_[0] & 0x0000000f) != 0x0000000f) return false;
+  if ((_has_bits_[0] & 0x0000001f) != 0x0000001f) return false;
 
   return true;
 }
@@ -2601,6 +2638,7 @@ void HostCallResult::Swap(HostCallResult* other) {
     std::swap(port_, other->port_);
     std::swap(succ_, other->succ_);
     std::swap(err_, other->err_);
+    std::swap(overload_, other->overload_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
@@ -2624,7 +2662,6 @@ const int ReportStatusReq::kCmdidFieldNumber;
 const int ReportStatusReq::kCallerFieldNumber;
 const int ReportStatusReq::kResultsFieldNumber;
 const int ReportStatusReq::kTsFieldNumber;
-const int ReportStatusReq::kOverloadFieldNumber;
 #endif  // !_MSC_VER
 
 ReportStatusReq::ReportStatusReq()
@@ -2649,7 +2686,6 @@ void ReportStatusReq::SharedCtor() {
   cmdid_ = 0;
   caller_ = 0;
   ts_ = 0u;
-  overload_ = false;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -2695,10 +2731,8 @@ void ReportStatusReq::Clear() {
     ::memset(&first, 0, n);                                \
   } while (0)
 
-  if (_has_bits_[0 / 32] & 55) {
-    ZR_(modid_, cmdid_);
-    ZR_(caller_, overload_);
-  }
+  ZR_(modid_, cmdid_);
+  ZR_(caller_, ts_);
 
 #undef OFFSET_OF_FIELD_
 #undef ZR_
@@ -2787,21 +2821,6 @@ bool ReportStatusReq::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(48)) goto parse_overload;
-        break;
-      }
-
-      // required bool overload = 6;
-      case 6: {
-        if (tag == 48) {
-         parse_overload:
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &overload_)));
-          set_has_overload();
-        } else {
-          goto handle_unusual;
-        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -2857,11 +2876,6 @@ void ReportStatusReq::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(5, this->ts(), output);
   }
 
-  // required bool overload = 6;
-  if (has_overload()) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(6, this->overload(), output);
-  }
-
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -2897,11 +2911,6 @@ void ReportStatusReq::SerializeWithCachedSizes(
   // required uint32 ts = 5;
   if (has_ts()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(5, this->ts(), target);
-  }
-
-  // required bool overload = 6;
-  if (has_overload()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(6, this->overload(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -2942,11 +2951,6 @@ int ReportStatusReq::ByteSize() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::UInt32Size(
           this->ts());
-    }
-
-    // required bool overload = 6;
-    if (has_overload()) {
-      total_size += 1 + 1;
     }
 
   }
@@ -2997,9 +3001,6 @@ void ReportStatusReq::MergeFrom(const ReportStatusReq& from) {
     if (from.has_ts()) {
       set_ts(from.ts());
     }
-    if (from.has_overload()) {
-      set_overload(from.overload());
-    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -3017,7 +3018,7 @@ void ReportStatusReq::CopyFrom(const ReportStatusReq& from) {
 }
 
 bool ReportStatusReq::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000037) != 0x00000037) return false;
+  if ((_has_bits_[0] & 0x00000017) != 0x00000017) return false;
 
   if (!::google::protobuf::internal::AllAreInitialized(this->results())) return false;
   return true;
@@ -3030,7 +3031,6 @@ void ReportStatusReq::Swap(ReportStatusReq* other) {
     std::swap(caller_, other->caller_);
     results_.Swap(&other->results_);
     std::swap(ts_, other->ts_);
-    std::swap(overload_, other->overload_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

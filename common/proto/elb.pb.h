@@ -762,6 +762,13 @@ class HostCallResult : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 err() const;
   inline void set_err(::google::protobuf::uint32 value);
 
+  // required bool overload = 5;
+  inline bool has_overload() const;
+  inline void clear_overload();
+  static const int kOverloadFieldNumber = 5;
+  inline bool overload() const;
+  inline void set_overload(bool value);
+
   // @@protoc_insertion_point(class_scope:elb.HostCallResult)
  private:
   inline void set_has_ip();
@@ -772,6 +779,8 @@ class HostCallResult : public ::google::protobuf::Message {
   inline void clear_has_succ();
   inline void set_has_err();
   inline void clear_has_err();
+  inline void set_has_overload();
+  inline void clear_has_overload();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -781,6 +790,7 @@ class HostCallResult : public ::google::protobuf::Message {
   ::google::protobuf::int32 port_;
   ::google::protobuf::uint32 succ_;
   ::google::protobuf::uint32 err_;
+  bool overload_;
   friend void  protobuf_AddDesc_elb_2eproto();
   friend void protobuf_AssignDesc_elb_2eproto();
   friend void protobuf_ShutdownFile_elb_2eproto();
@@ -883,13 +893,6 @@ class ReportStatusReq : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 ts() const;
   inline void set_ts(::google::protobuf::uint32 value);
 
-  // required bool overload = 6;
-  inline bool has_overload() const;
-  inline void clear_overload();
-  static const int kOverloadFieldNumber = 6;
-  inline bool overload() const;
-  inline void set_overload(bool value);
-
   // @@protoc_insertion_point(class_scope:elb.ReportStatusReq)
  private:
   inline void set_has_modid();
@@ -900,8 +903,6 @@ class ReportStatusReq : public ::google::protobuf::Message {
   inline void clear_has_caller();
   inline void set_has_ts();
   inline void clear_has_ts();
-  inline void set_has_overload();
-  inline void clear_has_overload();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -912,7 +913,6 @@ class ReportStatusReq : public ::google::protobuf::Message {
   ::google::protobuf::RepeatedPtrField< ::elb::HostCallResult > results_;
   ::google::protobuf::int32 caller_;
   ::google::protobuf::uint32 ts_;
-  bool overload_;
   friend void  protobuf_AddDesc_elb_2eproto();
   friend void protobuf_AssignDesc_elb_2eproto();
   friend void protobuf_ShutdownFile_elb_2eproto();
@@ -1543,6 +1543,30 @@ inline void HostCallResult::set_err(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:elb.HostCallResult.err)
 }
 
+// required bool overload = 5;
+inline bool HostCallResult::has_overload() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void HostCallResult::set_has_overload() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void HostCallResult::clear_has_overload() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void HostCallResult::clear_overload() {
+  overload_ = false;
+  clear_has_overload();
+}
+inline bool HostCallResult::overload() const {
+  // @@protoc_insertion_point(field_get:elb.HostCallResult.overload)
+  return overload_;
+}
+inline void HostCallResult::set_overload(bool value) {
+  set_has_overload();
+  overload_ = value;
+  // @@protoc_insertion_point(field_set:elb.HostCallResult.overload)
+}
+
 // -------------------------------------------------------------------
 
 // ReportStatusReq
@@ -1671,30 +1695,6 @@ inline void ReportStatusReq::set_ts(::google::protobuf::uint32 value) {
   set_has_ts();
   ts_ = value;
   // @@protoc_insertion_point(field_set:elb.ReportStatusReq.ts)
-}
-
-// required bool overload = 6;
-inline bool ReportStatusReq::has_overload() const {
-  return (_has_bits_[0] & 0x00000020u) != 0;
-}
-inline void ReportStatusReq::set_has_overload() {
-  _has_bits_[0] |= 0x00000020u;
-}
-inline void ReportStatusReq::clear_has_overload() {
-  _has_bits_[0] &= ~0x00000020u;
-}
-inline void ReportStatusReq::clear_overload() {
-  overload_ = false;
-  clear_has_overload();
-}
-inline bool ReportStatusReq::overload() const {
-  // @@protoc_insertion_point(field_get:elb.ReportStatusReq.overload)
-  return overload_;
-}
-inline void ReportStatusReq::set_overload(bool value) {
-  set_has_overload();
-  overload_ = value;
-  // @@protoc_insertion_point(field_set:elb.ReportStatusReq.overload)
 }
 
 

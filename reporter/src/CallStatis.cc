@@ -28,10 +28,10 @@ CallStatis::CallStatis()
 
 void CallStatis::report(elb::ReportStatusReq& req)
 {
-    int overload = req.overload()? 1: 0;
     for (int i = 0;i < req.results_size(); ++i)
     {
         const elb::HostCallResult& result = req.results(i);
+        int overload = result.overload() ? 1: 0;
         char sql[3072];
         snprintf(sql, 3072, "INSERT INTO ServerCallStatus"
             "(modid, cmdid, ip, port, caller, succ_cnt, err_cnt, ts, overload) "

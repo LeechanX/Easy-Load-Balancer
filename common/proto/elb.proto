@@ -56,10 +56,11 @@ message GetRouteRsp {
 
 //host call result
 message HostCallResult {
-    required int32 ip    = 1;
-    required int32 port  = 2;
-    required uint32 succ = 3;
-    required uint32 err  = 4;
+    required int32 ip      = 1;
+    required int32 port    = 2;
+    required uint32 succ   = 3;
+    required uint32 err    = 4;
+    required bool overload = 5;
 }
 
 //agent report lb status to reporter
@@ -69,5 +70,4 @@ message ReportStatusReq {
     required int32 caller           = 3;
     repeated HostCallResult results = 4;
     required uint32 ts              = 5;//sec
-    required bool overload          = 6;
 }
