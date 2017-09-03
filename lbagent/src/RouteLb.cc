@@ -1,5 +1,4 @@
 #include <set>
-#include <time.h>
 #include <stdio.h>
 #include <netdb.h>
 #include <assert.h>
@@ -59,6 +58,17 @@ static void initLbEnviro()
         ::inet_aton("127.0.0.1", &inaddr);
         MyIp = ntohl(inaddr.s_addr);
     }
+}
+
+void HI::reset(uint32_t initSucc)
+{
+    succ = initSucc;
+    err = 0;
+    continSucc = 0;
+    continErr = 0;
+    overload = false;
+    windowTs = time(NULL);
+    overloadTs = 0;
 }
 
 LB::~LB()
@@ -156,14 +166,88 @@ void LB::report(int ip, int port, int retcode)
     if (_hostMap.find(key) == _hostMap.end())
         return ;
     HI* hi = _hostMap[key];
-    //TODO
     if (retcode == 0)
     {
         hi->succ += 1;
+        hi->continSucc++;
+        hi->continErr = 0;
     }
     else
     {
         hi->err += 1;
+        hi->continSucc = 0;
+        hi->continErr++;
+    }
+    long currenTs = time(NULL);
+    //检查idle节点是否满足overload条件;或者overload节点是否满足idle条件
+    //如果是idle节点，则只有调用失败才有必要判断是否达到overload条件
+    if (!hi->overload && retcode != 0)
+    {
+        bool ifOverload = false;
+        //idle节点,检查是否达到判定为overload状态的条件
+        //[1].计算失败率,如果大于预设失败率，则认为overload
+        double errRate = hi->err * 1.0 / (hi->succ + hi->err);
+        if (errRate > LbConfig.errRate)
+            ifOverload = true;
+        //[2].连续失败次数达到阈值，认为overload
+        if (!ifOverload && hi->continErr >= (uint32_t)LbConfig.continErrLim)
+            ifOverload = true;
+        //判定为overload了
+        if (ifOverload)
+        {
+            hi->overload = true;
+            //TODO: 重置succ,err
+
+            //移除出runingList,放入downList
+            _runningList.remove(hi);
+            _downList.push_back(hi);
+        }
+    }
+    else if (hi->overload && retcode == 0)//如果是overload节点，则只有调用成功才有必要判断是否达到idle条件
+    {
+        bool ifIdle = false;
+        //overload节点,检查是否达到回到idle状态的条件
+        //[1].计算成功率,如果大于预设成功率，则认为idle
+        double succRate = hi->succ * 1.0 / (hi->succ + hi->err);
+        if (succRate > LbConfig.succRate)
+            ifIdle = true;
+        //[2].连续成功次数达到阈值，认为idle
+        if (!ifIdle && hi->continSucc >= (uint32_t)LbConfig.continSuccLim)
+        //判定为idle了
+        if (ifIdle)
+        {
+            hi->overload = false;
+            //TODO: 重置succ,err
+
+            //移除出downList,重新放入runingList            
+            _downList.remove(hi);
+            _runningList.push_back(hi);
+            //并设置被判定为overload的时间
+            hi->overloadTs = currenTs;
+        }
+    }
+
+    //检查idle时间窗口是否到达，若到达，重置;或者检查overload节点是否处于overload状态的时长已经超时了
+    if (!hi->overload)
+    {
+        //节点是idle状态，检查是否时间窗口到达
+        if (currenTs - hi->windowTs >= LbConfig.clearTimo)
+        {
+            //时间窗口到达
+            hi->reset(LbConfig.initSuccCnt);
+        }
+    }
+    else
+    {
+        //检查overload节点是否处于overload状态的时长已经超时了
+        if (currenTs - hi->overloadTs >= LbConfig.ovldWaitLim)
+        {
+            //处于overload状态的时长已经超时了
+            hi->reset(LbConfig.initSuccCnt);
+            //重新把节点放入runningList
+            _downList.remove(hi);
+            _runningList.push_back(hi);
+        }
     }
 }
 

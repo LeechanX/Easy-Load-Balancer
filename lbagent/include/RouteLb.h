@@ -3,6 +3,7 @@
 
 #include <list>
 #include <vector>
+#include <time.h>
 #include <stdio.h>
 #include <stdint.h>
 #include <pthread.h>
@@ -12,21 +13,41 @@
 //host info
 struct HI
 {
-    HI(uint32_t myIp, int myPort, uint32_t initSucc): ip(myIp), port(myPort), succ(initSucc), err(0), overload(false) { }
+    HI(uint32_t myIp, int myPort, uint32_t initSucc): 
+        ip(myIp),
+        port(myPort),
+        succ(initSucc),
+        err(0),
+        continSucc(0),
+        continErr(0),
+        overload(false),
+        overloadTs(0) {
+            windowTs = time(NULL);
+        }
+
+    void reset(uint32_t initSucc);
 
     uint32_t ip;
     int port;
     uint32_t succ;
     uint32_t err;
+    uint32_t continSucc;
+    uint32_t continErr;
     bool overload;
+    long windowTs;
+    long overloadTs;
 };
 
 class LB
 {
 public:
-    LB(int modid, int cmdid): effectData(0), lstRptTime(0), status(ISPULLING), _modid(modid), _cmdid(cmdid), _accessCnt(0)
-    {
-    }
+    LB(int modid, int cmdid): 
+        effectData(0),
+        lstRptTime(0),
+        status(ISPULLING),
+        _modid(modid),
+        _cmdid(cmdid),
+        _accessCnt(0) { }
 
     ~LB();
 
