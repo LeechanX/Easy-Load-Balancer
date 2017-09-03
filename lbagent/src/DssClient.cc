@@ -44,8 +44,8 @@ void dssConnectorDomain(event_loop& loop)
     //设置：当收到消息id=1的消息时的回调函数
     client.add_msg_cb(elb::GetRouteByAgentRspId, recvRoute/*, ???*/);
 
-    //设置：当断连后调用的回调函数
-    client.onClose(whenConnClose);
+    //设置：连接成功、断线重连接成功后调用whenConnClose来清理之前的任务
+    client.onConnection(whenConnClose);
 
     //loop install message queue's messge coming event
     pullQueue->set_loop(&loop, newPullReq, &client);
