@@ -96,7 +96,7 @@ int elbClient::apiGetHost(int modid, int cmdid, int timo, std::string& ip, int& 
     if (head.cmdid != elb::GetHostRspId || 
         !rsp.ParseFromArray(rbuf + COMMU_HEAD_LENGTH, pkgLen - COMMU_HEAD_LENGTH))
     {
-        fprintf(stderr, "package format error%s\n");
+        fprintf(stderr, "package format error\n");
         return -9999;
     }
     while (rsp.seq() < seq)
@@ -112,13 +112,13 @@ int elbClient::apiGetHost(int modid, int cmdid, int timo, std::string& ip, int& 
         if (head.cmdid != elb::GetHostRspId || 
             !rsp.ParseFromArray(rbuf + COMMU_HEAD_LENGTH, pkgLen - COMMU_HEAD_LENGTH))
         {
-            fprintf(stderr, "package format error%s\n");
+            fprintf(stderr, "package format error\n");
             return -9999;
         }
     }
     if (rsp.seq() != seq || rsp.modid() != modid || rsp.cmdid() != cmdid)
     {
-        fprintf(stderr, "package content error%s\n");
+        fprintf(stderr, "package content error\n");
         return -9999;
     }
 
