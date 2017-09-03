@@ -18,6 +18,8 @@ struct HI
         port(myPort),
         succ(initSucc),
         err(0),
+        rSucc(0),
+        rErr(0),
         continSucc(0),
         continErr(0),
         overload(false),
@@ -25,12 +27,15 @@ struct HI
             windowTs = time(NULL);
         }
 
-    void reset(uint32_t initSucc);
+    void resetIdle(uint32_t initSucc);
+    void setOverload(uint32_t overloadErr);
 
     uint32_t ip;
     int port;
-    uint32_t succ;
-    uint32_t err;
+    uint32_t succ;//虚拟成功个数,用于过载、空闲判定
+    uint32_t err;//虚拟失败个数,用于过载、空闲判定
+    uint32_t rSucc;//真实成功个数,用于上报给reporter观察,每个modid/cmdid的上报周期重置一次
+    uint32_t rErr;//真实失败个数,用于上报给reporter观察,每个modid/cmdid的上报周期重置一次
     uint32_t continSucc;
     uint32_t continErr;
     bool overload;

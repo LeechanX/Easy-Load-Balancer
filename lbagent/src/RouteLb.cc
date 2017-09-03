@@ -10,16 +10,17 @@
 
 struct LbConfigure
 {
-    int initSuccCnt;   //初始的成功个数，防止刚启动时少量失败就认为过载
+    int initSuccCnt;   //初始的（虚拟）成功个数，防止刚启动时少量失败就认为过载
+    int ovldErrCnt;    //被判定为overload时（虚拟）失败个数
     int continSuccLim; //当overload节点连续成功次数超过此值，认为成功恢复
     int continErrLim;  //当正常节点连续失败次数超过此值，认为overload
     int probeNum;      //经过几次获取节点请求后，试探选择一次overload节点
     long updateTimo;   //对于每个modid/cmdid，多久更新一下本地路由,s
     long clearTimo;    //对于某个modid/cmdid下的某个host，多久清理一下负载信息
-    long reportTimo;   //对于每个modid/cmdid，多久上报给reporter一次
+    long reportTimo;   //每个modid/cmdid的上报周期,多久上报给reporter一次
     long ovldWaitLim;  //对于某个modid/cmdid下的某个host被判断过载后，在过载队列等待的最大时间,s
-    float succRate;    //当overload节点成功率高于此值，节点变idle
-    float errRate;     //当idle节点失败率高于此值，节点变overload
+    float succRate;    //当overload节点（虚拟）成功率高于此值，节点变idle
+    float errRate;     //当idle节点（虚拟）失败率高于此值，节点变overload
 } LbConfig;
 
 static uint32_t MyIp = 0;
@@ -30,6 +31,7 @@ static void initLbEnviro()
 {
     //load configures
     LbConfig.initSuccCnt   = config_reader::ins()->GetNumber("lb", "init_succ_cnt", 270);
+    LbConfig.ovldErrCnt    = config_reader::ins()->GetNumber("lb", "ovld_err_cnt", 10);
     LbConfig.continSuccLim = config_reader::ins()->GetNumber("lb", "contin_succ_lim", 30);
     LbConfig.continErrLim  = config_reader::ins()->GetNumber("lb", "contin_err_lim", 30);
     LbConfig.probeNum      = config_reader::ins()->GetNumber("lb", "probe_num", 10);
@@ -60,15 +62,25 @@ static void initLbEnviro()
     }
 }
 
-void HI::reset(uint32_t initSucc)
+void HI::resetIdle(uint32_t initSucc)
 {
     succ = initSucc;
     err = 0;
     continSucc = 0;
     continErr = 0;
     overload = false;
-    windowTs = time(NULL);
+    windowTs = time(NULL);//重置窗口时间
     overloadTs = 0;
+}
+
+void HI::setOverload(uint32_t overloadErr)
+{
+    succ = 0;
+    err = overloadErr;
+    continSucc = 0;
+    continErr = 0;
+    overload = true;
+    overloadTs = time(NULL);//设置被判定为overload的时刻
 }
 
 LB::~LB()
@@ -168,13 +180,19 @@ void LB::report(int ip, int port, int retcode)
     HI* hi = _hostMap[key];
     if (retcode == 0)
     {
+        //更新虚拟成功、真实成功次数
         hi->succ += 1;
+        hi->rSucc++;
+        //连续成功、失败个数更新
         hi->continSucc++;
         hi->continErr = 0;
     }
     else
     {
+        //更新虚拟失败、真实失败次数
         hi->err += 1;
+        hi->rErr++;
+        //连续成功、失败个数更新
         hi->continSucc = 0;
         hi->continErr++;
     }
@@ -195,9 +213,8 @@ void LB::report(int ip, int port, int retcode)
         //判定为overload了
         if (ifOverload)
         {
-            hi->overload = true;
-            //TODO: 重置succ,err
-
+            //重置hi为overload状态
+            hi->setOverload(LbConfig.ovldErrCnt);
             //移除出runingList,放入downList
             _runningList.remove(hi);
             _downList.push_back(hi);
@@ -216,14 +233,11 @@ void LB::report(int ip, int port, int retcode)
         //判定为idle了
         if (ifIdle)
         {
-            hi->overload = false;
-            //TODO: 重置succ,err
-
+            //重置hi为idle状态
+            hi->resetIdle(LbConfig.initSuccCnt);
             //移除出downList,重新放入runingList            
             _downList.remove(hi);
             _runningList.push_back(hi);
-            //并设置被判定为overload的时间
-            hi->overloadTs = currenTs;
         }
     }
 
@@ -234,7 +248,7 @@ void LB::report(int ip, int port, int retcode)
         if (currenTs - hi->windowTs >= LbConfig.clearTimo)
         {
             //时间窗口到达
-            hi->reset(LbConfig.initSuccCnt);
+            hi->resetIdle(LbConfig.initSuccCnt);
         }
     }
     else
@@ -243,7 +257,7 @@ void LB::report(int ip, int port, int retcode)
         if (currenTs - hi->overloadTs >= LbConfig.ovldWaitLim)
         {
             //处于overload状态的时长已经超时了
-            hi->reset(LbConfig.initSuccCnt);
+            hi->resetIdle(LbConfig.initSuccCnt);
             //重新把节点放入runningList
             _downList.remove(hi);
             _runningList.push_back(hi);
@@ -297,7 +311,7 @@ void LB::update(elb::GetRouteRsp& rsp)
         _hostMap.erase(*it);
         delete hi;
     }
-    //reset effectData,表明路由更新时间\有效期开始
+    //重置effectData,表明路由更新时间\有效期开始
     effectData = time(NULL);
     status = ISNEW;
 }
@@ -333,8 +347,9 @@ void LB::report2Rpter()
         elb::HostCallResult callRes;
         callRes.set_ip(hi->ip);
         callRes.set_port(hi->port);
-        callRes.set_succ(hi->succ);
-        callRes.set_err(hi->err);
+        callRes.set_succ(hi->rSucc);
+        callRes.set_err(hi->rErr);
+        hi->rSucc = 0, hi->rErr = 0;//每个modid/cmdid的上报周期重置一次
         callRes.set_overload(false);
         req.add_results()->CopyFrom(callRes);
     }
@@ -344,12 +359,12 @@ void LB::report2Rpter()
         elb::HostCallResult callRes;
         callRes.set_ip(hi->ip);
         callRes.set_port(hi->port);
-        callRes.set_succ(hi->succ);
-        callRes.set_err(hi->err);
+        callRes.set_succ(hi->rSucc);
+        callRes.set_err(hi->rErr);
+        hi->rSucc = 0, hi->rErr = 0;//每个modid/cmdid的上报周期重置一次
         callRes.set_overload(true);
         req.add_results()->CopyFrom(callRes);
     }
-
     reptQueue->send_msg(req);
 }
 
