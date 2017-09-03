@@ -20,16 +20,45 @@ public:
     {
         if (_route.empty())
         {
-            FILE* fp = fopen("/tmp/backupRoute.dat", "r");
-            int imodid, icmdid, iport;
-            char cip[16];
-            while (fscanf(fp, "%d %d %s %d", &imodid, &icmdid, cip, &iport) != EOF)
+            FILE* fp = fopen("/tmp/backupRoute.dat.1", "r");
+            if (fp)
             {
-                uint64_t key = ((uint64_t)imodid << 32) + icmdid;
-                hostType host(cip, iport);
-                _route[key].push_back(host);
+                int imodid, icmdid, iport;
+                char cip[16];
+                while (fscanf(fp, "%d %d %s %d", &imodid, &icmdid, cip, &iport) != EOF)
+                {
+                    uint64_t key = ((uint64_t)imodid << 32) + icmdid;
+                    hostType host(cip, iport);
+                    _route[key].push_back(host);
+                }
+                fclose(fp);
             }
-            fclose(fp);
+            fp = fopen("/tmp/backupRoute.dat.2", "r");
+            if (fp)
+            {
+                int imodid, icmdid, iport;
+                char cip[16];
+                while (fscanf(fp, "%d %d %s %d", &imodid, &icmdid, cip, &iport) != EOF)
+                {
+                    uint64_t key = ((uint64_t)imodid << 32) + icmdid;
+                    hostType host(cip, iport);
+                    _route[key].push_back(host);
+                }
+                fclose(fp);
+            }
+            fp = fopen("/tmp/backupRoute.dat.3", "r");
+            if (fp)
+            {
+                int imodid, icmdid, iport;
+                char cip[16];
+                while (fscanf(fp, "%d %d %s %d", &imodid, &icmdid, cip, &iport) != EOF)
+                {
+                    uint64_t key = ((uint64_t)imodid << 32) + icmdid;
+                    hostType host(cip, iport);
+                    _route[key].push_back(host);
+                }
+                fclose(fp);
+            }
         }
         uint64_t key = ((uint64_t)modid << 32) + cmdid;
         if (_route.find(key) == _route.end())
