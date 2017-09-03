@@ -16,9 +16,9 @@ struct LbConfigure
     int continErrLim;  //当正常节点连续失败次数超过此值，认为overload
     int probeNum;      //经过几次获取节点请求后，试探选择一次overload节点
     long updateTimo;   //对于每个modid/cmdid，多久更新一下本地路由,s
-    long clearTimo;    //对于每个modid/cmdid下的每个host，多久清理一下负载信息
+    long clearTimo;    //对于某个modid/cmdid下的某个host，多久清理一下负载信息
     long reportTimo;   //对于每个modid/cmdid，多久上报给reporter一次
-    long ovldWaitLim;  //<modid, cmdid, ip ,port>被判断过载后，在过载队列等待的最大时间,s
+    long ovldWaitLim;  //对于某个modid/cmdid下的某个host被判断过载后，在过载队列等待的最大时间,s
     float succRate;    //当overload节点成功率高于此值，节点变idle
     float errRate;     //当idle节点失败率高于此值，节点变overload
 } LbConfig;
