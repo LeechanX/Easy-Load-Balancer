@@ -51,7 +51,8 @@ int elbClient::apiGetHost(int modid, int cmdid, int timo, std::string& ip, int& 
         int ret = _staticRoute.getHost(modid, cmdid, ip, port);
         if (ret == -1)
         {
-            return -100011;
+            fprintf(stderr, "[%d,%d] is not exist!\n", modid, cmdid);
+            return -9998;// = lbagent's NOEXIST
         }
         return 0;
     }
@@ -75,7 +76,7 @@ int elbClient::apiGetHost(int modid, int cmdid, int timo, std::string& ip, int& 
     if (ret == -1)
     {
         perror("sendto");
-        return -10001;
+        return -9999;
     }
 
     struct timeval tv;
@@ -87,7 +88,7 @@ int elbClient::apiGetHost(int modid, int cmdid, int timo, std::string& ip, int& 
     if (pkgLen == -1)
     {
         perror("recvfrom");
-        return -10001;
+        return -9999;
     }
 
     ::memcpy(&head, rbuf, COMMU_HEAD_LENGTH);
@@ -95,7 +96,8 @@ int elbClient::apiGetHost(int modid, int cmdid, int timo, std::string& ip, int& 
     if (head.cmdid != elb::GetHostRspId || 
         !rsp.ParseFromArray(rbuf + COMMU_HEAD_LENGTH, pkgLen - COMMU_HEAD_LENGTH))
     {
-        return -10002;
+        fprintf(stderr, "package format error%s\n");
+        return -9999;
     }
     while (rsp.seq() < seq)
     {
@@ -104,18 +106,20 @@ int elbClient::apiGetHost(int modid, int cmdid, int timo, std::string& ip, int& 
         if (pkgLen == -1)
         {
             perror("recvfrom");
-            return -10001;
+            return -9999;
         }
         ::memcpy(&head, rbuf, COMMU_HEAD_LENGTH);
         if (head.cmdid != elb::GetHostRspId || 
             !rsp.ParseFromArray(rbuf + COMMU_HEAD_LENGTH, pkgLen - COMMU_HEAD_LENGTH))
         {
-            return -10002;
+            fprintf(stderr, "package format error%s\n");
+            return -9999;
         }
     }
     if (rsp.seq() != seq || rsp.modid() != modid || rsp.cmdid() != cmdid)
     {
-        return -10002;
+        fprintf(stderr, "package content error%s\n");
+        return -9999;
     }
 
     if (rsp.retcode() == 0)

@@ -1,4 +1,5 @@
 import os
+import sys
 import mmap
 import time
 import socket
@@ -45,7 +46,8 @@ class elbClient:
             self.__agentOff = True
             staticData = self.__staticRoute.getHost(modid, cmdid)
             if staticData == -1:
-                return (-10001, 'no data')
+                print >> sys.stderr, '[%d,%d] is not exist!' % (modid, cmdid)
+                return (-9998, 'no data')
             return (0, staticData)
 
         self.__staticRoute.freeData()
@@ -69,8 +71,8 @@ class elbClient:
         try:
             sock.sendto(reqStr, ('127.0.0.1', 8888 + i))
         except socket.error, errMsg:
-            print errMsg
-            return (-10003, errMsg)
+            print >> sys.stderr, errMsg
+            return (-9999, errMsg)
         try:
             #recv response
             sock.settimeout(timo * 0.001)
@@ -88,7 +90,8 @@ class elbClient:
                     raise FormatError('message head format error')
                 rsp.ParseFromString(rspStr[8:])
             if rsp.seq != req.seq:
-                return (-10001, 'request seq id is %d, response seq id is %d' % (req.seq, rsp.seq))
+                print >> sys.stderr, 'request seq id is %d, response seq id is %d' % (req.seq, rsp.seq)
+                return (-9999, 'request seq id is %d, response seq id is %d' % (req.seq, rsp.seq))
             elif rsp.retcode != 0:
                 return (rsp.retcode, 'agent error')
             else:
@@ -96,9 +99,10 @@ class elbClient:
                 ips = socket.inet_ntoa(struct.pack('I', socket.htonl(ipn)))
                 return (0, (ips, rsp.host.port))
         except socket.timeout:
-            return (-10002, 'time out when recvfrom socket')
+            print >> sys.stderr, 'time out when recvfrom socket'
+            return (-9999, 'time out when recvfrom socket')
         except FormatError as e:
-            return (-10001, e.value)
+            return (-9999, e.value)
 
     def apiReportRes(self, modid, cmdid, ip, port, res):
         if self.__agentOff:
