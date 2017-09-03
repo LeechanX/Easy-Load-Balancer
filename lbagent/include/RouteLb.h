@@ -3,6 +3,7 @@
 
 #include <list>
 #include <vector>
+#include <stdio.h>
 #include <stdint.h>
 #include <pthread.h>
 #include <ext/hash_map>
@@ -40,6 +41,8 @@ public:
     void update(elb::GetRouteRsp& rsp);
 
     void pull();
+
+    void persist(FILE* fp);
 
     void report2Rpter();
 
@@ -81,14 +84,18 @@ public:
     //清除任何标记为：正在拉取 的[modid,cmdid]状态，当dss client网络断开后需要调用之
     void clearPulling();
 
+    void setId(int id) { _id = id; }
+
+    void persistRoute();
+
 private:
     typedef __gnu_cxx::hash_map<uint64_t, LB*> RouteMap;
     typedef __gnu_cxx::hash_map<uint64_t, LB*>::iterator RouteMapIt;
-
     RouteMap _routeMap;
-
     //用于同步agent线程和后台dnsserver-client线程
     pthread_mutex_t _mutex;
+    //标识自己是第几个RouteLB
+    int _id;
 };
 
 #endif

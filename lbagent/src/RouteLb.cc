@@ -141,6 +141,15 @@ void LB::getRoute(std::vector<HI*>& vec)
     }
 }
 
+void LB::persist(FILE* fp)
+{
+    for (HostMapIt it = _hostMap.begin();it != _hostMap.end(); ++it)
+    {
+        HI* hi = it->second;
+        fprintf(fp, "%d %d %d %d\n", _modid, _cmdid, hi->ip, hi->port);
+    }
+}
+
 void LB::report(int ip, int port, int retcode)
 {
     uint64_t key = ((uint64_t)ip << 32) + port;
@@ -395,4 +404,32 @@ void RouteLB::clearPulling()
             lb->status = LB::ISNEW;
     }
     ::pthread_mutex_unlock(&_mutex);
+}
+
+void RouteLB::persistRoute()
+{
+    FILE* fp = NULL;
+    switch (_id)
+    {
+        case 1:
+            fp = fopen("/tmp/backupRoute.dat.1", "w");
+            break;
+        case 2:
+            fp = fopen("/tmp/backupRoute.dat.2", "w");
+            break;
+        case 3:
+            fp = fopen("/tmp/backupRoute.dat.3", "w");
+    }
+    if (fp)
+    {
+        ::pthread_mutex_lock(&_mutex);
+        for (RouteMapIt it = _routeMap.begin();
+            it != _routeMap.end(); ++it)
+        {
+            LB* lb = it->second;
+            lb->persist(fp);
+        }
+        ::pthread_mutex_unlock(&_mutex);
+        fclose(fp);
+    }
 }

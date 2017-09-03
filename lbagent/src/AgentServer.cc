@@ -47,6 +47,12 @@ static void getRoute(const char* data, uint32_t len, int msgid, net_commu* commu
     commu->send_data(rspStr.c_str(), rspStr.size(), elb::GetRouteByToolRspId);//回复消息
 }
 
+static void persistRoute(event_loop* loop, void* usrData)
+{
+    RouteLB* ptrRouteLB = (RouteLB*)usrData;
+    ptrRouteLB->persistRoute();
+}
+
 static void* initUDPServerIns(void* portPtr)
 {
     short port = *((short*)portPtr);
@@ -56,6 +62,8 @@ static void* initUDPServerIns(void* portPtr)
     server.add_msg_cb(elb::GetHostReqId, getHost, &routeLB[port - 8888]);//设置：当收到消息id = GetHostReqId的消息调用的回调函数getHost
     server.add_msg_cb(elb::ReportReqId, reportStatus, &routeLB[port - 8888]);//设置：当收到消息id = ReportReqId的消息调用的回调函数reportStatus
     server.add_msg_cb(elb::GetRouteByToolReqId, getRoute, &routeLB[port - 8888]);//设置：当收到消息id = GetRouteByToolReqId的消息调用的回调函数getRoute
+
+    loop.run_every(persistRoute, &routeLB[port - 8888], 60);//设置：每隔60s将本地已拉到的路由持久化到磁盘
 
     loop.process_evs();
     return NULL;

@@ -20,6 +20,9 @@ static void recordTs(event_loop* loop, void* usrData)
 
 int main()
 {
+    routeLB[0].setId(1);
+    routeLB[0].setId(2);
+    routeLB[0].setId(3);
     config_reader::setPath("lbagent.ini");
     dispLogo();
     _init_log_("lbagent", ".");
