@@ -31,7 +31,8 @@ static void newPullReq(event_loop* loop, int fd, void *args)
 
 static void whenConnClose(tcp_client* client, void* args)
 {
-    //TODO
+    for (int i = 0;i < 3; ++i)
+        routeLB[i].clearPulling();
 }
 
 void dssConnectorDomain(event_loop& loop)

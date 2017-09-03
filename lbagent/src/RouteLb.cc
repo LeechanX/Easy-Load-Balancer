@@ -1,10 +1,13 @@
 #include <set>
 #include <time.h>
 #include <stdio.h>
+#include <netdb.h>
 #include <assert.h>
 #include <stdlib.h>
+#include <arpa/inet.h>
 #include "Server.h"
 #include "RouteLb.h"
+#include "easy_reactor.h"
 
 struct LbConfigure
 {
@@ -13,11 +16,50 @@ struct LbConfigure
     int continErrLim;  //当正常节点连续失败次数超过此值，认为overload
     int probeNum;      //经过几次获取节点请求后，试探选择一次overload节点
     long updateTimo;   //对于每个modid/cmdid，多久更新一下本地路由,s
-    long clearTimo;    //对于每个modid/cmdid，多久清理一下负载信息，顺便上报给reporter
+    long clearTimo;    //对于每个modid/cmdid下的每个host，多久清理一下负载信息
+    long reportTimo;   //对于每个modid/cmdid，多久上报给reporter一次
     long ovldWaitLim;  //<modid, cmdid, ip ,port>被判断过载后，在过载队列等待的最大时间,s
     float succRate;    //当overload节点成功率高于此值，节点变idle
     float errRate;     //当idle节点失败率高于此值，节点变overload
 } LbConfig;
+
+static uint32_t MyIp = 0;
+
+static pthread_once_t onceLoad = PTHREAD_ONCE_INIT;
+
+static void initLbEnviro()
+{
+    //load configures
+    LbConfig.initSuccCnt   = config_reader::ins()->GetNumber("lb", "init_succ_cnt", 270);
+    LbConfig.continSuccLim = config_reader::ins()->GetNumber("lb", "contin_succ_lim", 30);
+    LbConfig.continErrLim  = config_reader::ins()->GetNumber("lb", "contin_err_lim", 30);
+    LbConfig.probeNum      = config_reader::ins()->GetNumber("lb", "probe_num", 10);
+    LbConfig.updateTimo    = config_reader::ins()->GetNumber("lb", "update_timeout", 15);
+    LbConfig.clearTimo     = config_reader::ins()->GetNumber("lb", "clear_timeout", 15);
+    LbConfig.reportTimo    = config_reader::ins()->GetNumber("lb", "report_timeout", 15);
+    LbConfig.ovldWaitLim   = config_reader::ins()->GetNumber("lb", "overload_wait_lim", 300);
+    LbConfig.succRate      = config_reader::ins()->GetFloat("lb", "succ_rate", 0.95);
+    LbConfig.errRate       = config_reader::ins()->GetFloat("lb", "err_rate", 0.1);
+
+    //get local IP
+    char myhostname[1024];
+    if (::gethostname(myhostname, 1024) == 0)
+    {
+        struct hostent* hd = ::gethostbyname(myhostname);
+        if (hd)
+        {
+            struct sockaddr_in myaddr;
+            myaddr.sin_addr = *(struct in_addr* )hd->h_addr;
+            MyIp = ntohl(myaddr.sin_addr.s_addr);
+        }
+    }
+    if (!MyIp)
+    {
+        struct in_addr inaddr;
+        ::inet_aton("127.0.0.1", &inaddr);
+        MyIp = ntohl(inaddr.s_addr);
+    }
+}
 
 LB::~LB()
 {
@@ -167,9 +209,67 @@ void LB::update(elb::GetRouteRsp& rsp)
     status = ISNEW;
 }
 
+void LB::pull()
+{
+    elb::GetRouteReq pullReq;
+    pullReq.set_modid(_modid);
+    pullReq.set_cmdid(_cmdid);
+    pullQueue->send_msg(pullReq);
+    //标记:路由正在拉取
+    status = LB::ISPULLING;
+}
+
+void LB::report2Rpter()
+{
+    if (empty())
+        return ;
+    long currenTs = time(NULL);
+    if (currenTs - lstRptTime < LbConfig.reportTimo)
+        return ;
+    lstRptTime = currenTs;
+
+    elb::ReportStatusReq req;
+    req.set_modid(_modid);
+    req.set_cmdid(_cmdid);
+    req.set_ts(time(NULL));
+    req.set_caller(MyIp);
+
+    for (ListIt it = _runningList.begin();it != _runningList.end(); ++it)
+    {
+        HI* hi = *it;
+        elb::HostCallResult callRes;
+        callRes.set_ip(hi->ip);
+        callRes.set_port(hi->port);
+        callRes.set_succ(hi->succ);
+        callRes.set_err(hi->err);
+        callRes.set_overload(false);
+        req.add_results()->CopyFrom(callRes);
+    }
+    for (ListIt it = _downList.begin();it != _downList.end(); ++it)
+    {
+        HI* hi = *it;
+        elb::HostCallResult callRes;
+        callRes.set_ip(hi->ip);
+        callRes.set_port(hi->port);
+        callRes.set_succ(hi->succ);
+        callRes.set_err(hi->err);
+        callRes.set_overload(true);
+        req.add_results()->CopyFrom(callRes);
+    }
+
+    reptQueue->send_msg(req);
+}
+
+RouteLB::RouteLB()
+{
+    ::pthread_once(&onceLoad, initLbEnviro);
+    ::pthread_mutex_init(&_mutex, NULL);
+}
+
 int RouteLB::getHost(int modid, int cmdid, elb::GetHostRsp& rsp)
 {
     uint64_t key = ((uint64_t)modid << 32) + cmdid;
+    ::pthread_mutex_lock(&_mutex);
     if (_routeMap.find(key) != _routeMap.end())
     {
         LB* lb = _routeMap[key];
@@ -181,24 +281,23 @@ int RouteLB::getHost(int modid, int cmdid, elb::GetHostRsp& rsp)
         //若路由并没有正在拉取，且有效期至今已超时，则重拉取
         if (lb->status == LB::ISNEW && time(NULL) - lb->effectData > LbConfig.updateTimo)
         {
-            elb::GetRouteReq pullReq;
-            pullReq.set_modid(modid);
-            pullReq.set_cmdid(cmdid);
-            pullQueue->send_msg(pullReq);
-            //标记:路由正在拉取
-            lb->status = LB::ISPULLING;
+            lb->pull();
         }
+        ::pthread_mutex_unlock(&_mutex);
     }
     else
     {
-        _routeMap[key] = new LB();
-        rsp.set_retcode(NOEXIST);
-
+        LB* lb = new LB(modid, cmdid);
+        if (!lb)
+        {
+            fprintf(stderr, "no more space to new LB\n");
+            ::exit(1);
+        }
+        _routeMap[key] = lb;
         //拉取一下路由
-        elb::GetRouteReq pullReq;
-        pullReq.set_modid(modid);
-        pullReq.set_cmdid(cmdid);
-        pullQueue->send_msg(pullReq);
+        lb->pull();
+        ::pthread_mutex_lock(&_mutex);
+        rsp.set_retcode(NOEXIST);
         return NOEXIST;
     }
     return 0;
@@ -212,22 +311,35 @@ void RouteLB::report(elb::ReportReq& req)
     int ip = req.host().ip();
     int port = req.host().port();
     uint64_t key = ((uint64_t)modid << 32) + cmdid;
+    ::pthread_mutex_lock(&_mutex);
     if (_routeMap.find(key) != _routeMap.end())
     {
         LB* lb = _routeMap[key];
         lb->report(ip, port, retcode);
-        //TODO: report to reporter
+        //try to report to reporter
+        lb->report2Rpter();
     }
+    ::pthread_mutex_unlock(&_mutex);
 }
 
 void RouteLB::getRoute(int modid, int cmdid, elb::GetRouteRsp& rsp)
 {
     uint64_t key = ((uint64_t)modid << 32) + cmdid;
+    ::pthread_mutex_lock(&_mutex);
     if (_routeMap.find(key) != _routeMap.end())
     {
         LB* lb = _routeMap[key];
         std::vector<HI*> vec;
         lb->getRoute(vec);
+
+        //检查是否需要重拉路由
+        //若路由并没有正在拉取，且有效期至今已超时，则重拉取
+        if (lb->status == LB::ISNEW && time(NULL) - lb->effectData > LbConfig.updateTimo)
+        {
+            lb->pull();
+        }
+        ::pthread_mutex_lock(&_mutex);
+
         for (std::vector<HI*>::iterator it = vec.begin();it != vec.end(); ++it)
         {
             elb::HostAddr host;
@@ -235,39 +347,32 @@ void RouteLB::getRoute(int modid, int cmdid, elb::GetRouteRsp& rsp)
             host.set_port((*it)->port);
             rsp.add_hosts()->CopyFrom(host);
         }
-
-        //检查是否需要重拉路由
-        //若路由并没有正在拉取，且有效期至今已超时，则重拉取
-        if (lb->status == LB::ISNEW && time(NULL) - lb->effectData > LbConfig.updateTimo)
-        {
-            elb::GetRouteReq pullReq;
-            pullReq.set_modid(modid);
-            pullReq.set_cmdid(cmdid);
-            pullQueue->send_msg(pullReq);
-            //标记:路由正在拉取
-            lb->status = LB::ISPULLING;
-        }
     }
     else
     {
-        _routeMap[key] = new LB();
+        LB* lb = new LB(modid, cmdid);
+        if (!lb)
+        {
+            fprintf(stderr, "no more space to new LB\n");
+            ::exit(1);
+        }
+        _routeMap[key] = lb;
         //拉取一下路由
-        elb::GetRouteReq pullReq;
-        pullReq.set_modid(modid);
-        pullReq.set_cmdid(cmdid);
-        pullQueue->send_msg(pullReq);
+        lb->pull();
+        ::pthread_mutex_lock(&_mutex);
     }
 }
 
 void RouteLB::update(int modid, int cmdid, elb::GetRouteRsp& rsp)
 {
     uint64_t key = ((uint64_t)modid << 32) + cmdid;
+    ::pthread_mutex_lock(&_mutex);
     if (_routeMap.find(key) != _routeMap.end())
     {
         LB* lb = _routeMap[key];
         if (rsp.hosts_size() == 0)
         {
-            //delete it
+            //delete this[modid,cmdid]
             delete lb;
             _routeMap.erase(key);            
         }
@@ -276,10 +381,12 @@ void RouteLB::update(int modid, int cmdid, elb::GetRouteRsp& rsp)
             lb->update(rsp);
         }
     }
+    ::pthread_mutex_unlock(&_mutex);
 }
 
 void RouteLB::clearPulling()
 {
+    ::pthread_mutex_lock(&_mutex);
     for (RouteMapIt it = _routeMap.begin();
         it != _routeMap.end(); ++it)
     {
@@ -287,4 +394,5 @@ void RouteLB::clearPulling()
         if (lb->status == LB::ISPULLING)
             lb->status = LB::ISNEW;
     }
+    ::pthread_mutex_unlock(&_mutex);
 }

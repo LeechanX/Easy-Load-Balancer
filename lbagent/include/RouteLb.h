@@ -4,6 +4,7 @@
 #include <list>
 #include <vector>
 #include <stdint.h>
+#include <pthread.h>
 #include <ext/hash_map>
 #include "elb.pb.h"
 
@@ -22,13 +23,11 @@ struct HI
 class LB
 {
 public:
-    LB(): effectData(0), status(ISPULLING), _accessCnt(0)
+    LB(int modid, int cmdid): effectData(0), lstRptTime(0), status(ISPULLING), _modid(modid), _cmdid(cmdid), _accessCnt(0)
     {
     }
 
     ~LB();
-
-    //bool overload() const { return !empty() && _runningList.empty(); }
 
     bool empty() const { return _hostMap.empty(); }
 
@@ -39,6 +38,10 @@ public:
     void report(int ip, int port, int retcode);
 
     void update(elb::GetRouteRsp& rsp);
+
+    void pull();
+
+    void report2Rpter();
 
     enum STATUS
     {
@@ -54,14 +57,19 @@ private:
     typedef __gnu_cxx::hash_map<uint64_t, HI*> HostMap;
     typedef __gnu_cxx::hash_map<uint64_t, HI*>::iterator HostMapIt;
 
+    int _modid;
+    int _cmdid;
     int _accessCnt;
     HostMap _hostMap;
     std::list<HI*> _runningList, _downList;
+    typedef std::list<HI*>::iterator ListIt;
 };
 
 class RouteLB
 {
 public:
+    RouteLB();
+
     int getHost(int modid, int cmdid, elb::GetHostRsp& rsp);
 
     void report(elb::ReportReq& req);
@@ -78,6 +86,9 @@ private:
     typedef __gnu_cxx::hash_map<uint64_t, LB*>::iterator RouteMapIt;
 
     RouteMap _routeMap;
+
+    //用于同步agent线程和后台dnsserver-client线程
+    pthread_mutex_t _mutex;
 };
 
 #endif
