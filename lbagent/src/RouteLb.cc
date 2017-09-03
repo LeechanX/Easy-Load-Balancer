@@ -4,6 +4,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <arpa/inet.h>
+#include "log.h"
 #include "Server.h"
 #include "RouteLb.h"
 #include "easy_reactor.h"
@@ -218,6 +219,9 @@ void LB::report(int ip, int port, int retcode)
             //移除出runingList,放入downList
             _runningList.remove(hi);
             _downList.push_back(hi);
+            struct in_addr saddr;
+            saddr.s_addr = htonl(hi->ip);
+            log_error("[%d, %d] host %s:%d suffer overload", _modid, _cmdid, ::inet_ntoa(saddr), hi->port);
         }
     }
     else if (hi->overload && retcode == 0)//如果是overload节点，则只有调用成功才有必要判断是否达到idle条件
@@ -238,6 +242,9 @@ void LB::report(int ip, int port, int retcode)
             //移除出downList,重新放入runingList            
             _downList.remove(hi);
             _runningList.push_back(hi);
+            struct in_addr saddr;
+            saddr.s_addr = htonl(hi->ip);
+            log_error("[%d, %d] host %s:%d recover to idle", _modid, _cmdid, ::inet_ntoa(saddr), hi->port);
         }
     }
 
@@ -261,6 +268,9 @@ void LB::report(int ip, int port, int retcode)
             //重新把节点放入runningList
             _downList.remove(hi);
             _runningList.push_back(hi);
+            struct in_addr saddr;
+            saddr.s_addr = htonl(hi->ip);
+            log_error("[%d, %d] host %s:%d recover to idle because of timeout", _modid, _cmdid, ::inet_ntoa(saddr), hi->port);
         }
     }
 }
