@@ -84,8 +84,8 @@ class elbClient:
             rsp.ParseFromString(rspStr[8:])
             while rsp.seq < req.seq:
                 rspStr, addr = sock.recvfrom(65536)
-                rspId = struct.unpack('i', rspStr[:4])
-                bodyLen = struct.unpack('i', rspStr[4:8])
+                rspId = struct.unpack('i', rspStr[:4])[0]
+                bodyLen = struct.unpack('i', rspStr[4:8])[0]
                 if rspId != elb_pb2.GetHostReqId or bodyLen != len(rspStr[8:]):
                     raise FormatError('message head format error')
                 rsp.ParseFromString(rspStr[8:])
@@ -114,7 +114,8 @@ class elbClient:
         req.modid = modid
         req.cmdid = cmdid
         req.retcode = res
-        req.host.ip = ip
+        #ip is str, but req.host.ip need big-endian number        
+        req.host.ip = struct.unpack('I', socket.inet_aton(ip))[0]
         req.host.port = port
         bodyStr = req.SerializeToString()
         reqStr = struct.pack('i', elb_pb2.ReportReqId) + struct.pack('i', len(bodyStr)) + bodyStr
