@@ -96,7 +96,9 @@ class elbClient:
                 return (rsp.retcode, 'agent error')
             else:
                 ipn = rsp.host.ip
-                ips = socket.inet_ntoa(struct.pack('I', socket.htonl(ipn)))
+                if ipn < 0:
+                    ipn += 2 ** 32
+                ips = socket.inet_ntoa(struct.pack('I', ipn))
                 return (0, (ips, rsp.host.port))
         except socket.timeout:
             print >> sys.stderr, 'time out when recvfrom socket'
@@ -115,17 +117,11 @@ class elbClient:
         req.cmdid = cmdid
         req.retcode = res
         #ip is str, but req.host.ip need big-endian number        
-        req.host.ip = struct.unpack('I', socket.inet_aton(ip))[0]
+        ipn = struct.unpack('I', socket.inet_aton(ip))[0]
+        if ipn > 2 ** 31 - 1:
+            ipn -= 2 ** 32
+        req.host.ip = ipn
         req.host.port = port
         bodyStr = req.SerializeToString()
         reqStr = struct.pack('i', elb_pb2.ReportReqId) + struct.pack('i', len(bodyStr)) + bodyStr
         sock.sendto(reqStr, ('127.0.0.1', 8888 + i))
-
-if __name__ == '__main__':
-    client = elbClient()
-    ret, hostOrEmsg = client.apiGetHost(10001, 1001, 10)
-    if ret == 0:
-        print hostOrEmsg
-    else:
-        print hostOrEmsg
-    client.apiReportRes(10001, 1001, 1, 2, 3)
