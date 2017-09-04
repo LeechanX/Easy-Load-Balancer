@@ -16,7 +16,7 @@ enum RETCODE
 extern thread_queue<elb::GetRouteReq>* pullQueue;
 extern thread_queue<elb::ReportStatusReq>* reptQueue;
 
-extern RouteLB routeLB[3];
+extern RouteLB* routeLB[3];
 
 void initUDPServers();
 void dssConnectorDomain(event_loop& loop);

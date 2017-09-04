@@ -9,7 +9,7 @@
 thread_queue<elb::GetRouteReq>* pullQueue = NULL;
 thread_queue<elb::ReportStatusReq>* reptQueue = NULL;
 
-RouteLB routeLB[3];
+RouteLB* routeLB[3];
 
 //timeout event 1: record current time in shared memory
 static void recordTs(event_loop* loop, void* usrData)
@@ -20,11 +20,21 @@ static void recordTs(event_loop* loop, void* usrData)
 
 int main()
 {
-    routeLB[0].setId(1);
-    routeLB[0].setId(2);
-    routeLB[0].setId(3);
-    config_reader::setPath("lbagent.ini");
     dispLogo();
+    
+    config_reader::setPath("conf/lbagent.ini");
+
+    for (int i = 0;i < 3; ++i)
+    {
+        int id = i + 1;
+        routeLB[i] = new RouteLB(id);
+        if (!routeLB[i])
+        {
+            fprintf(stderr, "no more space to new RouteLB\n");
+            return 1;
+        }
+    }
+
     _init_log_("lbagent", ".");
     int log_level = config_reader::ins()->GetNumber("log", "level", 3);
     _set_log_level_(log_level);

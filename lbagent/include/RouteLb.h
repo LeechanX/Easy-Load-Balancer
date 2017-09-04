@@ -97,7 +97,7 @@ private:
 class RouteLB
 {
 public:
-    RouteLB();
+    RouteLB(int id);
 
     int getHost(int modid, int cmdid, elb::GetHostRsp& rsp);
 
@@ -109,8 +109,6 @@ public:
 
     //清除任何标记为：正在拉取 的[modid,cmdid]状态，当dss client网络断开后需要调用之
     void clearPulling();
-
-    void setId(int id) { _id = id; }
 
     void persistRoute();
 

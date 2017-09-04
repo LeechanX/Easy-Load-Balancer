@@ -12,7 +12,7 @@ static void recvRoute(const char* data, uint32_t len, int msgid, net_commu* comm
     int cmdid = rsp.cmdid();
     int index = (modid + cmdid) % 3;
     //update metadata
-    routeLB[index].update(modid, cmdid, rsp);
+    routeLB[index]->update(modid, cmdid, rsp);
 }
 
 static void newPullReq(event_loop* loop, int fd, void *args)
@@ -32,7 +32,7 @@ static void newPullReq(event_loop* loop, int fd, void *args)
 static void whenConnClose(tcp_client* client, void* args)
 {
     for (int i = 0;i < 3; ++i)
-        routeLB[i].clearPulling();
+        routeLB[i]->clearPulling();
 }
 
 void dssConnectorDomain(event_loop& loop)

@@ -378,7 +378,7 @@ void LB::report2Rpter()
     reptQueue->send_msg(req);
 }
 
-RouteLB::RouteLB()
+RouteLB::RouteLB(int id): _id(id)
 {
     ::pthread_once(&onceLoad, initLbEnviro);
     ::pthread_mutex_init(&_mutex, NULL);
