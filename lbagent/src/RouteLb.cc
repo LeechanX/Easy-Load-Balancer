@@ -414,7 +414,7 @@ int RouteLB::getHost(int modid, int cmdid, elb::GetHostRsp& rsp)
         _routeMap[key] = lb;
         //拉取一下路由
         lb->pull();
-        ::pthread_mutex_lock(&_mutex);
+        ::pthread_mutex_unlock(&_mutex);
         rsp.set_retcode(NOEXIST);
         return NOEXIST;
     }
@@ -456,7 +456,7 @@ void RouteLB::getRoute(int modid, int cmdid, elb::GetRouteRsp& rsp)
         {
             lb->pull();
         }
-        ::pthread_mutex_lock(&_mutex);
+        ::pthread_mutex_unlock(&_mutex);
 
         for (std::vector<HI*>::iterator it = vec.begin();it != vec.end(); ++it)
         {
@@ -477,7 +477,7 @@ void RouteLB::getRoute(int modid, int cmdid, elb::GetRouteRsp& rsp)
         _routeMap[key] = lb;
         //拉取一下路由
         lb->pull();
-        ::pthread_mutex_lock(&_mutex);
+        ::pthread_mutex_unlock(&_mutex);
     }
 }
 

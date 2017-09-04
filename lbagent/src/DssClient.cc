@@ -23,6 +23,7 @@ static void newPullReq(event_loop* loop, int fd, void *args)
     while (!msgs.empty())
     {
         elb::GetRouteReq req = msgs.front();
+        msgs.pop();
         std::string reqStr;
         req.SerializeToString(&reqStr);
         cli->send_data(reqStr.c_str(), reqStr.size(), elb::GetRouteByAgentReqId);//发送消息

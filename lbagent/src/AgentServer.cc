@@ -59,11 +59,11 @@ static void* initUDPServerIns(void* portPtr)
     event_loop loop;
     udp_server server(&loop, "127.0.0.1", port);//创建UDP服务器
 
-    server.add_msg_cb(elb::GetHostReqId, getHost, &routeLB[port - 8888]);//设置：当收到消息id = GetHostReqId的消息调用的回调函数getHost
-    server.add_msg_cb(elb::ReportReqId, reportStatus, &routeLB[port - 8888]);//设置：当收到消息id = ReportReqId的消息调用的回调函数reportStatus
-    server.add_msg_cb(elb::GetRouteByToolReqId, getRoute, &routeLB[port - 8888]);//设置：当收到消息id = GetRouteByToolReqId的消息调用的回调函数getRoute
+    server.add_msg_cb(elb::GetHostReqId, getHost, routeLB[port - 8888]);//设置：当收到消息id = GetHostReqId的消息调用的回调函数getHost
+    server.add_msg_cb(elb::ReportReqId, reportStatus, routeLB[port - 8888]);//设置：当收到消息id = ReportReqId的消息调用的回调函数reportStatus
+    server.add_msg_cb(elb::GetRouteByToolReqId, getRoute, routeLB[port - 8888]);//设置：当收到消息id = GetRouteByToolReqId的消息调用的回调函数getRoute
 
-    loop.run_every(persistRoute, &routeLB[port - 8888], 60);//设置：每隔60s将本地已拉到的路由持久化到磁盘
+    loop.run_every(persistRoute, routeLB[port - 8888], 60);//设置：每隔60s将本地已拉到的路由持久化到磁盘
 
     loop.process_evs();
     return NULL;

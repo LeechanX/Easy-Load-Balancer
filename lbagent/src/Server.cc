@@ -59,12 +59,10 @@ int main()
     rptConnectorDomain();
 
     event_loop mainLoop;
-    //init connector who connects to dns server, and run in loop [main thread]
-    dssConnectorDomain(mainLoop);
     //install timeout event 1: record current time in shared memory, 1 second 1 do
     HeartBeat hb(true);
     mainLoop.run_every(recordTs, &hb, 1);
-    //run loop
-    mainLoop.process_evs();
+    //init connector who connects to dns server, and run in loop [main thread]
+    dssConnectorDomain(mainLoop);
     return 0;
 }

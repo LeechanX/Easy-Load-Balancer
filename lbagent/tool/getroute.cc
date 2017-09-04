@@ -18,7 +18,9 @@ int main(int argc, char const *argv[])
     int ret = client.apiGetRoute(modid, cmdid, route);
     if (ret == 0)
     {
-        std::cout << "route for " << modid << "/" + cmdid << std::endl;
+        std::cout << "route for " << modid << "," << cmdid << ":" << std::endl;
+        if (route.size() == 0)
+            std::cout << "No route right now" << std::endl;
         for (unsigned i = 0;i < route.size(); ++i)
         {
             std::pair<std::string, int> host = route[i];
