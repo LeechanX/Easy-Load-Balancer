@@ -16,7 +16,7 @@ static void newReportReq(event_loop* loop, int fd, void *args)
         msgs.pop();
         std::string reqStr;
         req.SerializeToString(&reqStr);
-        cli->send_data(reqStr.c_str(), reqStr.size(), elb::GetRouteByAgentReqId);//发送消息
+        cli->send_data(reqStr.c_str(), reqStr.size(), elb::ReportStatusReqId);//发送消息
     }
 }
 
@@ -25,7 +25,7 @@ static void* initRptCliIns(void* args)
     const char* rptIp = config_reader::ins()->GetString("reporter", "ip", "").c_str();
     short rptPort = config_reader::ins()->GetNumber("reporter", "port", 0);
     event_loop loop;
-    tcp_client client(&loop, rptIp, rptPort);//创建TCP客户端
+    tcp_client client(&loop, rptIp, rptPort, "reporter");//创建TCP客户端
     //loop install message queue's messge coming event
     reptQueue->set_loop(&loop, newReportReq, &client);
     //run loop

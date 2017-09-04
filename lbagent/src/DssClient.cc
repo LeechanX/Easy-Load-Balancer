@@ -40,7 +40,7 @@ void dssConnectorDomain(event_loop& loop)
 {
     const char* dssIp = config_reader::ins()->GetString("dnsserver", "ip", "").c_str();
     short dssPort = config_reader::ins()->GetNumber("dnsserver", "port", 0);
-    tcp_client client(&loop, dssIp, dssPort);//创建TCP客户端
+    tcp_client client(&loop, dssIp, dssPort, "dnsserver");//创建TCP客户端
 
     //设置：当收到消息id=1的消息时的回调函数
     client.add_msg_cb(elb::GetRouteByAgentRspId, recvRoute/*, ???*/);

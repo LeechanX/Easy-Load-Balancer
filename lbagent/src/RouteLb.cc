@@ -278,6 +278,8 @@ void LB::report(int ip, int port, int retcode)
 void LB::update(elb::GetRouteRsp& rsp)
 {
     assert(rsp.hosts_size() != 0);
+    //如果是第一次拉过来，则重置lstRptTime，防止第一次api上报状态就触发lbagent给reporter上报
+    bool resetRptTime = _hostMap.empty();
     bool updated = false;
     //hosts who need to delete
     std::set<uint64_t> remote;
@@ -324,6 +326,8 @@ void LB::update(elb::GetRouteRsp& rsp)
     //重置effectData,表明路由更新时间\有效期开始
     effectData = time(NULL);
     status = ISNEW;
+    if (resetRptTime)
+        lstRptTime = time(NULL);
 }
 
 void LB::pull()
