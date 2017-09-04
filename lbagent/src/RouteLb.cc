@@ -32,15 +32,15 @@ static void initLbEnviro()
 {
     //load configures
     LbConfig.initSuccCnt   = config_reader::ins()->GetNumber("lb", "init_succ_cnt", 270);
-    LbConfig.ovldErrCnt    = config_reader::ins()->GetNumber("lb", "ovld_err_cnt", 10);
-    LbConfig.continSuccLim = config_reader::ins()->GetNumber("lb", "contin_succ_lim", 30);
-    LbConfig.continErrLim  = config_reader::ins()->GetNumber("lb", "contin_err_lim", 30);
+    LbConfig.ovldErrCnt    = config_reader::ins()->GetNumber("lb", "ovld_err_cnt", 5);
+    LbConfig.continSuccLim = config_reader::ins()->GetNumber("lb", "contin_succ_lim", 10);
+    LbConfig.continErrLim  = config_reader::ins()->GetNumber("lb", "contin_err_lim", 10);
     LbConfig.probeNum      = config_reader::ins()->GetNumber("lb", "probe_num", 10);
     LbConfig.updateTimo    = config_reader::ins()->GetNumber("lb", "update_timeout", 15);
     LbConfig.clearTimo     = config_reader::ins()->GetNumber("lb", "clear_timeout", 15);
     LbConfig.reportTimo    = config_reader::ins()->GetNumber("lb", "report_timeout", 15);
     LbConfig.ovldWaitLim   = config_reader::ins()->GetNumber("lb", "overload_wait_lim", 300);
-    LbConfig.succRate      = config_reader::ins()->GetFloat("lb", "succ_rate", 0.95);
+    LbConfig.succRate      = config_reader::ins()->GetFloat("lb", "succ_rate", 0.92);
     LbConfig.errRate       = config_reader::ins()->GetFloat("lb", "err_rate", 0.1);
 
     //get local IP
