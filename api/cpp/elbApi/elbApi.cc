@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 #include <strings.h>
 #include <arpa/inet.h>
 #include <sys/types.h>
@@ -174,7 +175,9 @@ int elbClient::apiGetRoute(int modid, int cmdid, std::vector<std::pair<std::stri
     req.set_modid(modid);
     req.set_cmdid(cmdid);
     //send
-    char wbuf[4096], rbuf[4096];
+    char wbuf[4096];
+    char* rbuf = new char[40960];
+    assert(rbuf);
     commu_head head;
     head.length = req.ByteSize();
     head.cmdid = elb::GetRouteByToolReqId;
@@ -193,7 +196,7 @@ int elbClient::apiGetRoute(int modid, int cmdid, std::vector<std::pair<std::stri
     tv.tv_usec = 0;
     ::setsockopt(_sockfd[index], SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv));
 
-    int pkgLen = ::recvfrom(_sockfd[index], rbuf, sizeof rbuf, 0, NULL, NULL);
+    int pkgLen = ::recvfrom(_sockfd[index], rbuf, 40960, 0, NULL, NULL);
     if (pkgLen == -1)
     {
         perror("recvfrom");
@@ -218,5 +221,6 @@ int elbClient::apiGetRoute(int modid, int cmdid, std::vector<std::pair<std::stri
         int port = host.port();
         route.push_back(std::pair<std::string, int>(ip, port));
     }
+    delete[] rbuf;
     return 0;
 }
