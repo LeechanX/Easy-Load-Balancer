@@ -13,7 +13,6 @@ void reportStatus(event_loop* loop, void* usr_data)
     req.set_cmdid(1);
     req.set_caller(123);
     req.set_ts(time(NULL));
-    req.set_overload(true);
     for (int i = 0;i < 3; ++i)
     {
         elb::HostCallResult res;
@@ -21,6 +20,7 @@ void reportStatus(event_loop* loop, void* usr_data)
         res.set_port((i + 1) * (i + 1));
         res.set_succ(100);
         res.set_err(3);
+        res.set_overload(true);
         req.add_results()->CopyFrom(res);
     }
 
