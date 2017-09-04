@@ -6,6 +6,7 @@
 #include "util.h"
 #include "Server.h"
 #include "elb.pb.h"
+#include "CallStatis.h"
 #include "easy_reactor.h"
 
 int threadCnt = 0;
@@ -52,6 +53,8 @@ int main()
         log_error("no space to create thread_queue<elb::ReportStatusReq>*[%d]", threadCnt);
         return 1;
     }
+    //多线程使用Mysql需要先调用mysql_library_init
+    CallStatis::libraryInit();
     for (int i = 0;i < threadCnt; ++i)
     {
         rptQueues[i] = new thread_queue<elb::ReportStatusReq>();

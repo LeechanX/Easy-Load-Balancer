@@ -12,6 +12,8 @@ public:
     //~CallStatis();
     void report(elb::ReportStatusReq& req);
 
+    //多线程使用Mysql需要先调用mysql_library_init
+    static void libraryInit() { mysql_library_init(0, NULL, NULL); }
 private:
     MYSQL _dbConn;
 };
