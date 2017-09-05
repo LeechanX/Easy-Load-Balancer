@@ -66,7 +66,7 @@ int elbClient::apiGetHost(int modid, int cmdid, int timo, std::string& ip, int& 
     req.set_modid(modid);
     req.set_cmdid(cmdid);
     //send
-    char wbuf[4096], rbuf[4096];
+    char wbuf[4096], rbuf[81920];
     commu_head head;
     head.length = req.ByteSize();
     head.cmdid = elb::GetHostReqId;
@@ -97,7 +97,8 @@ int elbClient::apiGetHost(int modid, int cmdid, int timo, std::string& ip, int& 
     if (head.cmdid != elb::GetHostRspId || 
         !rsp.ParseFromArray(rbuf + COMMU_HEAD_LENGTH, pkgLen - COMMU_HEAD_LENGTH))
     {
-        fprintf(stderr, "package format error\n");
+        fprintf(stderr, "package format error: head.length is %d, pkgLen is %d, head.cmdid is %d, target cmdid is %d\n",
+            head.length, pkgLen, head.cmdid, elb::GetHostRspId);
         return -9999;
     }
     while (rsp.seq() < seq)
