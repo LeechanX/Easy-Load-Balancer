@@ -35,6 +35,6 @@ DnsServer使用两个map存储路由数据（key = `modid<<32 + cmdid` ， value
 **QPS测试结果：**
 
 | dnsserverTCP服务线程数 |  benchmark情况 |  QPS |
-| --:-- | --:-- | --:-- |
+| :-----: | :-----: | :-----: |
 |3线程|6个benchmark，各建立100个连接| `25.83W/s` |
 |5线程|6个benchmark，各建立100个连接| `39.4W/s` |
