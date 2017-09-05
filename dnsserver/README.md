@@ -28,4 +28,13 @@ DnsServer使用两个map存储路由数据（key = `modid<<32 + cmdid` ， value
 后台线程Backend thread每隔10s清空`tmp_ptr`指向的map，再加载DnsServerRoute表内容到`tmp_ptr`指向的map，加载成功后交换指针`data_ptr`与`tmp_ptr`指针内容，于是完成了路由数据的更新
 
 ### **performance**
-在服务器采用3线程时，QPS大于`18W/s`
+
+>服务器参数：
+>CPU个数：24   内存：128GB   网卡队列个数：25
+
+**QPS测试结果：**
+
+| dnsserverTCP服务线程数 |  benchmark情况 |  QPS |
+| --:-- | --:-- | --:-- |
+|3线程|6个benchmark，各建立100个连接| `25.83W/s` |
+|5线程|6个benchmark，各建立100个连接| `39.4W/s` |
