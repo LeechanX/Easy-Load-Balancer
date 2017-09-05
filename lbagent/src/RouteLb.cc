@@ -93,7 +93,7 @@ LB::~LB()
     }
 }
 
-int LB::getHost(elb::HostAddr* hp)
+int LB::getHost(elb::GetHostRsp& rsp)
 {
     if (_runningList.empty())//此[modid, cmdid]已经过载了，即所有节点都已经过载
     {
@@ -103,6 +103,7 @@ int LB::getHost(elb::HostAddr* hp)
             _accessCnt = 0;
             //选择一个overload节点
             HI* hi = _downList.front();
+            elb::HostAddr* hp = rsp.mutable_host();
             hp->set_ip(hi->ip);
             hp->set_port(hi->port);
             _downList.pop_front();
@@ -111,6 +112,7 @@ int LB::getHost(elb::HostAddr* hp)
         else
         {
             //明确告诉API：已经过载了
+            printf("DEBUG: _runningList is null for [%d,%d], access is %d\n", _modid, _cmdid, _accessCnt);
             ++_accessCnt;
             return OVERLOAD;
         }
@@ -122,6 +124,7 @@ int LB::getHost(elb::HostAddr* hp)
             _accessCnt = 0;//重置访问次数，仅在有节点过载时才记录
             //选择一个idle节点
             HI* hi = _runningList.front();
+            elb::HostAddr* hp = rsp.mutable_host();
             hp->set_ip(hi->ip);
             hp->set_port(hi->port);
             _runningList.pop_front();
@@ -135,6 +138,7 @@ int LB::getHost(elb::HostAddr* hp)
                 _accessCnt = 0;
                 //选择一个overload节点
                 HI* hi = _downList.front();
+                elb::HostAddr* hp = rsp.mutable_host();
                 hp->set_ip(hi->ip);
                 hp->set_port(hi->port);
                 _downList.pop_front();
@@ -145,6 +149,7 @@ int LB::getHost(elb::HostAddr* hp)
                 ++_accessCnt;
                 //选择一个idle节点
                 HI* hi = _runningList.front();
+                elb::HostAddr* hp = rsp.mutable_host();
                 hp->set_ip(hi->ip);
                 hp->set_port(hi->port);
                 _runningList.pop_front();
@@ -214,14 +219,15 @@ void LB::report(int ip, int port, int retcode)
         //判定为overload了
         if (ifOverload)
         {
+            struct in_addr saddr;
+            saddr.s_addr = htonl(hi->ip);
+            log_error("[%d, %d] host %s:%d suffer overload, succ %u err %u",
+                _modid, _cmdid, ::inet_ntoa(saddr), hi->port, hi->succ, hi->err);
             //重置hi为overload状态
             hi->setOverload(LbConfig.ovldErrCnt);
             //移除出runingList,放入downList
             _runningList.remove(hi);
             _downList.push_back(hi);
-            struct in_addr saddr;
-            saddr.s_addr = htonl(hi->ip);
-            log_error("[%d, %d] host %s:%d suffer overload", _modid, _cmdid, ::inet_ntoa(saddr), hi->port);
         }
     }
     else if (hi->overload && retcode == 0)//如果是overload节点，则只有调用成功才有必要判断是否达到idle条件
@@ -237,14 +243,15 @@ void LB::report(int ip, int port, int retcode)
         //判定为idle了
         if (ifIdle)
         {
+            struct in_addr saddr;
+            saddr.s_addr = htonl(hi->ip);
+            log_error("[%d, %d] host %s:%d recover to idle, succ %u err %u",
+                _modid, _cmdid, ::inet_ntoa(saddr), hi->port, hi->succ, hi->err);
             //重置hi为idle状态
             hi->resetIdle(LbConfig.initSuccCnt);
             //移除出downList,重新放入runingList            
             _downList.remove(hi);
             _runningList.push_back(hi);
-            struct in_addr saddr;
-            saddr.s_addr = htonl(hi->ip);
-            log_error("[%d, %d] host %s:%d recover to idle", _modid, _cmdid, ::inet_ntoa(saddr), hi->port);
         }
     }
 
@@ -263,14 +270,15 @@ void LB::report(int ip, int port, int retcode)
         //检查overload节点是否处于overload状态的时长已经超时了
         if (currenTs - hi->overloadTs >= LbConfig.ovldWaitLim)
         {
+            struct in_addr saddr;
+            saddr.s_addr = htonl(hi->ip);
+            log_error("[%d, %d] host %s:%d suffer overload, succ %u err %u",
+                _modid, _cmdid, ::inet_ntoa(saddr), hi->port, hi->succ, hi->err);
             //处于overload状态的时长已经超时了
             hi->resetIdle(LbConfig.initSuccCnt);
             //重新把节点放入runningList
             _downList.remove(hi);
             _runningList.push_back(hi);
-            struct in_addr saddr;
-            saddr.s_addr = htonl(hi->ip);
-            log_error("[%d, %d] host %s:%d recover to idle because of timeout", _modid, _cmdid, ::inet_ntoa(saddr), hi->port);
         }
     }
 }
@@ -395,15 +403,23 @@ int RouteLB::getHost(int modid, int cmdid, elb::GetHostRsp& rsp)
     if (_routeMap.find(key) != _routeMap.end())
     {
         LB* lb = _routeMap[key];
-        elb::HostAddr* hp = rsp.mutable_host();
-        int ret = lb->getHost(hp);
-        rsp.set_retcode(ret);
 
-        //检查是否需要重拉路由
-        //若路由并没有正在拉取，且有效期至今已超时，则重拉取
-        if (lb->status == LB::ISNEW && time(NULL) - lb->effectData > LbConfig.updateTimo)
+        if (lb->empty())
         {
-            lb->pull();
+            //说明此[modid,cmdid]正在被首次拉取且还没回来，于是直接回复不存在
+            assert(lb->status == LB::ISPULLING);
+            rsp.set_retcode(NOEXIST);
+        }
+        else
+        {
+            int ret = lb->getHost(rsp);
+            rsp.set_retcode(ret);
+            //检查是否需要重拉路由
+            //若路由并没有正在拉取，且有效期至今已超时，则重拉取
+            if (lb->status == LB::ISNEW && time(NULL) - lb->effectData > LbConfig.updateTimo)
+            {
+                lb->pull();
+            }
         }
         ::pthread_mutex_unlock(&_mutex);
     }

@@ -58,7 +58,7 @@ public:
 
     bool empty() const { return _hostMap.empty(); }
 
-    int getHost(elb::HostAddr* hp);
+    int getHost(elb::GetHostRsp& rsp);
 
     void getRoute(std::vector<HI*>& vec);
 
