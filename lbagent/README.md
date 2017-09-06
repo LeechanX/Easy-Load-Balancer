@@ -27,7 +27,10 @@ LB Agent拥有5个线程，一个LB算法：
 #### **1、节点获取服务getHost**
 
 - 当业务方调用API：getHost，将利用自己需要的modid+cmdid，先计算i = (modid+cmdid)%3，然后向LB Agent的第i+1个UDP Server获取节点
-- LB Agent收到getHost请求，在内存查询是否有TOWRITE
+- LB Agent收到getHost请求，在内存查询是否有要求模块的路由；如果没有，返回不存在给API；否则由LB算法选择一个可用节点、或返回过载错误给API
+- getHost也驱动着向Dss Client传递拉取路由请求：
+ + 如果模块modid+cmdid不存在，会打包一个拉取此模块路由的请求，发给Dss Client线程MQ；（作为首次拉取路由）
+ + 如果模块modid+cmdid上次拉取路由时间距今超时（默认15s），也打包一个拉取此模块路由的请求，发给Dss Client线程MQ；（作为路由更新）
 
 
 #### **2、节点调用结果上报服务**
