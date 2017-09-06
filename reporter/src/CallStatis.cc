@@ -19,6 +19,11 @@ CallStatis::CallStatis()
 
     mysql_init(&_dbConn);
     mysql_options(&_dbConn, MYSQL_OPT_CONNECT_TIMEOUT, "30");
+
+    //when close down, let mysql_ping auto reconnect
+    my_bool reconnect = 0;
+    mysql_options(&_dbConn, MYSQL_OPT_RECONNECT, &reconnect);
+
     if (!mysql_real_connect(&_dbConn, dbHost, dbUser, dbPasswd, dbName, dbPort, NULL, 0))
     {
         log_error("Failed to connect to MySQL[%s:%u %s %s]: %s\n", dbHost, dbPort, dbUser, dbName, mysql_error(&_dbConn));
@@ -41,6 +46,7 @@ void CallStatis::report(elb::ReportStatusReq& req)
             result.succ(), result.err(), req.ts(), overload,
             result.succ(), result.err(), req.ts(), overload);
 
+        mysql_ping(&_dbConn);//if close down, auto reconnect
         int ret = mysql_real_query(&_dbConn, sql, strlen(sql));
         if (ret)
         {

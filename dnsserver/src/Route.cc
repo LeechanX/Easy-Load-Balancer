@@ -25,6 +25,7 @@ hostSet Route::getHosts(int modid, int cmdid)
 //backend thread call it
 int Route::reload()
 {
+    mysql_ping(&_dbConn);
     _tmpData->clear();
     //read from DB
     int ret = mysql_real_query(&_dbConn, _sql, strlen(_sql));
@@ -88,6 +89,10 @@ Route::Route()
 
     mysql_init(&_dbConn);
     mysql_options(&_dbConn, MYSQL_OPT_CONNECT_TIMEOUT, "30");
+    //when close down, let mysql_ping auto reconnect
+    my_bool reconnect = 0;
+    mysql_options(&_dbConn, MYSQL_OPT_RECONNECT, &reconnect);
+
     if (!mysql_real_connect(&_dbConn, dbHost, dbUser, dbPasswd, dbName, dbPort, NULL, 0))
     {
         log_error("Failed to connect to MySQL[%s:%u %s %s]: %s\n", dbHost, dbPort, dbUser, dbName, mysql_error(&_dbConn));
