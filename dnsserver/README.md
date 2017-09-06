@@ -30,7 +30,7 @@ DnsServer使用两个map存储路由数据（key = `modid<<32 + cmdid` ， value
 ### **performance**
 
 >服务器参数：
->CPU个数：24   内存：128GB   网卡队列个数：25
+>CPU个数：24   内存：128GB   网卡队列个数：24
 
 **QPS测试结果：**
 
