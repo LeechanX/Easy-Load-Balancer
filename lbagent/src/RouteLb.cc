@@ -98,7 +98,7 @@ int LB::getHost(elb::GetHostRsp& rsp)
     if (_runningList.empty())//此[modid, cmdid]已经过载了，即所有节点都已经过载
     {
         //访问次数超过了probeNum，于是决定试探一次overload节点
-        if (_accessCnt > LbConfig.probeNum)
+        if (_accessCnt >= LbConfig.probeNum)
         {
             _accessCnt = 0;
             //选择一个overload节点
@@ -112,7 +112,6 @@ int LB::getHost(elb::GetHostRsp& rsp)
         else
         {
             //明确告诉API：已经过载了
-            printf("DEBUG: _runningList is null for [%d,%d], access is %d\n", _modid, _cmdid, _accessCnt);
             ++_accessCnt;
             return OVERLOAD;
         }
@@ -133,7 +132,7 @@ int LB::getHost(elb::GetHostRsp& rsp)
         else//有部分节点过载了
         {
             //访问次数超过了probeNum，于是决定试探一次overload节点
-            if (_accessCnt > LbConfig.probeNum)
+            if (_accessCnt >= LbConfig.probeNum)
             {
                 _accessCnt = 0;
                 //选择一个overload节点
@@ -240,6 +239,7 @@ void LB::report(int ip, int port, int retcode)
             ifIdle = true;
         //[2].连续成功次数达到阈值，认为idle
         if (!ifIdle && hi->continSucc >= (uint32_t)LbConfig.continSuccLim)
+            ifIdle = true;
         //判定为idle了
         if (ifIdle)
         {
@@ -272,7 +272,7 @@ void LB::report(int ip, int port, int retcode)
         {
             struct in_addr saddr;
             saddr.s_addr = htonl(hi->ip);
-            log_error("[%d, %d] host %s:%d suffer overload, succ %u err %u",
+            log_error("[%d, %d] host %s:%d recover to idle, succ %u err %u",
                 _modid, _cmdid, ::inet_ntoa(saddr), hi->port, hi->succ, hi->err);
             //处于overload状态的时长已经超时了
             hi->resetIdle(LbConfig.initSuccCnt);
