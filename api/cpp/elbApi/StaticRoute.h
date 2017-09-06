@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <arpa/inet.h>
 #include <ext/hash_map>
 
 class StaticRoute
@@ -23,12 +24,14 @@ public:
             FILE* fp = fopen("/tmp/backupRoute.dat.1", "r");
             if (fp)
             {
-                int imodid, icmdid, iport;
-                char cip[16];
-                while (fscanf(fp, "%d %d %s %d", &imodid, &icmdid, cip, &iport) != EOF)
+                int imodid, icmdid, iip, iport;
+                while (fscanf(fp, "%d %d %d %d", &imodid, &icmdid, &iip, &iport) != EOF)
                 {
                     uint64_t key = ((uint64_t)imodid << 32) + icmdid;
-                    hostType host(cip, iport);
+                    struct in_addr saddr;
+                    saddr.s_addr = iip;
+                    std::string sip = inet_ntoa(saddr);
+                    hostType host(sip, iport);
                     _route[key].push_back(host);
                 }
                 fclose(fp);
@@ -36,12 +39,14 @@ public:
             fp = fopen("/tmp/backupRoute.dat.2", "r");
             if (fp)
             {
-                int imodid, icmdid, iport;
-                char cip[16];
-                while (fscanf(fp, "%d %d %s %d", &imodid, &icmdid, cip, &iport) != EOF)
+                int imodid, icmdid, iip, iport;
+                while (fscanf(fp, "%d %d %d %d", &imodid, &icmdid, &iip, &iport) != EOF)
                 {
                     uint64_t key = ((uint64_t)imodid << 32) + icmdid;
-                    hostType host(cip, iport);
+                    struct in_addr saddr;
+                    saddr.s_addr = iip;
+                    std::string sip = inet_ntoa(saddr);
+                    hostType host(sip, iport);
                     _route[key].push_back(host);
                 }
                 fclose(fp);
@@ -49,12 +54,14 @@ public:
             fp = fopen("/tmp/backupRoute.dat.3", "r");
             if (fp)
             {
-                int imodid, icmdid, iport;
-                char cip[16];
-                while (fscanf(fp, "%d %d %s %d", &imodid, &icmdid, cip, &iport) != EOF)
+                int imodid, icmdid, iip, iport;
+                while (fscanf(fp, "%d %d %d %d", &imodid, &icmdid, &iip, &iport) != EOF)
                 {
                     uint64_t key = ((uint64_t)imodid << 32) + icmdid;
-                    hostType host(cip, iport);
+                    struct in_addr saddr;
+                    saddr.s_addr = iip;
+                    std::string sip = inet_ntoa(saddr);
+                    hostType host(sip, iport);
                     _route[key].push_back(host);
                 }
                 fclose(fp);

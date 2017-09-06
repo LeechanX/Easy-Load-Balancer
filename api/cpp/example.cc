@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <unistd.h>
 #include "elbApi.h"
 #include <iostream>
 
@@ -9,7 +10,20 @@ int main(int argc, char const *argv[])
     elbClient client;
     std::string ip;
     int port;
-    int ret = client.apiGetHost(modid, cmdid, 10, ip, port);
+    int ret;
+    int retry = 0;
+    do
+    {
+        ret = client.apiGetHost(modid, cmdid, 10, ip, port);
+        if (ret == -9998)
+        {
+            retry += 1;
+            //modid,cmdid不存在，建议等50ms再拉一次
+            usleep(50000);
+        }
+    }
+    while (ret == -9998 && retry < 3);
+
     if (ret == 0)
     {
         std::cout << "host is " << ip << ":" << port << std::endl;

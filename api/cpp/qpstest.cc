@@ -37,7 +37,7 @@ void* mockApi(void* args)
         if (curr - lst >= 1)
         {
             lst = curr;
-            printf("[%d]\n", qps);
+            printf("[%ld]\n", qps);
             qps = 0;
         }
     }
