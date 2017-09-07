@@ -16,3 +16,7 @@
 **Reporter: [reporter readme][3]**
 
 [3]: https://github.com/LeechanX/Easy-Load-Balancer/blob/master/reporter/README.md
+
+**API: [API readme][4]**
+
+[4]: https://github.com/LeechanX/Easy-Load-Balancer/blob/master/api/README.md
