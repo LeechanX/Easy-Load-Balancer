@@ -11,7 +11,7 @@ Python：
 
         from elbApi.elbClient import elbClient
 
-###1、创建API对象
+### 1、创建API对象
 CPP：
 
         elbClient client;
@@ -20,7 +20,7 @@ Python：
         client = elbClient()
 
 
-###1、节点获取
+### 2、节点获取
 #### CPP：
 
         int apiGetHost(int modid, int cmdid, int timo, std::string& ip, int& port)
@@ -50,7 +50,7 @@ retcode同CPP返回值，
 hostOrErrmsg：当retcode=0，是一个ip,port；否则是错误字符串
 
 
-###2、节点调用结果汇报
+### 3、节点调用结果汇报
 #### CPP：
 
         void apiReportRes(int modid, int cmdid, const std::string& ip, int port, int retcode);
@@ -58,7 +58,7 @@ hostOrErrmsg：当retcode=0，是一个ip,port；否则是错误字符串
         
         client.apiReportRes(modid, cmdid, ip, port, retcode)
 
-###3、（可选）预取路由
+### 4、（可选）预取路由
 
 如果不想第一次模块获取节点返回不存在错误，可以预先调用`apiRegister`，用于事先要求lb agent拉取某模块
 
