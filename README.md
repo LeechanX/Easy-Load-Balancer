@@ -4,7 +4,7 @@ ELB（Easy Load Balance）是一个简单、易用、高性能的服务间远程
 
 此系统的闭源版本已经在我司200+台服务器上自2017年4月稳定运行至今
 
-本系统各个组件的网络框架直接利用了我开发的另一个Github项目：[高性能C++多线程Reactor网络服务框架：EasyReactor][1]，以顺便检验EasyReactor项目的性能和可用性。ELB系统开发完成后，事实证明系统的性能还是很好的:-D （如：组件LB Agent QPS `50+W/s`，组件dnsserver QPS 3线程时`25+W/s`、5线程时`39+W/s`，具体各组件的性能测试见各组件的README）
+**PS：** 本系统各个组件的网络框架直接利用了我开发的另一个Github项目：[高性能C++多线程Reactor网络服务框架：EasyReactor][1]，以顺便检验EasyReactor项目的性能和可用性。ELB系统开发完成后，事实证明系统的性能还是很好的:-D （如：组件LB Agent QPS `50+W/s`，组件dnsserver QPS 3线程时`25+W/s`、5线程时`39+W/s`，具体各组件的性能测试见各组件的README）
 
 [1]: https://github.com/LeechanX/Easy-Reactor
 
