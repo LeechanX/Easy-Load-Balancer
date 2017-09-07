@@ -1,10 +1,13 @@
 # Easy Load Balancer
 
 ELB（Easy Load Balance）是一个简单、易用、高性能的服务间远程调用管理、调度、负载系统
+
 此系统的闭源版本已经在我司200+台服务器上自2017年4月稳定运行至今
 
 开发者：李琛轩
+
 联系方式：leechan8@outlook.com
+
 微信：leechanx
 
 ### 介绍
