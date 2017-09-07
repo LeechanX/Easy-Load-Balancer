@@ -4,11 +4,9 @@ ELB（Easy Load Balance）是一个简单、易用、高性能的服务间远程
 
 此系统的闭源版本已经在我司200+台服务器上自2017年4月稳定运行至今
 
-开发者：李琛轩
+本系统的网络框架直接利用了我开发的另一个Github项目：[高性能C++多线程网络服务框架ReactorEasyReactor][1]，性能还是很好的:-D
 
-联系方式：leechan8@outlook.com
-
-微信：leechanx
+[1]: https://github.com/LeechanX/Easy-Reactor
 
 ### 介绍
 
@@ -43,18 +41,23 @@ ELB（Easy Load Balance）是一个简单、易用、高性能的服务间远程
 
 
 ### 各模块架构原理介绍
-**DNS Server: [dnsserver readme][1]**
+**DNS Server: [dnsserver readme][2]**
 
-[1]: https://github.com/LeechanX/Easy-Load-Balancer/blob/master/dnsserver/README.md
+[2]: https://github.com/LeechanX/Easy-Load-Balancer/blob/master/dnsserver/README.md
 
-**LB Agent: [lb agent readme][2]**
+**LB Agent: [lb agent readme][3]**
 
-[2]: https://github.com/LeechanX/Easy-Load-Balancer/blob/master/lbagent/README.md
+[3]: https://github.com/LeechanX/Easy-Load-Balancer/blob/master/lbagent/README.md
 
-**Reporter: [reporter readme][3]**
+**Reporter: [reporter readme][4]**
 
-[3]: https://github.com/LeechanX/Easy-Load-Balancer/blob/master/reporter/README.md
+[4]: https://github.com/LeechanX/Easy-Load-Balancer/blob/master/reporter/README.md
 
-**API: [API readme][4]**
+**API: [API readme][5]**
 
-[4]: https://github.com/LeechanX/Easy-Load-Balancer/blob/master/api/README.md
+[5]: https://github.com/LeechanX/Easy-Load-Balancer/blob/master/api/README.md
+
+### TODO
+
+- LB算法对节的异构性考虑不够细致，值得优化
+- 增加更多语言API
