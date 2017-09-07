@@ -125,3 +125,11 @@ class elbClient:
         bodyStr = req.SerializeToString()
         reqStr = struct.pack('i', elb_pb2.ReportReqId) + struct.pack('i', len(bodyStr)) + bodyStr
         sock.sendto(reqStr, ('127.0.0.1', 8888 + i))
+
+    def apiRegister(self, modid, cmdid):#非必需使用的API
+        for i in range(3):
+            ret, hostOrEmsg = self.apiGetHost(modid, cmdid, 50)
+            if ret == 0:
+                break
+            time.sleep(0.05)
+        return 0 if ret == 0 else -9998

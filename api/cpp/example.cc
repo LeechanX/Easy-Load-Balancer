@@ -10,20 +10,11 @@ int main(int argc, char const *argv[])
     elbClient client;
     std::string ip;
     int port;
-    int ret;
-    int retry = 0;
-    do
-    {
-        ret = client.apiGetHost(modid, cmdid, 10, ip, port);
-        if (ret == -9998)
-        {
-            retry += 1;
-            //modid,cmdid不存在，建议等50ms再拉一次
-            usleep(50000);
-        }
-    }
-    while (ret == -9998 && retry < 3);
+    int ret = client.apiRegister(modid, cmdid);//非必需使用的API
+    if (ret != 0)
+        std::cout << "still not exist after register" << std::endl;
 
+    ret = client.apiGetHost(modid, cmdid, 10, ip, port);
     if (ret == 0)
     {
         std::cout << "host is " << ip << ":" << port << std::endl;

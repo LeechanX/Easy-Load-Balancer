@@ -17,6 +17,8 @@ public:
 
     int apiGetRoute(int modid, int cmdid, std::vector<std::pair<std::string, int> >& route);
 
+    int apiRegister(int modid, int cmdid);//非必需使用的API
+
 private:
     int _sockfd[3];
     uint32_t _seqid;

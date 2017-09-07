@@ -193,8 +193,8 @@ int elbClient::apiGetRoute(int modid, int cmdid, std::vector<std::pair<std::stri
     }
 
     struct timeval tv;
-    tv.tv_sec = 1;
-    tv.tv_usec = 0;
+    tv.tv_sec = 0;
+    tv.tv_usec = 100000;
     ::setsockopt(_sockfd[index], SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv));
 
     int pkgLen = ::recvfrom(_sockfd[index], rbuf, 40960, 0, NULL, NULL);
@@ -223,5 +223,24 @@ int elbClient::apiGetRoute(int modid, int cmdid, std::vector<std::pair<std::stri
         route.push_back(std::pair<std::string, int>(ip, port));
     }
     delete[] rbuf;
+    return 0;
+}
+
+//非必需使用的API
+int elbClient::apiRegister(int modid, int cmdid)
+{
+    std::vector<std::pair<std::string, int> > route;
+    int retryCnt = 0;
+    while (route.empty() && retryCnt < 3)
+    {
+        apiGetRoute(modid, cmdid, route);
+        if (route.empty())
+            usleep(50000);//wait 50ms
+        else
+            break;
+        ++retryCnt;
+    }
+    if (route.empty())//after 3 times retry, still can't get route, we think the module is not exist
+        return -9998;// = lbagent's NOEXIST
     return 0;
 }
