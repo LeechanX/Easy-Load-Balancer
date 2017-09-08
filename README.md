@@ -1,11 +1,19 @@
 # Easy Load Balancer
 
+ELB（Easy Load Balance）是一个简单、易用、高性能的服务间远程调用管理、调度、负载系统
+
+此系统的闭源版本已经在我司300+台服务器、2000+个远程服务上自2017年4月稳定运行至今
+
+**PS：** 本系统各组件的网络框架直接采用了我做的另一个项目：[高性能C++多线程Reactor网络服务框架：EasyReactor][1]，以顺便检验EasyReactor项目的性能和可用性。ELB系统开发完成后，事实证明系统性能还是很好的:-D （如：组件LB Agent QPS `50+W/s`，组件dnsserver QPS 3线程时`25+W/s`、5线程时`39+W/s`，具体各组件的性能测试见各组件的README）
+
+[1]: https://github.com/LeechanX/Easy-Reactor
+
 ### 介绍
 
-对于一个部门的后台，为增强灵活性，一个服务可以被抽象为命令字：`modid+cmdid`的组合，称为**一个模块**
+对于一个部门的后台，为增强灵活性，一个服务可以被抽象为命令字：`modid+cmdid`的组合，称为**一个模块**，而这个服务往往有多个服务节点，其所有服务节点的地址集合被称为这个模块下的**路由**，节点地址简称为节点
+
 - `modid`：标识业务的大类，如：“直播列表相关”
 - `cmdid`：标识具体服务内容，如：“批量获取直播列表”
-一个modid+cmdid下往往有多个节点，这些节点就是该服务的所有服务进程的网络地址
 
 业务代码利用modid,cmdid，就可以调用对应的远程服务
 
@@ -32,19 +40,24 @@
 5. reporter将各`modid,cmdid`的各节点一段时间内的调用结果写回到MySQL，方便Web端查看、报警
 
 
-### 各模块架构原理介绍
-**DNS Server: [dnsserver readme][1]**
+### 各组件架构原理介绍
+**DNS Server: [dnsserver readme][2]**
 
-[1]: https://github.com/LeechanX/Easy-Load-Balancer/blob/master/dnsserver/README.md
+[2]: https://github.com/LeechanX/Easy-Load-Balancer/blob/master/dnsserver/README.md
 
-**LB Agent: [lb agent readme][2]**
+**LB Agent: [lb agent readme][3]**
 
-[2]: https://github.com/LeechanX/Easy-Load-Balancer/blob/master/lbagent/README.md
+[3]: https://github.com/LeechanX/Easy-Load-Balancer/blob/master/lbagent/README.md
 
-**Reporter: [reporter readme][3]**
+**Reporter: [reporter readme][4]**
 
-[3]: https://github.com/LeechanX/Easy-Load-Balancer/blob/master/reporter/README.md
+[4]: https://github.com/LeechanX/Easy-Load-Balancer/blob/master/reporter/README.md
 
-**API: [API readme][4]**
+**API: [API readme][5]**
 
-[4]: https://github.com/LeechanX/Easy-Load-Balancer/blob/master/api/README.md
+[5]: https://github.com/LeechanX/Easy-Load-Balancer/blob/master/api/README.md
+
+### TODO
+
+- LB算法对节的异构性考虑不够细致，值得优化
+- 增加更多语言API
