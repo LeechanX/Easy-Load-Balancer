@@ -19,9 +19,12 @@ ELB（Easy Load Balance）是一个简单、易用、高性能的服务间远程
 
 一个ELB系统包含一个dnsserver，一个reporter，以及部署于每个服务器的Lbagent，业务代码通过API与ELB系统进行交互
 
-**API** ：根据自身需要的`modid,cmdid`，向ELB系统获取节点、汇报节点调用结果；提供`C++`、`Java`、`Python`接口；
+**API** ：根据自身需要的`modid,cmdid`，向ELB系统获取节点、汇报节点调用结果；提供`C++`、`Java`、`Python`接口
+
 **LB agent**：运行于每个服务器上，负责为此服务器上的业务提供节点获取、节点状态汇报、路由管理、负载调度等核心功能
-**dnsserver** ： 运行于一台服务器上（也可以用LVS部署多实例防单点），负责`modid,cmdid`到节点路由的转换；
+
+**dnsserver** ： 运行于一台服务器上（也可以用LVS部署多实例防单点），负责`modid,cmdid`到节点路由的转换
+
 **reporter** ： 运行于dnsserver同机服务器上，负责收集各`modid,cmdid`下各节点调用状况，可用于观察、报警
 
 `modid,cmdid`数据由`Mysql`管理，具体SQL脚本在`common/sql`路径下
