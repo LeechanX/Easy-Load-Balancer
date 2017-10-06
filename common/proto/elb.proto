@@ -9,6 +9,9 @@ enum MsgTypeId {
     GetRouteByAgentReqId = 6; //agent get route from dnsserver
     GetRouteByAgentRspId = 7; //dnsserver give route to agent
     ReportStatusReqId    = 8; //agent report lb status to reporter
+    CacheGetRouteReqId   = 9; //为支持API cache: api向agent发起获取\更新路由请求
+    CacheGetRouteRspId   = 10;//为支持API cache: agent给api返回的路由应答
+    CacheBatchRptReqId   = 11;//为支持API cache: api向agent批量上报若干成功结果
 }
 
 //represent a remote node
@@ -70,4 +73,34 @@ message ReportStatusReq {
     required int32 caller           = 3;
     repeated HostCallResult results = 4;
     required uint32 ts              = 5;//sec
+}
+
+//为支持API cache: api向agent发起获取\更新路由请求
+message CacheGetRouteReq {
+    required int32 modid   = 1;
+    required int32 cmdid   = 2;
+    required int64 version = 3;//首次获取时，version=-1
+}
+
+//为支持API cache: agent给api返回的路由应答
+message CacheGetRouteRsp {
+    required int32 modid    = 1;
+    required int32 cmdid    = 2;
+    required int64 version  = 3;//agent不存在此mod，则version=-1
+    optional bool overload  = 4;
+    repeated HostAddr route = 5;
+}
+
+//host batch call result
+message HostBatchCallRes {
+    required int32 ip       = 1;
+    required int32 port     = 2;
+    required uint32 succCnt = 3;
+}
+
+//为支持API cache: api向agent批量上报若干成功结果
+message CacheBatchRptReq {
+    required int32 modid              = 1;
+    required int32 cmdid              = 2;
+    repeated HostBatchCallRes results = 3;
 }
