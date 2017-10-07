@@ -624,7 +624,6 @@ void RouteLB::cacheGetRoute(int modid, int cmdid, long version, elb::CacheGetRou
         {
             //说明此[modid,cmdid]正在被首次拉取且还没回来，于是直接回复不存在
             assert(lb->status == LB::ISPULLING);
-            log_error("%d,%d NOT EXIST!", modid, cmdid);
             rsp.set_version(-1);
             ::pthread_mutex_unlock(&_mutex);
         }
