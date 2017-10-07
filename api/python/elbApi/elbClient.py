@@ -70,9 +70,9 @@ class elbClient:
             return (-9998, 'no exist')
 
         #检查此mod的缓存条目是否超时：
-        #如果有节点overload且上次更新是5s前 or 无节点overload且上次更新是2s前，则重拉取一次
+        #如果上次更新是2s前，则重拉取一次
         #顺便先把暂存的上报信息报上去（如果有的话）
-        if (cacheItem.overload and currTs - cacheItem.lstUpdTs >= 5) or (not cacheItem.overload and currTs - cacheItem.lstUpdTs >= 2):
+        if currTs - cacheItem.lstUpdTs >= 2:
             self.__batchReportRes(cacheItem)
             self.__getRoute4Cache(modid, cmdid, currTs)
             #从缓存中获取刚拉到的此mod条目
@@ -149,14 +149,16 @@ class elbClient:
     def apiReportRes(self, modid, cmdid, ip, port, res):
         if self.__agentOff:
             return
-        if res == 0:
-            #report to cache
-            if (modid, cmdid) in self.cache:
-                self.cache[(modid, cmdid)].report(ip, port)
-            return
-        #retcode != 0 立即将之前暂存的report状态上报予agent，如果有的话
-        if (modid, cmdid) in self.cache:
-            self.__batchReportRes(self.cache[(modid, cmdid)])
+        cu = self.cache.get((modid, cmdid), None)
+        if cu and not cu.overload:
+            if res == 0:
+                #report to cache
+                cu.report(ip, port)
+                return
+            else:
+                #retcode != 0 立即将之前暂存的report状态上报予agent，如果有的话
+                self.__batchReportRes(cu)
+
         #report by local network
         i = (modid + cmdid) % 3
         sock = self._socks[i]
