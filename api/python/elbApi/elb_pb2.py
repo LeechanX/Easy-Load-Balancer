@@ -19,7 +19,7 @@ _sym_db = _symbol_database.Default()
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='elb.proto',
   package='elb',
-  serialized_pb=_b('\n\telb.proto\x12\x03\x65lb\"$\n\x08HostAddr\x12\n\n\x02ip\x18\x01 \x02(\x05\x12\x0c\n\x04port\x18\x02 \x02(\x05\"7\n\nGetHostReq\x12\x0b\n\x03seq\x18\x01 \x02(\r\x12\r\n\x05modid\x18\x02 \x02(\x05\x12\r\n\x05\x63mdid\x18\x03 \x02(\x05\"e\n\nGetHostRsp\x12\x0b\n\x03seq\x18\x01 \x02(\r\x12\r\n\x05modid\x18\x02 \x02(\x05\x12\r\n\x05\x63mdid\x18\x03 \x02(\x05\x12\x0f\n\x07retcode\x18\x04 \x02(\x05\x12\x1b\n\x04host\x18\x05 \x01(\x0b\x32\r.elb.HostAddr\"W\n\tReportReq\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\x12\x1b\n\x04host\x18\x03 \x02(\x0b\x32\r.elb.HostAddr\x12\x0f\n\x07retcode\x18\x04 \x02(\x05\"+\n\x0bGetRouteReq\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\"I\n\x0bGetRouteRsp\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\x12\x1c\n\x05hosts\x18\x03 \x03(\x0b\x32\r.elb.HostAddr\"E\n\x0eHostCallResult\x12\n\n\x02ip\x18\x01 \x02(\x05\x12\x0c\n\x04port\x18\x02 \x02(\x05\x12\x0c\n\x04succ\x18\x03 \x02(\r\x12\x0b\n\x03\x65rr\x18\x04 \x02(\r\"\x83\x01\n\x0fReportStatusReq\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\x12\x0e\n\x06\x63\x61ller\x18\x03 \x02(\x05\x12$\n\x07results\x18\x04 \x03(\x0b\x32\x13.elb.HostCallResult\x12\n\n\x02ts\x18\x05 \x02(\r\x12\x10\n\x08overload\x18\x06 \x02(\x08*\xbd\x01\n\tMsgTypeId\x12\x10\n\x0cGetHostReqId\x10\x01\x12\x10\n\x0cGetHostRspId\x10\x02\x12\x0f\n\x0bReportReqId\x10\x03\x12\x17\n\x13GetRouteByToolReqId\x10\x04\x12\x17\n\x13GetRouteByToolRspId\x10\x05\x12\x18\n\x14GetRouteByAgentReqId\x10\x06\x12\x18\n\x14GetRouteByAgentRspId\x10\x07\x12\x15\n\x11ReportStatusReqId\x10\x08')
+  serialized_pb=_b('\n\telb.proto\x12\x03\x65lb\"$\n\x08HostAddr\x12\n\n\x02ip\x18\x01 \x02(\x05\x12\x0c\n\x04port\x18\x02 \x02(\x05\"7\n\nGetHostReq\x12\x0b\n\x03seq\x18\x01 \x02(\r\x12\r\n\x05modid\x18\x02 \x02(\x05\x12\r\n\x05\x63mdid\x18\x03 \x02(\x05\"e\n\nGetHostRsp\x12\x0b\n\x03seq\x18\x01 \x02(\r\x12\r\n\x05modid\x18\x02 \x02(\x05\x12\r\n\x05\x63mdid\x18\x03 \x02(\x05\x12\x0f\n\x07retcode\x18\x04 \x02(\x05\x12\x1b\n\x04host\x18\x05 \x01(\x0b\x32\r.elb.HostAddr\"W\n\tReportReq\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\x12\x1b\n\x04host\x18\x03 \x02(\x0b\x32\r.elb.HostAddr\x12\x0f\n\x07retcode\x18\x04 \x02(\x05\"+\n\x0bGetRouteReq\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\"I\n\x0bGetRouteRsp\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\x12\x1c\n\x05hosts\x18\x03 \x03(\x0b\x32\r.elb.HostAddr\"W\n\x0eHostCallResult\x12\n\n\x02ip\x18\x01 \x02(\x05\x12\x0c\n\x04port\x18\x02 \x02(\x05\x12\x0c\n\x04succ\x18\x03 \x02(\r\x12\x0b\n\x03\x65rr\x18\x04 \x02(\r\x12\x10\n\x08overload\x18\x05 \x02(\x08\"q\n\x0fReportStatusReq\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\x12\x0e\n\x06\x63\x61ller\x18\x03 \x02(\x05\x12$\n\x07results\x18\x04 \x03(\x0b\x32\x13.elb.HostCallResult\x12\n\n\x02ts\x18\x05 \x02(\r\"A\n\x10\x43\x61\x63heGetRouteReq\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\x12\x0f\n\x07version\x18\x03 \x02(\x03\"q\n\x10\x43\x61\x63heGetRouteRsp\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\x12\x0f\n\x07version\x18\x03 \x02(\x03\x12\x10\n\x08overload\x18\x04 \x01(\x08\x12\x1c\n\x05route\x18\x05 \x03(\x0b\x32\r.elb.HostAddr\"=\n\x10HostBatchCallRes\x12\n\n\x02ip\x18\x01 \x02(\x05\x12\x0c\n\x04port\x18\x02 \x02(\x05\x12\x0f\n\x07succCnt\x18\x03 \x02(\r\"X\n\x10\x43\x61\x63heBatchRptReq\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\x12&\n\x07results\x18\x03 \x03(\x0b\x32\x15.elb.HostBatchCallRes*\x85\x02\n\tMsgTypeId\x12\x10\n\x0cGetHostReqId\x10\x01\x12\x10\n\x0cGetHostRspId\x10\x02\x12\x0f\n\x0bReportReqId\x10\x03\x12\x17\n\x13GetRouteByToolReqId\x10\x04\x12\x17\n\x13GetRouteByToolRspId\x10\x05\x12\x18\n\x14GetRouteByAgentReqId\x10\x06\x12\x18\n\x14GetRouteByAgentRspId\x10\x07\x12\x15\n\x11ReportStatusReqId\x10\x08\x12\x16\n\x12\x43\x61\x63heGetRouteReqId\x10\t\x12\x16\n\x12\x43\x61\x63heGetRouteRspId\x10\n\x12\x16\n\x12\x43\x61\x63heBatchRptReqId\x10\x0b')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -61,11 +61,23 @@ _MSGTYPEID = _descriptor.EnumDescriptor(
       name='ReportStatusReqId', index=7, number=8,
       options=None,
       type=None),
+    _descriptor.EnumValueDescriptor(
+      name='CacheGetRouteReqId', index=8, number=9,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='CacheGetRouteRspId', index=9, number=10,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='CacheBatchRptReqId', index=10, number=11,
+      options=None,
+      type=None),
   ],
   containing_type=None,
   options=None,
-  serialized_start=631,
-  serialized_end=820,
+  serialized_start=965,
+  serialized_end=1226,
 )
 _sym_db.RegisterEnumDescriptor(_MSGTYPEID)
 
@@ -78,6 +90,9 @@ GetRouteByToolRspId = 5
 GetRouteByAgentReqId = 6
 GetRouteByAgentRspId = 7
 ReportStatusReqId = 8
+CacheGetRouteReqId = 9
+CacheGetRouteRspId = 10
+CacheBatchRptReqId = 11
 
 
 
@@ -387,6 +402,13 @@ _HOSTCALLRESULT = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    _descriptor.FieldDescriptor(
+      name='overload', full_name='elb.HostCallResult.overload', index=4,
+      number=5, type=8, cpp_type=7, label=2,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -399,7 +421,7 @@ _HOSTCALLRESULT = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=425,
-  serialized_end=494,
+  serialized_end=512,
 )
 
 
@@ -445,10 +467,47 @@ _REPORTSTATUSREQ = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=514,
+  serialized_end=627,
+)
+
+
+_CACHEGETROUTEREQ = _descriptor.Descriptor(
+  name='CacheGetRouteReq',
+  full_name='elb.CacheGetRouteReq',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
     _descriptor.FieldDescriptor(
-      name='overload', full_name='elb.ReportStatusReq.overload', index=5,
-      number=6, type=8, cpp_type=7, label=2,
-      has_default_value=False, default_value=False,
+      name='modid', full_name='elb.CacheGetRouteReq.modid', index=0,
+      number=1, type=5, cpp_type=1, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='cmdid', full_name='elb.CacheGetRouteReq.cmdid', index=1,
+      number=2, type=5, cpp_type=1, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='version', full_name='elb.CacheGetRouteReq.version', index=2,
+      number=3, type=3, cpp_type=2, label=2,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -463,14 +522,162 @@ _REPORTSTATUSREQ = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=497,
-  serialized_end=628,
+  serialized_start=629,
+  serialized_end=694,
+)
+
+
+_CACHEGETROUTERSP = _descriptor.Descriptor(
+  name='CacheGetRouteRsp',
+  full_name='elb.CacheGetRouteRsp',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='modid', full_name='elb.CacheGetRouteRsp.modid', index=0,
+      number=1, type=5, cpp_type=1, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='cmdid', full_name='elb.CacheGetRouteRsp.cmdid', index=1,
+      number=2, type=5, cpp_type=1, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='version', full_name='elb.CacheGetRouteRsp.version', index=2,
+      number=3, type=3, cpp_type=2, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='overload', full_name='elb.CacheGetRouteRsp.overload', index=3,
+      number=4, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='route', full_name='elb.CacheGetRouteRsp.route', index=4,
+      number=5, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=696,
+  serialized_end=809,
+)
+
+
+_HOSTBATCHCALLRES = _descriptor.Descriptor(
+  name='HostBatchCallRes',
+  full_name='elb.HostBatchCallRes',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='ip', full_name='elb.HostBatchCallRes.ip', index=0,
+      number=1, type=5, cpp_type=1, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='port', full_name='elb.HostBatchCallRes.port', index=1,
+      number=2, type=5, cpp_type=1, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='succCnt', full_name='elb.HostBatchCallRes.succCnt', index=2,
+      number=3, type=13, cpp_type=3, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=811,
+  serialized_end=872,
+)
+
+
+_CACHEBATCHRPTREQ = _descriptor.Descriptor(
+  name='CacheBatchRptReq',
+  full_name='elb.CacheBatchRptReq',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='modid', full_name='elb.CacheBatchRptReq.modid', index=0,
+      number=1, type=5, cpp_type=1, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='cmdid', full_name='elb.CacheBatchRptReq.cmdid', index=1,
+      number=2, type=5, cpp_type=1, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='results', full_name='elb.CacheBatchRptReq.results', index=2,
+      number=3, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=874,
+  serialized_end=962,
 )
 
 _GETHOSTRSP.fields_by_name['host'].message_type = _HOSTADDR
 _REPORTREQ.fields_by_name['host'].message_type = _HOSTADDR
 _GETROUTERSP.fields_by_name['hosts'].message_type = _HOSTADDR
 _REPORTSTATUSREQ.fields_by_name['results'].message_type = _HOSTCALLRESULT
+_CACHEGETROUTERSP.fields_by_name['route'].message_type = _HOSTADDR
+_CACHEBATCHRPTREQ.fields_by_name['results'].message_type = _HOSTBATCHCALLRES
 DESCRIPTOR.message_types_by_name['HostAddr'] = _HOSTADDR
 DESCRIPTOR.message_types_by_name['GetHostReq'] = _GETHOSTREQ
 DESCRIPTOR.message_types_by_name['GetHostRsp'] = _GETHOSTRSP
@@ -479,6 +686,10 @@ DESCRIPTOR.message_types_by_name['GetRouteReq'] = _GETROUTEREQ
 DESCRIPTOR.message_types_by_name['GetRouteRsp'] = _GETROUTERSP
 DESCRIPTOR.message_types_by_name['HostCallResult'] = _HOSTCALLRESULT
 DESCRIPTOR.message_types_by_name['ReportStatusReq'] = _REPORTSTATUSREQ
+DESCRIPTOR.message_types_by_name['CacheGetRouteReq'] = _CACHEGETROUTEREQ
+DESCRIPTOR.message_types_by_name['CacheGetRouteRsp'] = _CACHEGETROUTERSP
+DESCRIPTOR.message_types_by_name['HostBatchCallRes'] = _HOSTBATCHCALLRES
+DESCRIPTOR.message_types_by_name['CacheBatchRptReq'] = _CACHEBATCHRPTREQ
 DESCRIPTOR.enum_types_by_name['MsgTypeId'] = _MSGTYPEID
 
 HostAddr = _reflection.GeneratedProtocolMessageType('HostAddr', (_message.Message,), dict(
@@ -536,6 +747,34 @@ ReportStatusReq = _reflection.GeneratedProtocolMessageType('ReportStatusReq', (_
   # @@protoc_insertion_point(class_scope:elb.ReportStatusReq)
   ))
 _sym_db.RegisterMessage(ReportStatusReq)
+
+CacheGetRouteReq = _reflection.GeneratedProtocolMessageType('CacheGetRouteReq', (_message.Message,), dict(
+  DESCRIPTOR = _CACHEGETROUTEREQ,
+  __module__ = 'elb_pb2'
+  # @@protoc_insertion_point(class_scope:elb.CacheGetRouteReq)
+  ))
+_sym_db.RegisterMessage(CacheGetRouteReq)
+
+CacheGetRouteRsp = _reflection.GeneratedProtocolMessageType('CacheGetRouteRsp', (_message.Message,), dict(
+  DESCRIPTOR = _CACHEGETROUTERSP,
+  __module__ = 'elb_pb2'
+  # @@protoc_insertion_point(class_scope:elb.CacheGetRouteRsp)
+  ))
+_sym_db.RegisterMessage(CacheGetRouteRsp)
+
+HostBatchCallRes = _reflection.GeneratedProtocolMessageType('HostBatchCallRes', (_message.Message,), dict(
+  DESCRIPTOR = _HOSTBATCHCALLRES,
+  __module__ = 'elb_pb2'
+  # @@protoc_insertion_point(class_scope:elb.HostBatchCallRes)
+  ))
+_sym_db.RegisterMessage(HostBatchCallRes)
+
+CacheBatchRptReq = _reflection.GeneratedProtocolMessageType('CacheBatchRptReq', (_message.Message,), dict(
+  DESCRIPTOR = _CACHEBATCHRPTREQ,
+  __module__ = 'elb_pb2'
+  # @@protoc_insertion_point(class_scope:elb.CacheBatchRptReq)
+  ))
+_sym_db.RegisterMessage(CacheBatchRptReq)
 
 
 # @@protoc_insertion_point(module_scope)
