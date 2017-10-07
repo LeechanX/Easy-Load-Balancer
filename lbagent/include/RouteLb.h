@@ -63,6 +63,7 @@ public:
     void getRoute(std::vector<HI*>& vec);
 
     void report(int ip, int port, int retcode);
+    void reportSomeSucc(int ip, int port, unsigned succCnt);
 
     void update(elb::GetRouteRsp& rsp);
 
@@ -71,6 +72,8 @@ public:
     void persist(FILE* fp);
 
     void report2Rpter();
+
+    bool hasOvHost() const { return !_downList.empty(); }
 
     enum STATUS
     {
@@ -81,6 +84,7 @@ public:
     long effectData;//used to repull, last pull timestamp
     long lstRptTime;//last report timestamp
     STATUS status;
+    long version;//route version
 
 private:
     typedef __gnu_cxx::hash_map<uint64_t, HI*> HostMap;
@@ -102,8 +106,10 @@ public:
     int getHost(int modid, int cmdid, elb::GetHostRsp& rsp);
 
     void report(elb::ReportReq& req);
+    void batchReport(elb::CacheBatchRptReq& req);
 
     void getRoute(int modid, int cmdid, elb::GetRouteRsp& rsp);
+    void cacheGetRoute(int modid, int cmdid, long version, elb::CacheGetRouteRsp& rsp);
 
     void update(int modid, int cmdid, elb::GetRouteRsp& rsp);
 

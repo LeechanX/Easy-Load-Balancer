@@ -32,7 +32,7 @@ static void reportStatus(const char* data, uint32_t len, int msgid, net_commu* c
     ptrRouteLB->report(req);
 }
 
-static void getRoute(const char* data, uint32_t len, int msgid, net_commu* commu, void* usrData)
+static void getRouteByTool(const char* data, uint32_t len, int msgid, net_commu* commu, void* usrData)
 {
     elb::GetRouteReq req;
     req.ParseFromArray(data, len);//解包，data[0:len)保证是一个完整包
@@ -45,6 +45,31 @@ static void getRoute(const char* data, uint32_t len, int msgid, net_commu* commu
     std::string rspStr;
     rsp.SerializeToString(&rspStr);
     commu->send_data(rspStr.c_str(), rspStr.size(), elb::GetRouteByToolRspId);//回复消息
+}
+
+static void cacheGetRoute(const char* data, uint32_t len, int msgid, net_commu* commu, void* usrData)
+{
+    elb::CacheGetRouteReq req;
+    req.ParseFromArray(data, len);//解包，data[0:len)保证是一个完整包
+    //report to route lb metadata
+    RouteLB* ptrRouteLB = (RouteLB*)usrData;
+    elb::CacheGetRouteRsp rsp;
+    rsp.set_modid(req.modid());
+    rsp.set_cmdid(req.cmdid());
+    long version = req.version();
+    ptrRouteLB->cacheGetRoute(req.modid(), req.cmdid(), version, rsp);
+    std::string rspStr;
+    rsp.SerializeToString(&rspStr);
+    commu->send_data(rspStr.c_str(), rspStr.size(), elb::CacheGetRouteRspId);//回复消息
+}
+
+static void batchReport(const char* data, uint32_t len, int msgid, net_commu* commu, void* usrData)
+{
+    elb::CacheBatchRptReq req;
+    req.ParseFromArray(data, len);//解包，data[0:len)保证是一个完整包
+    //report to route
+    RouteLB* ptrRouteLB = (RouteLB*)usrData;
+    ptrRouteLB->batchReport(req);
 }
 
 static void persistRoute(event_loop* loop, void* usrData)
@@ -61,7 +86,9 @@ static void* initUDPServerIns(void* portPtr)
 
     server.add_msg_cb(elb::GetHostReqId, getHost, routeLB[port - 8888]);//设置：当收到消息id = GetHostReqId的消息调用的回调函数getHost
     server.add_msg_cb(elb::ReportReqId, reportStatus, routeLB[port - 8888]);//设置：当收到消息id = ReportReqId的消息调用的回调函数reportStatus
-    server.add_msg_cb(elb::GetRouteByToolReqId, getRoute, routeLB[port - 8888]);//设置：当收到消息id = GetRouteByToolReqId的消息调用的回调函数getRoute
+    server.add_msg_cb(elb::GetRouteByToolReqId, getRouteByTool, routeLB[port - 8888]);//设置：当收到消息id = GetRouteByToolReqId的消息调用的回调函数getRouteByTool
+    server.add_msg_cb(elb::CacheGetRouteReqId, cacheGetRoute, routeLB[port - 8888]);//设置：当收到消息id = CacheGetRouteReqId的消息调用的回调函数cacheGetRoute
+    server.add_msg_cb(elb::CacheBatchRptReqId, batchReport, routeLB[port - 8888]);//设置：当收到消息id = CacheBatchRptReqId的消息调用的回调函数batchReport
 
     loop.run_every(persistRoute, routeLB[port - 8888], 60);//设置：每隔60s将本地已拉到的路由持久化到磁盘
 

@@ -283,12 +283,100 @@ void LB::report(int ip, int port, int retcode)
     }
 }
 
+void LB::reportSomeSucc(int ip, int port, unsigned succCnt)
+{
+    uint64_t key = ((uint64_t)ip << 32) + port;
+    if (_hostMap.find(key) == _hostMap.end())
+        return ;
+    HI* hi = _hostMap[key];
+    //更新真实成功次数
+    hi->rSucc += succCnt;
+    //更新连续成功、连续失败个数
+    hi->continSucc += succCnt;
+    hi->continErr = 0;
+    long currenTs = time(NULL);
+    //如果是idle节点，则在调用状态上报后，肯定还是idle，仅需更新虚拟成功个数、连续成功个数
+    if (!hi->overload)
+    {
+        hi->succ += succCnt;
+    }
+    else
+    {
+        //否则，检查此overload节点是否满足回到idle的条件
+        bool ifIdle = false;
+        unsigned leftSuccCnt = succCnt;
+        //[1].连续成功次数达到阈值，认为idle
+        if (hi->continSucc >= (uint32_t)LbConfig.continSuccLim)
+        {
+            leftSuccCnt = hi->continSucc - LbConfig.continSuccLim;
+            ifIdle = true;
+        }
+        //[2].计算成功率,如果大于预设成功率，则认为idle
+        if (!ifIdle)
+        {
+            unsigned needSucc = LbConfig.succRate * hi->err / (1 - LbConfig.succRate);
+            if (needSucc * 1.0 / (needSucc + hi->err) < LbConfig.succRate)
+                ++needSucc;
+            //如果成功个数超过所需成功个数，则认为idle
+            if (succCnt >= needSucc)
+            {
+                leftSuccCnt = succCnt - needSucc;
+                ifIdle = true;
+            }
+        }
+        hi->succ += succCnt - leftSuccCnt;
+        //判定为idle了
+        if (ifIdle)
+        {
+            struct in_addr saddr;
+            saddr.s_addr = htonl(hi->ip);
+            log_error("after report some, [%d, %d] host %s:%d recover to idle, succ %u err %u",
+                _modid, _cmdid, ::inet_ntoa(saddr), hi->port, hi->succ, hi->err);
+            //重置hi为idle状态
+            hi->resetIdle(LbConfig.initSuccCnt);
+            //移除出downList,重新放入runingList
+            _downList.remove(hi);
+            _runningList.push_back(hi);
+        }
+        //继续把剩下的成功个数加上
+        hi->succ += leftSuccCnt;
+    }
+
+    //检查idle时间窗口是否到达，若到达，重置;或者检查overload节点是否处于overload状态的时长已经超时了
+    if (!hi->overload)
+    {
+        //节点是idle状态，检查是否时间窗口到达
+        if (currenTs - hi->windowTs >= LbConfig.clearTimo)
+        {
+            //时间窗口到达
+            hi->resetIdle(LbConfig.initSuccCnt);
+        }
+    }
+    else
+    {
+        //检查overload节点是否处于overload状态的时长已经超时了
+        if (currenTs - hi->overloadTs >= LbConfig.ovldWaitLim)
+        {
+            struct in_addr saddr;
+            saddr.s_addr = htonl(hi->ip);
+            log_error("[%d, %d] host %s:%d recover to idle, succ %u err %u",
+                _modid, _cmdid, ::inet_ntoa(saddr), hi->port, hi->succ, hi->err);
+            //处于overload状态的时长已经超时了
+            hi->resetIdle(LbConfig.initSuccCnt);
+            //重新把节点放入runningList
+            _downList.remove(hi);
+            _runningList.push_back(hi);
+        }
+    }
+}
+
 void LB::update(elb::GetRouteRsp& rsp)
 {
     assert(rsp.hosts_size() != 0);
     //如果是第一次拉过来，则重置lstRptTime，防止第一次api上报状态就触发lbagent给reporter上报
     bool resetRptTime = _hostMap.empty();
     bool updated = false;
+    long currenTs = time(NULL);
     //hosts who need to delete
     std::set<uint64_t> remote;
     std::set<uint64_t> todel;
@@ -332,10 +420,12 @@ void LB::update(elb::GetRouteRsp& rsp)
         delete hi;
     }
     //重置effectData,表明路由更新时间\有效期开始
-    effectData = time(NULL);
+    effectData = currenTs;
     status = ISNEW;
     if (resetRptTime)
-        lstRptTime = time(NULL);
+        lstRptTime = currenTs;
+    if (updated)//确实发生了路由更新，于是更新版本号
+        version = currenTs;
 }
 
 void LB::pull()
@@ -403,7 +493,6 @@ int RouteLB::getHost(int modid, int cmdid, elb::GetHostRsp& rsp)
     if (_routeMap.find(key) != _routeMap.end())
     {
         LB* lb = _routeMap[key];
-
         if (lb->empty())
         {
             //说明此[modid,cmdid]正在被首次拉取且还没回来，于是直接回复不存在
@@ -460,6 +549,29 @@ void RouteLB::report(elb::ReportReq& req)
     ::pthread_mutex_unlock(&_mutex);
 }
 
+void RouteLB::batchReport(elb::CacheBatchRptReq& req)
+{
+    int modid = req.modid();
+    int cmdid = req.cmdid();
+    uint64_t key = ((uint64_t)modid << 32) + cmdid;
+    ::pthread_mutex_lock(&_mutex);
+    if (_routeMap.find(key) != _routeMap.end())
+    {
+        LB* lb = _routeMap[key];
+        for (int i = 0;i < req.results_size(); ++i)
+        {
+            const elb::HostBatchCallRes& cr = req.results(i);
+            int ip = cr.ip();
+            int port = cr.port();
+            unsigned succCnt = cr.succcnt();
+            lb->reportSomeSucc(ip, port, succCnt);
+        }
+        //try to report to reporter
+        lb->report2Rpter();
+    }
+    ::pthread_mutex_unlock(&_mutex);
+}
+
 void RouteLB::getRoute(int modid, int cmdid, elb::GetRouteRsp& rsp)
 {
     uint64_t key = ((uint64_t)modid << 32) + cmdid;
@@ -501,6 +613,65 @@ void RouteLB::getRoute(int modid, int cmdid, elb::GetRouteRsp& rsp)
     }
 }
 
+void RouteLB::cacheGetRoute(int modid, int cmdid, long version, elb::CacheGetRouteRsp& rsp)
+{
+    uint64_t key = ((uint64_t)modid << 32) + cmdid;
+    ::pthread_mutex_lock(&_mutex);
+    if (_routeMap.find(key) != _routeMap.end())
+    {
+        LB* lb = _routeMap[key];
+        if (lb->empty())
+        {
+            //说明此[modid,cmdid]正在被首次拉取且还没回来，于是直接回复不存在
+            assert(lb->status == LB::ISPULLING);
+            log_error("%d,%d NOT EXIST!", modid, cmdid);
+            rsp.set_version(-1);
+            ::pthread_mutex_unlock(&_mutex);
+        }
+        else
+        {
+            rsp.set_overload(lb->hasOvHost());
+            rsp.set_version(lb->version);
+
+            std::vector<HI*> vec;
+            if (lb->version != version)//路由有变化，需要更新
+            {
+                lb->getRoute(vec);
+            }
+            //检查是否需要重拉路由
+            //若路由并没有正在拉取，且有效期至今已超时，则重拉取
+            if (lb->status == LB::ISNEW && time(NULL) - lb->effectData > LbConfig.updateTimo)
+            {
+                lb->pull();
+            }
+            ::pthread_mutex_unlock(&_mutex);
+
+            for (std::vector<HI*>::iterator it = vec.begin();it != vec.end(); ++it)
+            {
+                elb::HostAddr host;
+                host.set_ip((*it)->ip);
+                host.set_port((*it)->port);
+                rsp.add_route()->CopyFrom(host);
+            }
+        }
+    }
+    else
+    {
+        //no exist
+        rsp.set_version(-1);
+        LB* lb = new LB(modid, cmdid);
+        if (!lb)
+        {
+            fprintf(stderr, "no more space to new LB\n");
+            ::exit(1);
+        }
+        _routeMap[key] = lb;
+        //拉取一下路由
+        lb->pull();
+        ::pthread_mutex_unlock(&_mutex);
+    }
+}
+
 void RouteLB::update(int modid, int cmdid, elb::GetRouteRsp& rsp)
 {
     uint64_t key = ((uint64_t)modid << 32) + cmdid;
@@ -512,7 +683,7 @@ void RouteLB::update(int modid, int cmdid, elb::GetRouteRsp& rsp)
         {
             //delete this[modid,cmdid]
             delete lb;
-            _routeMap.erase(key);            
+            _routeMap.erase(key);
         }
         else
         {
