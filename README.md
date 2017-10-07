@@ -48,7 +48,7 @@ ELB（Easy Load Balance）是一个简单、易用、高性能的服务间远程
 
 [2]: https://github.com/LeechanX/Easy-Load-Balancer/blob/master/dnsserver/README.md
 
-**LB Agent: [lb agent readme][3]**
+**LB Agent（含过载发现、调度等负载均衡算法内容介绍）: [lb agent readme][3]**
 
 [3]: https://github.com/LeechanX/Easy-Load-Balancer/blob/master/lbagent/README.md
 
@@ -59,6 +59,10 @@ ELB（Easy Load Balance）是一个简单、易用、高性能的服务间远程
 **API: [API readme][5]**
 
 [5]: https://github.com/LeechanX/Easy-Load-Balancer/blob/master/api/README.md
+
+**API缓存层: [cache readme][6]**
+
+[6]: https://github.com/LeechanX/Easy-Load-Balancer/blob/master/api/CacheLayer.md
 
 ### TODO
 
