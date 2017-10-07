@@ -46,17 +46,14 @@ class elbClient:
         s = self.__m.read(8)
         ts = struct.unpack('q', s)[0]
         self.__m.seek(0)
-        print 'I read mem ts', ts
         return currTs - ts > 2
 
     def apiGetHost(self, modid, cmdid, timo):
         if self.agentDie():
-            print 'agent is fucking die!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
             self.__agentOff = True
             staticData = self.__staticRoute.getHost(modid, cmdid)
             if staticData == -1:
-                print >> sys.stderr, '[%d,%d] is not exist!' % (modid, cmdid)
-                return (-9998, 'no exist,////')
+                return (-9998, 'no exist')
             return (0, staticData)
         self.__staticRoute.freeData()
         self.__agentOff = False
@@ -70,7 +67,7 @@ class elbClient:
         #从缓存中获取刚拉到的此mod条目
         cacheItem = self.cache.get((modid, cmdid), None)
         if cacheItem is None:
-            return (-9998, 'no exist,~~~~~~~~~~~~~~~~')
+            return (-9998, 'no exist')
 
         #检查此mod的缓存条目是否超时：
         #如果有节点overload且上次更新是5s前 or 无节点overload且上次更新是2s前，则重拉取一次
@@ -82,15 +79,13 @@ class elbClient:
             cacheItem = self.cache.get((modid, cmdid), None)
         if cacheItem is None:
             #说明agent端已经不存在此mod了，返回不存在错误
-            return (-9998, 'no exist,!!!!!!!!!!!!!!')
+            return (-9998, 'no exist')
 
         #如果此mod在API端没有overload节点，则从缓存中获取节点，否则走网络
         if not cacheItem.overload:
-            print 'get from cache OK'
             ip, port = cacheItem.getHost()
             return (0, (ip, port))
         #get host from local network
-        print 'get from network'
         if timo < 10: timo = 10
         if timo > 1000: timo = 1000
         i = (modid + cmdid) % 3
@@ -192,7 +187,6 @@ class elbClient:
         if cu.succCnt == 0:
             return
         modid, cmdid = cu.modid, cu.cmdid
-        print 'I need to call __batchReportRes'
         i = (modid + cmdid) % 3
         sock = self._socks[i]
         #create request
@@ -219,7 +213,6 @@ class elbClient:
         cu.succCnt = 0
 
     def __getRoute4Cache(self, modid, cmdid, ts):
-        print 'I called __getRoute4Cache'
         cacheItem = self.cache.get((modid, cmdid), None)
         req = elb_pb2.CacheGetRouteReq()
         req.modid, req.cmdid = modid, cmdid
@@ -250,20 +243,16 @@ class elbClient:
             #已收到回复
             if rsp.version == -1:
                 #remove cache if exist
-                print 'remote have no this route'
                 if cacheItem:
                     del self.cache[(modid, cmdid)]
             elif not cacheItem or cacheItem.version != rsp.version:
                 #update route
                 if not cacheItem:
-                    print 'cache have no this route, so reset'
-                    print 'remote, rsp v = ', rsp.version
                     cacheItem = CacheUnit()
                     cacheItem.modid = modid
                     cacheItem.cmdid = cmdid
                     self.cache[(modid, cmdid)] = cacheItem
-                else:
-                    print 'version not equal, so reset'
+
                 cacheItem.overload = rsp.overload
                 cacheItem.version = rsp.version
                 cacheItem.succCnt = 0
@@ -279,7 +268,6 @@ class elbClient:
                     cacheItem.nodeList.append((ips, h.port))
                     cacheItem.succAccum[(ips, h.port)] = 0
             else:
-                print 'version not change'
                 cacheItem.overload = rsp.overload
                 cacheItem.succCnt = 0
                 cacheItem.lstUpdTs = ts
