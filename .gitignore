@@ -3,3 +3,8 @@
 *.d
 *.prog
 *.pyc
+api/cpp/cachetest
+api/cpp/example
+api/cpp/qpstest
+api/cpp/testcache.cc
+api/python/testcache.py
