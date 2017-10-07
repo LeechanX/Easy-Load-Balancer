@@ -92,9 +92,9 @@ int elbClient::apiGetHost(int modid, int cmdid, int timo, std::string& ip, int& 
         return -9998;
     }
     //检查此mod的缓存条目是否超时：
-    //如果有节点overload且上次更新是5s前 or 无节点overload且上次更新是2s前，则重拉取一次
+    //如果上次更新是2s前，则重拉取一次
     //顺便先把暂存的上报信息报上去（如果有的话）
-    if ((cacheItem->overload && currTs - cacheItem->lstUpdTs >= 5) || (!cacheItem->overload && currTs - cacheItem->lstUpdTs >= 2))
+    if (currTs - cacheItem->lstUpdTs >= 2)
     {
         batchReportRes(cacheItem);
         getRoute4Cache(modid, cmdid, currTs);
@@ -332,19 +332,27 @@ void elbClient::apiReportRes(int modid, int cmdid, const std::string& ip, int po
     ::inet_aton(ip.c_str(), &inaddr);
     int ipn = inaddr.s_addr;//ip number
 
-    CacheUnit* cacheItem = NULL;
-    if (retcode == 0)
+    //调用成功，且此mod无节点过载
+    CacheUnit* cacheItem = _cacheLayer.getCache(modid, cmdid);
+    //此mod无节点过载
+    if (cacheItem && !cacheItem->overload)
     {
-        //上报到缓存即可
-        cacheItem = _cacheLayer.getCache(modid, cmdid);
-        if (cacheItem)
+        if (retcode == 0)
+        {
+            //上报到缓存即可
             cacheItem->report(ipn, port);
-        return ;
+            return ;
+        }
+        else
+        {
+            //retcode != 0
+            //立即将之前暂存的report状态上报予agent，如果有的话
+            batchReportRes(cacheItem);//将之前暂存的此mod的report状态上报予agent
+            //然后需要通过网络上报本次状态, so don't return
+        }
     }
-    //retcode != 0
-    //立即将之前暂存的report状态上报予agent，如果有的话
-    batchReportRes(cacheItem);//将之前暂存的此mod的report状态上报予agent
-    //然后通过网络上报本次状态
+    
+    //通过网络上报本次状态
     //report status by local network
     elb::ReportReq req;
     req.set_modid(modid);
