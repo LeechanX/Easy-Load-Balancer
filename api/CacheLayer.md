@@ -43,7 +43,7 @@ lbagent返回`CacheGetRouteRsp`类型的rsp，如果：
 2、如果此mod存在于缓存中，但此mod上次更新时间距今超过2s，则打包`CacheGetRouteReq`请求向lbagent更新路由：
 lbagent返回`CacheGetRouteRsp`类型的rsp，如果：
 - rsp.version = -1，说明lbagent端此mod路由已删除，于是删除对应缓存，且返给业务：不存在错误
-- 否则添加到本地缓存，包括版本号、路由信息、是否有节点过载等rsp携带的信息，然后走step 3
+- 否则添加到本地缓存，包括版本号、是否有节点过载等rsp携带的信息，如果`rsp.version!=`本地缓存版本则还要更新路由信息，然后走step 3
 
 3、此mod存在于缓存中，但是有节点过载：则走原逻辑：本地网络向lbagent获取节点
 
