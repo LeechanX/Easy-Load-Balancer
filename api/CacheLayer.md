@@ -34,6 +34,7 @@
 ### 带缓存的节点获取流程
 
 要对某mod获取节点
+
 1、如果此mod不存在于缓存中，则打包`CacheGetRouteReq`请求向lbagent获取路由：
 lbagent返回`CacheGetRouteRsp`类型的rsp，如果：
 - rsp.version = -1，说明lbagent端无此mod路由，于是返给业务：不存在错误
