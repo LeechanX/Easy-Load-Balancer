@@ -370,6 +370,93 @@ void LB::reportSomeSucc(int ip, int port, unsigned succCnt)
     }
 }
 
+void LB::reportSomeErr(int ip, int port, unsigned errCnt)
+{
+    printf("DEBUG: tell error count is %u\n", errCnt);
+    uint64_t key = ((uint64_t)ip << 32) + port;
+    if (_hostMap.find(key) == _hostMap.end())
+        return ;
+    HI* hi = _hostMap[key];
+    //更新真实失败次数
+    hi->rErr += errCnt;
+    //更新连续成功、连续失败个数
+    hi->continSucc = 0;
+    hi->continErr += errCnt;
+    long currenTs = time(NULL);
+    //如果是overload节点，则在调用状态上报后，肯定还是overload，仅需更新虚拟失败个数
+    if (hi->overload)
+    {
+        hi->err += errCnt;
+    }
+    else
+    {
+        //否则，检查此idle节点是否满足回到overload的条件
+        bool ifOverload = false;
+        unsigned leftErrCnt = errCnt;
+        //[1].连续失败次数达到阈值，认为overload
+        if (hi->continErr >= (uint32_t)LbConfig.continErrLim)
+        {
+            leftErrCnt = hi->continErr - LbConfig.continErrLim;
+            ifOverload = true;
+        }
+        //[2].计算失败率,如果大于预设失败率，则认为overload
+        if (!ifOverload)
+        {
+            unsigned needErr = LbConfig.errRate * hi->succ / (1 - LbConfig.errRate);
+            if (needErr * 1.0 / (needErr + hi->succ) < LbConfig.errRate)
+                ++needErr;
+            //如果失败个数超过所需失败个数，则认为idle
+            if (errCnt >= needErr)
+            {
+                leftErrCnt = errCnt - needErr;
+                ifOverload = true;
+            }
+        }
+        hi->err += errCnt - leftErrCnt;
+        //判定为overload了
+        if (ifOverload)
+        {
+            struct in_addr saddr;
+            saddr.s_addr = htonl(hi->ip);
+            log_error("[%d, %d] host %s:%d suffer overload, succ %u err %u",
+                _modid, _cmdid, ::inet_ntoa(saddr), hi->port, hi->succ, hi->err);
+            //重置hi为overload状态
+            hi->setOverload(LbConfig.ovldErrCnt);
+            //移除出runingList,放入downList
+            _runningList.remove(hi);
+            _downList.push_back(hi);
+        }
+        hi->err += leftErrCnt;
+    }
+
+    //检查idle时间窗口是否到达，若到达，重置;或者检查overload节点是否处于overload状态的时长已经超时了
+    if (!hi->overload)
+    {
+        //节点是idle状态，检查是否时间窗口到达
+        if (currenTs - hi->windowTs >= LbConfig.clearTimo)
+        {
+            //时间窗口到达
+            hi->resetIdle(LbConfig.initSuccCnt);
+        }
+    }
+    else
+    {
+        //检查overload节点是否处于overload状态的时长已经超时了
+        if (currenTs - hi->overloadTs >= LbConfig.ovldWaitLim)
+        {
+            struct in_addr saddr;
+            saddr.s_addr = htonl(hi->ip);
+            log_error("[%d, %d] host %s:%d recover to idle, succ %u err %u",
+                _modid, _cmdid, ::inet_ntoa(saddr), hi->port, hi->succ, hi->err);
+            //处于overload状态的时长已经超时了
+            hi->resetIdle(LbConfig.initSuccCnt);
+            //重新把节点放入runningList
+            _downList.remove(hi);
+            _runningList.push_back(hi);
+        }
+    }
+}
+
 void LB::update(elb::GetRouteRsp& rsp)
 {
     assert(rsp.hosts_size() != 0);
@@ -537,12 +624,28 @@ void RouteLB::report(elb::ReportReq& req)
     int retcode = req.retcode();
     int ip = req.host().ip();
     int port = req.host().port();
+    uint32_t errcnt = 1;
+    if (req.has_tcost())
+    {
+        assert(req.retcode() != 0);
+        //100ms视为一次err
+        errcnt = req.tcost() / 100;
+        if (errcnt == 0)
+            errcnt = 1;
+        else if (errcnt > 50)
+            errcnt = 50;
+    }
+
     uint64_t key = ((uint64_t)modid << 32) + cmdid;
     ::pthread_mutex_lock(&_mutex);
     if (_routeMap.find(key) != _routeMap.end())
     {
         LB* lb = _routeMap[key];
-        lb->report(ip, port, retcode);
+        
+        if (errcnt == 1)
+            lb->report(ip, port, retcode);
+        else
+            lb->reportSomeErr(ip, port, errcnt);
         //try to report to reporter
         lb->report2Rpter();
     }

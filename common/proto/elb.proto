@@ -42,6 +42,7 @@ message ReportReq {
     required int32 cmdid   = 2;
     required HostAddr host = 3;
     required int32 retcode = 4;
+    optional uint32 tcost  = 5;//如果调用失败，需要收集调用用时
 }
 
 //agent get route from dnsserver (TCP), or tool get route from agent (UDP)

@@ -469,6 +469,13 @@ class ReportReq : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 retcode() const;
   inline void set_retcode(::google::protobuf::int32 value);
 
+  // optional uint32 tcost = 5;
+  inline bool has_tcost() const;
+  inline void clear_tcost();
+  static const int kTcostFieldNumber = 5;
+  inline ::google::protobuf::uint32 tcost() const;
+  inline void set_tcost(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:elb.ReportReq)
  private:
   inline void set_has_modid();
@@ -479,6 +486,8 @@ class ReportReq : public ::google::protobuf::Message {
   inline void clear_has_host();
   inline void set_has_retcode();
   inline void clear_has_retcode();
+  inline void set_has_tcost();
+  inline void clear_has_tcost();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -488,6 +497,7 @@ class ReportReq : public ::google::protobuf::Message {
   ::google::protobuf::int32 cmdid_;
   ::elb::HostAddr* host_;
   ::google::protobuf::int32 retcode_;
+  ::google::protobuf::uint32 tcost_;
   friend void  protobuf_AddDesc_elb_2eproto();
   friend void protobuf_AssignDesc_elb_2eproto();
   friend void protobuf_ShutdownFile_elb_2eproto();
@@ -1736,6 +1746,30 @@ inline void ReportReq::set_retcode(::google::protobuf::int32 value) {
   set_has_retcode();
   retcode_ = value;
   // @@protoc_insertion_point(field_set:elb.ReportReq.retcode)
+}
+
+// optional uint32 tcost = 5;
+inline bool ReportReq::has_tcost() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void ReportReq::set_has_tcost() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void ReportReq::clear_has_tcost() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void ReportReq::clear_tcost() {
+  tcost_ = 0u;
+  clear_has_tcost();
+}
+inline ::google::protobuf::uint32 ReportReq::tcost() const {
+  // @@protoc_insertion_point(field_get:elb.ReportReq.tcost)
+  return tcost_;
+}
+inline void ReportReq::set_tcost(::google::protobuf::uint32 value) {
+  set_has_tcost();
+  tcost_ = value;
+  // @@protoc_insertion_point(field_set:elb.ReportReq.tcost)
 }
 
 // -------------------------------------------------------------------

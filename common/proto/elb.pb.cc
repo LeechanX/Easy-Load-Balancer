@@ -120,11 +120,12 @@ void protobuf_AssignDesc_elb_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(GetHostRsp));
   ReportReq_descriptor_ = file->message_type(3);
-  static const int ReportReq_offsets_[4] = {
+  static const int ReportReq_offsets_[5] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ReportReq, modid_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ReportReq, cmdid_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ReportReq, host_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ReportReq, retcode_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ReportReq, tcost_),
   };
   ReportReq_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -358,32 +359,33 @@ void protobuf_AddDesc_elb_2eproto() {
     "\r\022\r\n\005modid\030\002 \002(\005\022\r\n\005cmdid\030\003 \002(\005\"e\n\nGetHo"
     "stRsp\022\013\n\003seq\030\001 \002(\r\022\r\n\005modid\030\002 \002(\005\022\r\n\005cmd"
     "id\030\003 \002(\005\022\017\n\007retcode\030\004 \002(\005\022\033\n\004host\030\005 \001(\0132"
-    "\r.elb.HostAddr\"W\n\tReportReq\022\r\n\005modid\030\001 \002"
+    "\r.elb.HostAddr\"f\n\tReportReq\022\r\n\005modid\030\001 \002"
     "(\005\022\r\n\005cmdid\030\002 \002(\005\022\033\n\004host\030\003 \002(\0132\r.elb.Ho"
-    "stAddr\022\017\n\007retcode\030\004 \002(\005\"+\n\013GetRouteReq\022\r"
-    "\n\005modid\030\001 \002(\005\022\r\n\005cmdid\030\002 \002(\005\"I\n\013GetRoute"
-    "Rsp\022\r\n\005modid\030\001 \002(\005\022\r\n\005cmdid\030\002 \002(\005\022\034\n\005hos"
-    "ts\030\003 \003(\0132\r.elb.HostAddr\"W\n\016HostCallResul"
-    "t\022\n\n\002ip\030\001 \002(\005\022\014\n\004port\030\002 \002(\005\022\014\n\004succ\030\003 \002("
-    "\r\022\013\n\003err\030\004 \002(\r\022\020\n\010overload\030\005 \002(\010\"q\n\017Repo"
-    "rtStatusReq\022\r\n\005modid\030\001 \002(\005\022\r\n\005cmdid\030\002 \002("
-    "\005\022\016\n\006caller\030\003 \002(\005\022$\n\007results\030\004 \003(\0132\023.elb"
-    ".HostCallResult\022\n\n\002ts\030\005 \002(\r\"A\n\020CacheGetR"
-    "outeReq\022\r\n\005modid\030\001 \002(\005\022\r\n\005cmdid\030\002 \002(\005\022\017\n"
-    "\007version\030\003 \002(\003\"q\n\020CacheGetRouteRsp\022\r\n\005mo"
-    "did\030\001 \002(\005\022\r\n\005cmdid\030\002 \002(\005\022\017\n\007version\030\003 \002("
-    "\003\022\020\n\010overload\030\004 \001(\010\022\034\n\005route\030\005 \003(\0132\r.elb"
-    ".HostAddr\"=\n\020HostBatchCallRes\022\n\n\002ip\030\001 \002("
-    "\005\022\014\n\004port\030\002 \002(\005\022\017\n\007succCnt\030\003 \002(\r\"X\n\020Cach"
-    "eBatchRptReq\022\r\n\005modid\030\001 \002(\005\022\r\n\005cmdid\030\002 \002"
-    "(\005\022&\n\007results\030\003 \003(\0132\025.elb.HostBatchCallR"
-    "es*\205\002\n\tMsgTypeId\022\020\n\014GetHostReqId\020\001\022\020\n\014Ge"
-    "tHostRspId\020\002\022\017\n\013ReportReqId\020\003\022\027\n\023GetRout"
-    "eByToolReqId\020\004\022\027\n\023GetRouteByToolRspId\020\005\022"
-    "\030\n\024GetRouteByAgentReqId\020\006\022\030\n\024GetRouteByA"
-    "gentRspId\020\007\022\025\n\021ReportStatusReqId\020\010\022\026\n\022Ca"
-    "cheGetRouteReqId\020\t\022\026\n\022CacheGetRouteRspId"
-    "\020\n\022\026\n\022CacheBatchRptReqId\020\013", 1226);
+    "stAddr\022\017\n\007retcode\030\004 \002(\005\022\r\n\005tcost\030\005 \001(\r\"+"
+    "\n\013GetRouteReq\022\r\n\005modid\030\001 \002(\005\022\r\n\005cmdid\030\002 "
+    "\002(\005\"I\n\013GetRouteRsp\022\r\n\005modid\030\001 \002(\005\022\r\n\005cmd"
+    "id\030\002 \002(\005\022\034\n\005hosts\030\003 \003(\0132\r.elb.HostAddr\"W"
+    "\n\016HostCallResult\022\n\n\002ip\030\001 \002(\005\022\014\n\004port\030\002 \002"
+    "(\005\022\014\n\004succ\030\003 \002(\r\022\013\n\003err\030\004 \002(\r\022\020\n\010overloa"
+    "d\030\005 \002(\010\"q\n\017ReportStatusReq\022\r\n\005modid\030\001 \002("
+    "\005\022\r\n\005cmdid\030\002 \002(\005\022\016\n\006caller\030\003 \002(\005\022$\n\007resu"
+    "lts\030\004 \003(\0132\023.elb.HostCallResult\022\n\n\002ts\030\005 \002"
+    "(\r\"A\n\020CacheGetRouteReq\022\r\n\005modid\030\001 \002(\005\022\r\n"
+    "\005cmdid\030\002 \002(\005\022\017\n\007version\030\003 \002(\003\"q\n\020CacheGe"
+    "tRouteRsp\022\r\n\005modid\030\001 \002(\005\022\r\n\005cmdid\030\002 \002(\005\022"
+    "\017\n\007version\030\003 \002(\003\022\020\n\010overload\030\004 \001(\010\022\034\n\005ro"
+    "ute\030\005 \003(\0132\r.elb.HostAddr\"=\n\020HostBatchCal"
+    "lRes\022\n\n\002ip\030\001 \002(\005\022\014\n\004port\030\002 \002(\005\022\017\n\007succCn"
+    "t\030\003 \002(\r\"X\n\020CacheBatchRptReq\022\r\n\005modid\030\001 \002"
+    "(\005\022\r\n\005cmdid\030\002 \002(\005\022&\n\007results\030\003 \003(\0132\025.elb"
+    ".HostBatchCallRes*\205\002\n\tMsgTypeId\022\020\n\014GetHo"
+    "stReqId\020\001\022\020\n\014GetHostRspId\020\002\022\017\n\013ReportReq"
+    "Id\020\003\022\027\n\023GetRouteByToolReqId\020\004\022\027\n\023GetRout"
+    "eByToolRspId\020\005\022\030\n\024GetRouteByAgentReqId\020\006"
+    "\022\030\n\024GetRouteByAgentRspId\020\007\022\025\n\021ReportStat"
+    "usReqId\020\010\022\026\n\022CacheGetRouteReqId\020\t\022\026\n\022Cac"
+    "heGetRouteRspId\020\n\022\026\n\022CacheBatchRptReqId\020"
+    "\013", 1241);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "elb.proto", &protobuf_RegisterTypes);
   HostAddr::default_instance_ = new HostAddr();
@@ -1438,6 +1440,7 @@ const int ReportReq::kModidFieldNumber;
 const int ReportReq::kCmdidFieldNumber;
 const int ReportReq::kHostFieldNumber;
 const int ReportReq::kRetcodeFieldNumber;
+const int ReportReq::kTcostFieldNumber;
 #endif  // !_MSC_VER
 
 ReportReq::ReportReq()
@@ -1463,6 +1466,7 @@ void ReportReq::SharedCtor() {
   cmdid_ = 0;
   host_ = NULL;
   retcode_ = 0;
+  tcost_ = 0u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -1509,12 +1513,12 @@ void ReportReq::Clear() {
     ::memset(&first, 0, n);                                \
   } while (0)
 
-  if (_has_bits_[0 / 32] & 15) {
+  if (_has_bits_[0 / 32] & 31) {
     ZR_(modid_, cmdid_);
+    ZR_(retcode_, tcost_);
     if (has_host()) {
       if (host_ != NULL) host_->::elb::HostAddr::Clear();
     }
-    retcode_ = 0;
   }
 
 #undef OFFSET_OF_FIELD_
@@ -1587,6 +1591,21 @@ bool ReportReq::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
+        if (input->ExpectTag(40)) goto parse_tcost;
+        break;
+      }
+
+      // optional uint32 tcost = 5;
+      case 5: {
+        if (tag == 40) {
+         parse_tcost:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &tcost_)));
+          set_has_tcost();
+        } else {
+          goto handle_unusual;
+        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -1637,6 +1656,11 @@ void ReportReq::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->retcode(), output);
   }
 
+  // optional uint32 tcost = 5;
+  if (has_tcost()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(5, this->tcost(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -1667,6 +1691,11 @@ void ReportReq::SerializeWithCachedSizes(
   // required int32 retcode = 4;
   if (has_retcode()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(4, this->retcode(), target);
+  }
+
+  // optional uint32 tcost = 5;
+  if (has_tcost()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(5, this->tcost(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -1709,6 +1738,13 @@ int ReportReq::ByteSize() const {
           this->retcode());
     }
 
+    // optional uint32 tcost = 5;
+    if (has_tcost()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->tcost());
+    }
+
   }
   if (!unknown_fields().empty()) {
     total_size +=
@@ -1748,6 +1784,9 @@ void ReportReq::MergeFrom(const ReportReq& from) {
     if (from.has_retcode()) {
       set_retcode(from.retcode());
     }
+    if (from.has_tcost()) {
+      set_tcost(from.tcost());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -1779,6 +1818,7 @@ void ReportReq::Swap(ReportReq* other) {
     std::swap(cmdid_, other->cmdid_);
     std::swap(host_, other->host_);
     std::swap(retcode_, other->retcode_);
+    std::swap(tcost_, other->tcost_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

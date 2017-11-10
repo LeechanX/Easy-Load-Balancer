@@ -1,4 +1,4 @@
-TARGET = libelbapi.a
+TARGET = ../lib/libelbapi.a
 CXX = g++
 CFLAGS = -g -O2 -Wall
 
@@ -22,6 +22,7 @@ OBJS = $(addsuffix .o, $(basename $(wildcard *.cc)))
 OBJS += $(PROTO_H)/elb.pb.o $(BASE)/src/log.o
 
 $(TARGET): $(OBJS)
+	-mkdir -p ../lib
 	ar cqs $@ $^
 
 -include $(OBJS:.o=.d) 

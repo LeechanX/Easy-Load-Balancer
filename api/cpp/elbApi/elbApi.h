@@ -34,6 +34,7 @@ private:
     StaticRoute _staticRoute;
     bool _agentOff;
     CacheLayer _cacheLayer;
+    uint64_t _tsget;//获取到节点的时间戳，毫秒
 };
 
 #endif

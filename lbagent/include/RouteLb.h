@@ -64,6 +64,7 @@ public:
 
     void report(int ip, int port, int retcode);
     void reportSomeSucc(int ip, int port, unsigned succCnt);
+    void reportSomeErr(int ip, int port, unsigned errCnt);
 
     void update(elb::GetRouteRsp& rsp);
 

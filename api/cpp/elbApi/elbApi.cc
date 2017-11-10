@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <strings.h>
 #include <arpa/inet.h>
+#include <sys/time.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -13,7 +14,14 @@
 #include "elb.pb.h"
 #include "HeartBeat.h"
 
-elbClient::elbClient(): _seqid(0)
+inline uint64_t getCurrMills()
+{
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    return (uint64_t)tv.tv_sec * 1000 + tv.tv_usec / 1000;
+}
+
+elbClient::elbClient(): _seqid(0), _tsget(0)
 {
     struct sockaddr_in servaddr;
     ::bzero(&servaddr, sizeof (servaddr));
@@ -111,6 +119,7 @@ int elbClient::apiGetHost(int modid, int cmdid, int timo, std::string& ip, int& 
     if (!cacheItem->overload)
     {
         cacheItem->getHost(ip, port);
+        _tsget = getCurrMills();
         return 0;
     }
 
@@ -186,6 +195,8 @@ int elbClient::apiGetHost(int modid, int cmdid, int timo, std::string& ip, int& 
         inaddr.s_addr = host.ip();
         ip = ::inet_ntoa(inaddr);
         port = host.port();
+
+        _tsget = getCurrMills();
     }
     return rsp.retcode();
 }
@@ -363,6 +374,11 @@ void elbClient::apiReportRes(int modid, int cmdid, const std::string& ip, int po
     hp->set_ip(ipn);
     hp->set_port(port);
 
+    if (retcode)//#如果对节点的调用是失败的，则也需要上报调用消耗的毫秒级时间
+    {
+        uint32_t tcost = (uint32_t)(getCurrMills() - _tsget);
+        req.set_tcost(tcost);
+    }
     //send
     char wbuf[4096];
     commu_head head;

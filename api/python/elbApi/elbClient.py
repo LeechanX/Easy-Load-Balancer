@@ -32,6 +32,7 @@ class elbClient:
         self.__staticRoute = StaticRoute()
         self.__agentOff = True
         self.cache = {}
+        self.tsget = 0
 
     def __del__(self):
         for key in self.cache:
@@ -84,6 +85,7 @@ class elbClient:
         #如果此mod在API端没有overload节点，则从缓存中获取节点，否则走网络
         if not cacheItem.overload:
             ip, port = cacheItem.getHost()
+            self.tsget = int(time.time() * 1000)
             return (0, (ip, port))
         #get host from local network
         if timo < 10: timo = 10
@@ -130,7 +132,7 @@ class elbClient:
                 if rsp.retcode == -10000:
                     errMsg = 'overload'
                 elif rsp.retcode == -9998:
-                    errMsg = 'no exist,slslslslslslsls'
+                    errMsg = 'no exist'
                 else:
                     errMsg = 'agent error'
                 return (rsp.retcode, errMsg)
@@ -139,6 +141,7 @@ class elbClient:
                 if ipn < 0:
                     ipn += 2 ** 32
                 ips = socket.inet_ntoa(struct.pack('I', ipn))
+                self.tsget = int(time.time() * 1000)
                 return (0, (ips, rsp.host.port))
         except socket.timeout:
             print >> sys.stderr, 'time out when recvfrom socket'
@@ -167,6 +170,8 @@ class elbClient:
         req.modid = modid
         req.cmdid = cmdid
         req.retcode = res
+        if res:#如果对节点的调用是失败的，则也需要上报调用消耗的毫秒级时间
+            req.tcost = int(time.time() * 1000) - self.tsget
         #ip is str, but req.host.ip need big-endian number
         ipn = struct.unpack('I', socket.inet_aton(ip))[0]
         if ipn > 2 ** 31 - 1:

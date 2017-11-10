@@ -18,11 +18,16 @@ static void recordTs(event_loop* loop, void* usrData)
     hb->recordTs();
 }
 
-int main()
+int main(int argc, const char** argv)
 {
+    if (argc != 2)
+    {
+        printf("USAGE: ./lbagent configPath\n");
+        ::exit(1);
+    }
     dispLogo();
     
-    config_reader::setPath("conf/lbagent.ini");
+    config_reader::setPath(argv[1]);
 
     for (int i = 0;i < 3; ++i)
     {

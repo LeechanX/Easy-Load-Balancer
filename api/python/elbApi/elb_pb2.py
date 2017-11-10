@@ -19,7 +19,7 @@ _sym_db = _symbol_database.Default()
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='elb.proto',
   package='elb',
-  serialized_pb=_b('\n\telb.proto\x12\x03\x65lb\"$\n\x08HostAddr\x12\n\n\x02ip\x18\x01 \x02(\x05\x12\x0c\n\x04port\x18\x02 \x02(\x05\"7\n\nGetHostReq\x12\x0b\n\x03seq\x18\x01 \x02(\r\x12\r\n\x05modid\x18\x02 \x02(\x05\x12\r\n\x05\x63mdid\x18\x03 \x02(\x05\"e\n\nGetHostRsp\x12\x0b\n\x03seq\x18\x01 \x02(\r\x12\r\n\x05modid\x18\x02 \x02(\x05\x12\r\n\x05\x63mdid\x18\x03 \x02(\x05\x12\x0f\n\x07retcode\x18\x04 \x02(\x05\x12\x1b\n\x04host\x18\x05 \x01(\x0b\x32\r.elb.HostAddr\"W\n\tReportReq\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\x12\x1b\n\x04host\x18\x03 \x02(\x0b\x32\r.elb.HostAddr\x12\x0f\n\x07retcode\x18\x04 \x02(\x05\"+\n\x0bGetRouteReq\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\"I\n\x0bGetRouteRsp\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\x12\x1c\n\x05hosts\x18\x03 \x03(\x0b\x32\r.elb.HostAddr\"W\n\x0eHostCallResult\x12\n\n\x02ip\x18\x01 \x02(\x05\x12\x0c\n\x04port\x18\x02 \x02(\x05\x12\x0c\n\x04succ\x18\x03 \x02(\r\x12\x0b\n\x03\x65rr\x18\x04 \x02(\r\x12\x10\n\x08overload\x18\x05 \x02(\x08\"q\n\x0fReportStatusReq\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\x12\x0e\n\x06\x63\x61ller\x18\x03 \x02(\x05\x12$\n\x07results\x18\x04 \x03(\x0b\x32\x13.elb.HostCallResult\x12\n\n\x02ts\x18\x05 \x02(\r\"A\n\x10\x43\x61\x63heGetRouteReq\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\x12\x0f\n\x07version\x18\x03 \x02(\x03\"q\n\x10\x43\x61\x63heGetRouteRsp\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\x12\x0f\n\x07version\x18\x03 \x02(\x03\x12\x10\n\x08overload\x18\x04 \x01(\x08\x12\x1c\n\x05route\x18\x05 \x03(\x0b\x32\r.elb.HostAddr\"=\n\x10HostBatchCallRes\x12\n\n\x02ip\x18\x01 \x02(\x05\x12\x0c\n\x04port\x18\x02 \x02(\x05\x12\x0f\n\x07succCnt\x18\x03 \x02(\r\"X\n\x10\x43\x61\x63heBatchRptReq\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\x12&\n\x07results\x18\x03 \x03(\x0b\x32\x15.elb.HostBatchCallRes*\x85\x02\n\tMsgTypeId\x12\x10\n\x0cGetHostReqId\x10\x01\x12\x10\n\x0cGetHostRspId\x10\x02\x12\x0f\n\x0bReportReqId\x10\x03\x12\x17\n\x13GetRouteByToolReqId\x10\x04\x12\x17\n\x13GetRouteByToolRspId\x10\x05\x12\x18\n\x14GetRouteByAgentReqId\x10\x06\x12\x18\n\x14GetRouteByAgentRspId\x10\x07\x12\x15\n\x11ReportStatusReqId\x10\x08\x12\x16\n\x12\x43\x61\x63heGetRouteReqId\x10\t\x12\x16\n\x12\x43\x61\x63heGetRouteRspId\x10\n\x12\x16\n\x12\x43\x61\x63heBatchRptReqId\x10\x0b')
+  serialized_pb=_b('\n\telb.proto\x12\x03\x65lb\"$\n\x08HostAddr\x12\n\n\x02ip\x18\x01 \x02(\x05\x12\x0c\n\x04port\x18\x02 \x02(\x05\"7\n\nGetHostReq\x12\x0b\n\x03seq\x18\x01 \x02(\r\x12\r\n\x05modid\x18\x02 \x02(\x05\x12\r\n\x05\x63mdid\x18\x03 \x02(\x05\"e\n\nGetHostRsp\x12\x0b\n\x03seq\x18\x01 \x02(\r\x12\r\n\x05modid\x18\x02 \x02(\x05\x12\r\n\x05\x63mdid\x18\x03 \x02(\x05\x12\x0f\n\x07retcode\x18\x04 \x02(\x05\x12\x1b\n\x04host\x18\x05 \x01(\x0b\x32\r.elb.HostAddr\"f\n\tReportReq\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\x12\x1b\n\x04host\x18\x03 \x02(\x0b\x32\r.elb.HostAddr\x12\x0f\n\x07retcode\x18\x04 \x02(\x05\x12\r\n\x05tcost\x18\x05 \x01(\r\"+\n\x0bGetRouteReq\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\"I\n\x0bGetRouteRsp\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\x12\x1c\n\x05hosts\x18\x03 \x03(\x0b\x32\r.elb.HostAddr\"W\n\x0eHostCallResult\x12\n\n\x02ip\x18\x01 \x02(\x05\x12\x0c\n\x04port\x18\x02 \x02(\x05\x12\x0c\n\x04succ\x18\x03 \x02(\r\x12\x0b\n\x03\x65rr\x18\x04 \x02(\r\x12\x10\n\x08overload\x18\x05 \x02(\x08\"q\n\x0fReportStatusReq\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\x12\x0e\n\x06\x63\x61ller\x18\x03 \x02(\x05\x12$\n\x07results\x18\x04 \x03(\x0b\x32\x13.elb.HostCallResult\x12\n\n\x02ts\x18\x05 \x02(\r\"A\n\x10\x43\x61\x63heGetRouteReq\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\x12\x0f\n\x07version\x18\x03 \x02(\x03\"q\n\x10\x43\x61\x63heGetRouteRsp\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\x12\x0f\n\x07version\x18\x03 \x02(\x03\x12\x10\n\x08overload\x18\x04 \x01(\x08\x12\x1c\n\x05route\x18\x05 \x03(\x0b\x32\r.elb.HostAddr\"=\n\x10HostBatchCallRes\x12\n\n\x02ip\x18\x01 \x02(\x05\x12\x0c\n\x04port\x18\x02 \x02(\x05\x12\x0f\n\x07succCnt\x18\x03 \x02(\r\"X\n\x10\x43\x61\x63heBatchRptReq\x12\r\n\x05modid\x18\x01 \x02(\x05\x12\r\n\x05\x63mdid\x18\x02 \x02(\x05\x12&\n\x07results\x18\x03 \x03(\x0b\x32\x15.elb.HostBatchCallRes*\x85\x02\n\tMsgTypeId\x12\x10\n\x0cGetHostReqId\x10\x01\x12\x10\n\x0cGetHostRspId\x10\x02\x12\x0f\n\x0bReportReqId\x10\x03\x12\x17\n\x13GetRouteByToolReqId\x10\x04\x12\x17\n\x13GetRouteByToolRspId\x10\x05\x12\x18\n\x14GetRouteByAgentReqId\x10\x06\x12\x18\n\x14GetRouteByAgentRspId\x10\x07\x12\x15\n\x11ReportStatusReqId\x10\x08\x12\x16\n\x12\x43\x61\x63heGetRouteReqId\x10\t\x12\x16\n\x12\x43\x61\x63heGetRouteRspId\x10\n\x12\x16\n\x12\x43\x61\x63heBatchRptReqId\x10\x0b')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -76,8 +76,8 @@ _MSGTYPEID = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=965,
-  serialized_end=1226,
+  serialized_start=980,
+  serialized_end=1241,
 )
 _sym_db.RegisterEnumDescriptor(_MSGTYPEID)
 
@@ -270,6 +270,13 @@ _REPORTREQ = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    _descriptor.FieldDescriptor(
+      name='tcost', full_name='elb.ReportReq.tcost', index=4,
+      number=5, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -282,7 +289,7 @@ _REPORTREQ = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=216,
-  serialized_end=303,
+  serialized_end=318,
 )
 
 
@@ -318,8 +325,8 @@ _GETROUTEREQ = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=305,
-  serialized_end=348,
+  serialized_start=320,
+  serialized_end=363,
 )
 
 
@@ -362,8 +369,8 @@ _GETROUTERSP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=350,
-  serialized_end=423,
+  serialized_start=365,
+  serialized_end=438,
 )
 
 
@@ -420,8 +427,8 @@ _HOSTCALLRESULT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=425,
-  serialized_end=512,
+  serialized_start=440,
+  serialized_end=527,
 )
 
 
@@ -478,8 +485,8 @@ _REPORTSTATUSREQ = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=514,
-  serialized_end=627,
+  serialized_start=529,
+  serialized_end=642,
 )
 
 
@@ -522,8 +529,8 @@ _CACHEGETROUTEREQ = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=629,
-  serialized_end=694,
+  serialized_start=644,
+  serialized_end=709,
 )
 
 
@@ -580,8 +587,8 @@ _CACHEGETROUTERSP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=696,
-  serialized_end=809,
+  serialized_start=711,
+  serialized_end=824,
 )
 
 
@@ -624,8 +631,8 @@ _HOSTBATCHCALLRES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=811,
-  serialized_end=872,
+  serialized_start=826,
+  serialized_end=887,
 )
 
 
@@ -668,8 +675,8 @@ _CACHEBATCHRPTREQ = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=874,
-  serialized_end=962,
+  serialized_start=889,
+  serialized_end=977,
 )
 
 _GETHOSTRSP.fields_by_name['host'].message_type = _HOSTADDR
