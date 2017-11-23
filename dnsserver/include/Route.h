@@ -29,6 +29,14 @@ public:
     //backend thread call it
     void swap();
 
+    long routeVersion;
+
+    int loadVersion();
+
+    void loadChanges(std::vector<uint64_t>& changes);
+
+    void rmChanges(bool recent = true);
+
 private:
     Route();
 
@@ -41,7 +49,7 @@ private:
     routeMap* _data;
     routeMap* _tmpData;
 
-    char _sql[100];
+    char _sql[1000];
 };
 
 //backend thread domain

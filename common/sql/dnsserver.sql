@@ -26,3 +26,20 @@ CREATE TABLE `ServerCallStatus` (
   PRIMARY KEY (`modid`,`cmdid`,`ip`,`port`,`caller`),
   KEY `mlb_index` (`modid`,`cmdid`,`ip`,`port`,`caller`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `RouteVersion`;
+CREATE TABLE RouteVersion (
+    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `version` int(10) unsigned NOT NULL,
+    PRIMARY KEY (`id`)
+);
+INSERT INTO RouteVersion(version) VALUES(0);
+
+DROP TABLE IF EXISTS `ChangeLog`;
+CREATE TABLE ChangeLog (
+    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `modid` int(10) unsigned NOT NULL,
+    `cmdid` int(10) unsigned NOT NULL,
+    `version` bigint(20) unsigned NOT NULL,
+    PRIMARY KEY (`id`)
+);
