@@ -23,7 +23,7 @@ DnsServer使用两个map存储路由数据（key = `modid<<32 + cmdid` ， value
 
 这两个map分别由指针`data_ptr`与`tmp_ptr`指向
 
-#### **dnsserver还有个业务线程:**Backend Thread：
+#### **dnsserver还有个业务线程:** Backend Thread：
 
 1、负责周期性（default:1s）检查RouteVersion表版本号，如有变化，说明DnsServerRoute有变更，则重加载DnsServerRoute表内容；然后将ChangeLog表中被变更的mod取出，根据订阅列表查出mod被哪些连接订阅后，向所有工作线程发送任务：要求订阅这些mod的连接推送mod路由到agent
 
