@@ -23,10 +23,12 @@ struct HI
         continSucc(0),
         continErr(0),
         overload(false),
-        overloadTs(0) {
+        overloadTs(0),
+        windErrCnt(0) {
             windowTs = time(NULL);
         }
 
+    bool checkWindow();
     void resetIdle(uint32_t initSucc);
     void setOverload(uint32_t overloadErr);
 
@@ -41,6 +43,8 @@ struct HI
     bool overload;
     long windowTs;
     long overloadTs;
+
+    uint32_t windErrCnt;//失败率>=windErrRate的连续idle窗口个数，含此时的idle窗口
 };
 
 class LB

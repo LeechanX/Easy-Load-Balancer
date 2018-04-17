@@ -22,6 +22,8 @@ struct LbConfigure
     long ovldWaitLim;  //对于某个modid/cmdid下的某个host被判断过载后，在过载队列等待的最大时间,s
     float succRate;    //当overload节点（虚拟）成功率高于此值，节点变idle
     float errRate;     //当idle节点（虚拟）失败率高于此值，节点变overload
+    float windErrRate; //整个窗口的真实失败率阈值
+    int windErrLim;    //连续N个窗口真实失败率高于windErrRate, 如果N>=windErrLim，强行认为节点过载
 } LbConfig;
 
 static uint32_t MyIp = 0;
@@ -43,6 +45,9 @@ static void initLbEnviro()
     LbConfig.succRate      = config_reader::ins()->GetFloat("lb", "succ_rate", 0.92);
     LbConfig.errRate       = config_reader::ins()->GetFloat("lb", "err_rate", 0.1);
 
+    LbConfig.windErrRate   = config_reader::ins()->GetFloat("lb", "wind_err_rate", 0.7);
+    LbConfig.windErrLim    = config_reader::ins()->GetNumber("lb", "wind_err_limit", 2);
+
     //get local IP
     char myhostname[1024];
     if (::gethostname(myhostname, 1024) == 0)
@@ -63,25 +68,48 @@ static void initLbEnviro()
     }
 }
 
+/**
+ * 计算整个窗口的真实失败率, 如果达到连续失败窗口值则返回true
+ */
+bool HI::checkWindow() {
+    if (rSucc + rErr == 0) {
+        windErrCnt = 0;
+        return false;
+    }
+    //如果真实失败率>=windErrRate
+    if (rErr * 1.0 / (rSucc + rErr) >= LbConfig.windErrRate) {
+        windErrCnt += 1;
+        return (int)windErrCnt >= LbConfig.windErrLim;
+    }
+    windErrCnt = 0;
+    return false;
+}
+
 void HI::resetIdle(uint32_t initSucc)
 {
     succ = initSucc;
     err = 0;
+    rSucc = 0;
+    rErr = 0;
     continSucc = 0;
     continErr = 0;
     overload = false;
     windowTs = time(NULL);//重置窗口时间
     overloadTs = 0;
+    //windErrCnt = windErrCnt;保持不变即可
 }
 
 void HI::setOverload(uint32_t overloadErr)
 {
     succ = 0;
     err = overloadErr;
+    rSucc = 0;
+    rErr = 0;
     continSucc = 0;
     continErr = 0;
     overload = true;
     overloadTs = time(NULL);//设置被判定为overload的时刻
+    windErrCnt = 0;
 }
 
 LB::~LB()
@@ -227,6 +255,7 @@ void LB::report(int ip, int port, int retcode)
             //移除出runingList,放入downList
             _runningList.remove(hi);
             _downList.push_back(hi);
+            return ;
         }
     }
     else if (hi->overload && retcode == 0)//如果是overload节点，则只有调用成功才有必要判断是否达到idle条件
@@ -252,6 +281,7 @@ void LB::report(int ip, int port, int retcode)
             //移除出downList,重新放入runingList            
             _downList.remove(hi);
             _runningList.push_back(hi);
+            return ;
         }
     }
 
@@ -262,7 +292,23 @@ void LB::report(int ip, int port, int retcode)
         if (currenTs - hi->windowTs >= LbConfig.clearTimo)
         {
             //时间窗口到达
-            hi->resetIdle(LbConfig.initSuccCnt);
+            if (hi->checkWindow()) {
+                //说明连续N个窗口失败率都高于M
+                //将此节点打为过载
+                struct in_addr saddr;
+                saddr.s_addr = htonl(hi->ip);
+                log_error("[%d, %d] host %s:%d suffer overload because of continuous windows error rate too high, real succ %u real err %u",
+                    _modid, _cmdid, ::inet_ntoa(saddr), hi->port, hi->rSucc, hi->rErr);
+                //重置hi为overload状态
+                hi->setOverload(LbConfig.ovldErrCnt);
+                //移除出runingList,放入downList
+                _runningList.remove(hi);
+                _downList.push_back(hi);
+            }
+            else {
+                //新窗口
+                hi->resetIdle(LbConfig.initSuccCnt);
+            }
         }
     }
     else
@@ -349,7 +395,23 @@ void LB::reportSomeSucc(int ip, int port, unsigned succCnt)
         if (currenTs - hi->windowTs >= LbConfig.clearTimo)
         {
             //时间窗口到达
-            hi->resetIdle(LbConfig.initSuccCnt);
+            if (hi->checkWindow()) {
+                //说明连续N个窗口失败率都高于M
+                //将此节点打为过载
+                struct in_addr saddr;
+                saddr.s_addr = htonl(hi->ip);
+                log_error("[%d, %d] host %s:%d suffer overload because of continuous windows error rate too high, real succ %u real err %u",
+                    _modid, _cmdid, ::inet_ntoa(saddr), hi->port, hi->rSucc, hi->rErr);
+                //重置hi为overload状态
+                hi->setOverload(LbConfig.ovldErrCnt);
+                //移除出runingList,放入downList
+                _runningList.remove(hi);
+                _downList.push_back(hi);
+            }
+            else {
+                //新窗口
+                hi->resetIdle(LbConfig.initSuccCnt);
+            }
         }
     }
     else
@@ -436,7 +498,23 @@ void LB::reportSomeErr(int ip, int port, unsigned errCnt)
         if (currenTs - hi->windowTs >= LbConfig.clearTimo)
         {
             //时间窗口到达
-            hi->resetIdle(LbConfig.initSuccCnt);
+            if (hi->checkWindow()) {
+                //说明连续N个窗口失败率都高于M
+                //将此节点打为过载
+                struct in_addr saddr;
+                saddr.s_addr = htonl(hi->ip);
+                log_error("[%d, %d] host %s:%d suffer overload because of continuous windows error rate too high, real succ %u real err %u",
+                    _modid, _cmdid, ::inet_ntoa(saddr), hi->port, hi->rSucc, hi->rErr);
+                //重置hi为overload状态
+                hi->setOverload(LbConfig.ovldErrCnt);
+                //移除出runingList,放入downList
+                _runningList.remove(hi);
+                _downList.push_back(hi);
+            }
+            else {
+                //新窗口
+                hi->resetIdle(LbConfig.initSuccCnt);
+            }
         }
     }
     else
@@ -548,7 +626,6 @@ void LB::report2Rpter()
         callRes.set_port(hi->port);
         callRes.set_succ(hi->rSucc);
         callRes.set_err(hi->rErr);
-        hi->rSucc = 0, hi->rErr = 0;//每个modid/cmdid的上报周期重置一次
         callRes.set_overload(false);
         req.add_results()->CopyFrom(callRes);
     }
@@ -560,7 +637,6 @@ void LB::report2Rpter()
         callRes.set_port(hi->port);
         callRes.set_succ(hi->rSucc);
         callRes.set_err(hi->rErr);
-        hi->rSucc = 0, hi->rErr = 0;//每个modid/cmdid的上报周期重置一次
         callRes.set_overload(true);
         req.add_results()->CopyFrom(callRes);
     }
