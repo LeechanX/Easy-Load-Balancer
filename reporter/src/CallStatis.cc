@@ -21,7 +21,7 @@ CallStatis::CallStatis()
     mysql_options(&_dbConn, MYSQL_OPT_CONNECT_TIMEOUT, "30");
 
     //when close down, let mysql_ping auto reconnect
-    my_bool reconnect = 0;
+    my_bool reconnect = 1;
     mysql_options(&_dbConn, MYSQL_OPT_RECONNECT, &reconnect);
 
     if (!mysql_real_connect(&_dbConn, dbHost, dbUser, dbPasswd, dbName, dbPort, NULL, 0))
